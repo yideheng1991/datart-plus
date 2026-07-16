@@ -96,20 +96,39 @@ public class FileServiceImpl extends BaseService implements FileService {
                 requireExists(ownerId, Datachart.class);
                 break;
         }
-        String filePath = FileUtils.concatPath(fileOwner.getPath(), ownerId, StringUtils.isBlank(fileName) ? file.getOriginalFilename() : fileName);
+        String safeFileName = sanitizeFileName(StringUtils.isBlank(fileName) ? file.getOriginalFilename() : fileName);
+        String filePath = FileUtils.concatPath(fileOwner.getPath(), ownerId, safeFileName);
         String fullPath = FileUtils.withBasePath(filePath);
+        File destFile = new File(fullPath);
+        String basePath = new File(Application.getFileBasePath()).getCanonicalPath();
+        if (!destFile.getCanonicalPath().startsWith(basePath + File.separator)) {
+            Exceptions.msg("Invalid file path");
+        }
         FileUtils.mkdirParentIfNotExist(fullPath);
-        file.transferTo(new File(fullPath));
+        file.transferTo(destFile);
         return filePath;
+    }
+
+    private String sanitizeFileName(String fileName) {
+        if (StringUtils.isBlank(fileName)) {
+            return fileName;
+        }
+        return new File(fileName).getName();
     }
 
     private String updateUserAvatar(String userId, MultipartFile file) throws IOException {
 
         requireExists(userId, User.class);
 
-        String filePath = FileUtils.concatPath(FileOwner.USER_AVATAR.getPath(), userId, file.getOriginalFilename());
+        String safeFileName = sanitizeFileName(file.getOriginalFilename());
+        String filePath = FileUtils.concatPath(FileOwner.USER_AVATAR.getPath(), userId, safeFileName);
 
         String fullPath = FileUtils.withBasePath(filePath);
+        File destFile = new File(fullPath);
+        String basePath = new File(Application.getFileBasePath()).getCanonicalPath();
+        if (!destFile.getCanonicalPath().startsWith(basePath + File.separator)) {
+            Exceptions.msg("Invalid file path");
+        }
 
         FileUtils.mkdirParentIfNotExist(fullPath);
 
@@ -128,9 +147,15 @@ public class FileServiceImpl extends BaseService implements FileService {
 
         requireExists(orgId, Organization.class);
 
-        String filePath = FileUtils.concatPath(FileOwner.ORG_AVATAR.getPath(), orgId, file.getOriginalFilename());
+        String safeFileName = sanitizeFileName(file.getOriginalFilename());
+        String filePath = FileUtils.concatPath(FileOwner.ORG_AVATAR.getPath(), orgId, safeFileName);
 
         String fullPath = FileUtils.withBasePath(filePath);
+        File destFile = new File(fullPath);
+        String basePath = new File(Application.getFileBasePath()).getCanonicalPath();
+        if (!destFile.getCanonicalPath().startsWith(basePath + File.separator)) {
+            Exceptions.msg("Invalid file path");
+        }
 
 
         FileUtils.mkdirParentIfNotExist(fullPath);
@@ -150,13 +175,19 @@ public class FileServiceImpl extends BaseService implements FileService {
 
         requireExists(ownerId, Source.class);
 
-        String filePath = FileUtils.concatPath(fileOwner.getPath(), ownerId, System.currentTimeMillis() + "-" + file.getOriginalFilename());
+        String safeFileName = sanitizeFileName(file.getOriginalFilename());
+        String filePath = FileUtils.concatPath(fileOwner.getPath(), ownerId, System.currentTimeMillis() + "-" + safeFileName);
 
         String fullPath = FileUtils.withBasePath(filePath);
+        File destFile = new File(fullPath);
+        String basePath = new File(Application.getFileBasePath()).getCanonicalPath();
+        if (!destFile.getCanonicalPath().startsWith(basePath + File.separator)) {
+            Exceptions.msg("Invalid file path");
+        }
 
         FileUtils.mkdirParentIfNotExist(fullPath);
 
-        file.transferTo(new File(fullPath));
+        file.transferTo(destFile);
 
         return filePath;
     }
