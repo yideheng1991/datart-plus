@@ -20,6 +20,7 @@ import org.apache.calcite.sql.SqlDialect;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.CollectionUtils;
 import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.constructor.SafeConstructor;
 
 import javax.sql.DataSource;
 import java.io.File;
@@ -320,8 +321,14 @@ public class JdbcDataProvider extends DataProvider {
 
         private static Map<String, Map<String, String>> loadYml(String file) {
             try (InputStream inputStream = ProviderFactory.class.getResourceAsStream(file)) {
-                Yaml yaml = new Yaml();
-                return yaml.loadAs(inputStream, HashMap.class);
+                Yaml yaml = new Yaml(new SafeConstructor());
+                Object obj = yaml.load(inputStream);
+                if (!(obj instanceof Map)) {
+                    throw new IllegalStateException("Invalid jdbc-driver.yml format: root must be a map");
+                }
+                @SuppressWarnings("unchecked")
+                Map<String, Map<String, String>> result = (Map<String, Map<String, String>>) obj;
+                return result;
             } catch (Exception e) {
                 Exceptions.e(e);
             }
@@ -330,8 +337,14 @@ public class JdbcDataProvider extends DataProvider {
 
         private static Map<String, Map<String, String>> loadYml(File file) {
             try (InputStream inputStream = new FileInputStream(file)) {
-                Yaml yaml = new Yaml();
-                return yaml.loadAs(inputStream, HashMap.class);
+                Yaml yaml = new Yaml(new SafeConstructor());
+                Object obj = yaml.load(inputStream);
+                if (!(obj instanceof Map)) {
+                    throw new IllegalStateException("Invalid jdbc-driver.yml format: root must be a map");
+                }
+                @SuppressWarnings("unchecked")
+                Map<String, Map<String, String>> result = (Map<String, Map<String, String>>) obj;
+                return result;
             } catch (Exception e) {
                 Exceptions.e(e);
             }
