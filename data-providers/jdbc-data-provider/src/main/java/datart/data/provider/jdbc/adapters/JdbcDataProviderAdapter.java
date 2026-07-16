@@ -95,6 +95,7 @@ public class JdbcDataProviderAdapter implements Closeable {
 
     public boolean test(JdbcProperties properties) {
         BeanUtils.validate(properties);
+        properties.validate();
         try {
             Class.forName(properties.getDriverClass());
         } catch (ClassNotFoundException e) {

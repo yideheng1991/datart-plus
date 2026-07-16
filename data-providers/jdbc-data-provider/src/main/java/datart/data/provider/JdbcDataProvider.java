@@ -111,6 +111,7 @@ public class JdbcDataProvider extends DataProvider {
         JdbcProperties jdbcProperties = new JdbcProperties();
         jdbcProperties.setDbType(config.getProperties().get(DB_TYPE).toString().toUpperCase());
         jdbcProperties.setUrl(config.getProperties().get(URL).toString());
+        jdbcProperties.validate();
         Object user = config.getProperties().get(USER);
         if (user != null && StringUtils.isNotBlank(user.toString())) {
             jdbcProperties.setUser(user.toString());
