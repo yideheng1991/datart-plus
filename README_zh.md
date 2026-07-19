@@ -1,4 +1,4 @@
-![](http://running-elephant.gitee.io/datart-docs/images/about/logo_with_text.jpg)
+![](http://datart-docs.dhyi.top/datart-docs/images/about/logo_with_text.jpg)
 > **新一代数据可视化开放平台，支持报表、仪表板、大屏、分析和可视化数据应用的敏捷构建。**
 
 ## What is datart?
@@ -21,37 +21,37 @@ datart 是新一代数据可视化开放平台，支持各类企业数据可视�
  传统BI产品只能对已有数据进行勘察，而现代BI产品更加重视对数据延展洞见，以形成完整数据分析洞察能力，或[增强分析](https://www.gartner.com/en/information-technology/glossary/augmented-analytics)能力。datart 会在平台层面提供可扩展数据增强分析能力，基于数据通过可视化方式不仅回答 What，并且可以回答 Why。
 
 ### 功能特性 Features
-![](http://running-elephant.gitee.io/datart-docs/images/about/datart-vs-davinci.png)
+![](http://datart-docs.dhyi.top/datart-docs/images/about/datart-vs-davinci.png)
 
 ### 在线体验 Demo
-> [http://datart-demo.retech.cc](http://datart-demo.retech.cc)
+> [http://datart-demo.dhyi.top](http://datart-demo.dhyi.top)
 > 
 > 用户名：demo
 > 
 > 密码：123456
 
 ### 架构模块 Architecture
-![](http://running-elephant.gitee.io/datart-docs/images/about/architecture.png)
+![](http://datart-docs.dhyi.top/datart-docs/images/about/architecture.png)
 
 ## Document
 ### 如何部署 Deployment
-参见 [Deployment](http://running-elephant.gitee.io/datart-docs/docs/)
+参见 [Deployment](http://datart-docs.dhyi.top/datart-docs/docs/)
 ### 快速开始 Quick Start
-参见 [Quick Start Guide](http://running-elephant.gitee.io/datart-docs/docs/first-visualization.html)
+参见 [Quick Start Guide](http://datart-docs.dhyi.top/datart-docs/docs/first-visualization.html)
 ### 用户文档 User Document
-参见 [User Guide](http://running-elephant.gitee.io/datart-docs/docs/source.html)
+参见 [User Guide](http://datart-docs.dhyi.top/datart-docs/docs/source.html)
 
 ### 最新版本 Latest Release
-参见  [Latest Release](https://gitee.com/running-elephant/datart/releases)
+参见  [Latest Release](https://gitee.com/ydheng/datart/releases)
 
 ## Community
 ### 社区支持 Support
 ##### 反馈问题
-平台问题可以查看 [Issue](https://gitee.com/running-elephant/datart/issues)
+平台问题可以查看 [Issue](https://gitee.com/ydheng/datart/issues)
 
 ##### 交流讨论
 可以加入社区微信群参与讨论
-![](http://running-elephant.gitee.io/datart-docs/images/about/wechat-group.jpeg)
+![](http://datart-docs.dhyi.top/datart-docs/images/about/wechat-group.jpeg)
 
 #### 插件示例仓库
 [示例仓库 v1.0.0](https://gitee.com/running-elephant/datart-extension-charts)

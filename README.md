@@ -1,4 +1,4 @@
-![](https://running-elephant.github.io/datart-docs/images/about/logo_with_text.jpg)
+![](https://datart-docs.dhyi.top/datart-docs/images/about/logo_with_text.jpg)
 > **新一代数据可视化开放平台，支持报表、仪表板、大屏、分析和可视化数据应用的敏捷构建。**
 
 ## What is datart?
@@ -18,47 +18,47 @@ datart 可作为独立平台使用，但不仅限于此，为了更好支持快�
 传统BI产品只能对已有数据进行勘察，而现代BI产品更加重视对数据延展洞见，以形成完整数据分析洞察能力，或[增强分析](https://www.gartner.com/en/information-technology/glossary/augmented-analytics)能力。datart 会在平台层面提供可扩展数据增强分析能力，基于数据通过可视化方式不仅回答 What，并且可以回答 Why。
 
 ### 功能特性 Features
-![](https://running-elephant.github.io/datart-docs/images/about/datart-vs-davinci.png)
+![](https://datart-docs.dhyi.top/datart-docs/images/about/datart-vs-davinci.png)
 
 ### 在线体验 Demo
-> [http://datart-demo.retech.cc](http://datart-demo.retech.cc)
+> [http://datart-demo.dhyi.top](http://datart-demo.dhyi.top)
 > 
 > 用户名：demo
 > 
 > 密码：123456
 
 ### 架构模块 Architecture
-![](https://running-elephant.github.io/datart-docs/images/about/architecture.png)
+![](https://datart-docs.dhyi.top/datart-docs/images/about/architecture.png)
 
 ## Document
 ### 如何部署 Deployment
 1.新手上路 参见 [Deployment](./Deployment.md)
 
-2.老司机 参见 [Deployment](https://running-elephant.github.io/datart-docs/docs/)
+2.老司机 参见 [Deployment](https://datart-docs.dhyi.top/datart-docs/docs/)
 ### 快速开始 Quick Start
-参见 [Quick Start Guide](https://running-elephant.github.io/datart-docs/docs/first-visualization.html)
+参见 [Quick Start Guide](https://datart-docs.dhyi.top/datart-docs/docs/first-visualization.html)
 ### 用户文档 User Document
-参见 [User Guide](https://running-elephant.github.io/datart-docs/docs/source.html)
+参见 [User Guide](https://datart-docs.dhyi.top/datart-docs/docs/source.html)
 
 ### 最新版本 Latest Release
-参见  [Latest Release](https://github.com/running-elephant/datart/releases)
+参见  [Latest Release](https://gitee.com/ydheng/datart/releases)
 
 ## Community
 ### 社区支持 Support
 ##### 反馈问题
-平台问题可以查看 [Issue](https://github.com/running-elephant/datart/issues)，提交新Issue请参考 [Issue描述规范](https://github.com/running-elephant/datart/tree/master/.github/ISSUE_TEMPLATE)
+平台问题可以查看 [Issue](https://gitee.com/ydheng/datart/issues)，提交新Issue请参考 [Issue描述规范](https://gitee.com/ydheng/datart/tree/master/.gitee/)
 ##### 交流讨论
 可以加入社区微信群参与讨论
-![](https://running-elephant.github.io/datart-docs/images/about/wechat-group.jpeg)
+![](https://datart-docs.dhyi.top/datart-docs/images/about/wechat-group.jpeg)
 
 #### 插件示例仓库
-[示例仓库 v1.0.0](https://github.com/running-elephant/datart-extension-charts)
+[示例仓库 v1.0.0](https://gitee.com/running-elephant/datart-extension-charts)
 
 ### 参与贡献 Contributing
 非常欢迎和感谢参与贡献，如何参与可参见 [Contributing]()
 
 ### 谁在使用 Adopters
-参见 [Adopters](https://github.com/running-elephant/datart/issues/137)
+参见 [Adopters](https://gitee.com/running-elephant/datart/issues/137)
 
 ## License
-datart is under the Apache 2.0 license. See the [LICENSE](https://github.com/running-elephant/datart/blob/master/LICENSE) file for details.
+datart is under the Apache 2.0 license. See the [LICENSE](https://gitee.com/running-elephant/datart/blob/master/LICENSE) file for details.
