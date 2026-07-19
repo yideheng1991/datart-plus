@@ -85,6 +85,7 @@ export const ORIGINAL_TYPE_MAP = {
   richText: 'richText',
   iframe: 'iframe',
   border: 'border',
+  decoration: 'decoration',
 
   queryBtn: 'queryBtn',
   resetBtn: 'resetBtn',

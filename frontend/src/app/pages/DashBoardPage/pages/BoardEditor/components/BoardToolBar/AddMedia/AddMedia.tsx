@@ -77,6 +77,11 @@ export const AddMedia: React.FC<{}> = () => {
       icon: '',
       type: 'border',
     },
+    {
+      name: t('decoration'),
+      icon: '',
+      type: 'decoration',
+    },
   ];
   const mediaWidgetItems = (
     <Menu onClick={onSelectMediaWidget}>

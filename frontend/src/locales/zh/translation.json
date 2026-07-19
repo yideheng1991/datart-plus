@@ -950,6 +950,7 @@
         "iframe": "IFrame",
         "video": "视频",
         "border": "边框",
+        "decoration": "装饰",
         "container": "容器",
         "tab": "标签卡",
         "carousel": "轮播卡",

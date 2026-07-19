@@ -30,6 +30,7 @@ import timeProto from '../Widgets/ControllerWidget/config/timeProto';
 import valueProto from '../Widgets/ControllerWidget/config/valueProto';
 import linkedChartProto from '../Widgets/DataChartWidget/linkedChartConfig';
 import ownedChartProto from '../Widgets/DataChartWidget/ownedChartConfig';
+import decorationProto from '../Widgets/DecorationWidget/decorationConfig';
 import groupProto from '../Widgets/GroupWidget/config';
 import iframeProto from '../Widgets/IframeWidget/iframeConfig';
 import imageProto from '../Widgets/ImageWidget/imageConfig';
@@ -51,6 +52,7 @@ const protoList: WidgetProto[] = [
   iframeProto,
   timerProto,
   borderProto, //   border
+  decorationProto, //   decoration
   queryBtnProto, //   button
   resetBtnProto,
   dropdownListProto, //controller

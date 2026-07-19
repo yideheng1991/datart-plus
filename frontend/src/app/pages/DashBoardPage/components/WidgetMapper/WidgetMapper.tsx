@@ -22,6 +22,7 @@ import { WidgetContext } from '../WidgetProvider/WidgetProvider';
 import { BorderWidget } from '../Widgets/BorderWidget/BorderWidget';
 import { ControllerWidget } from '../Widgets/ControllerWidget/ControllerWidget';
 import { DataChartWidget } from '../Widgets/DataChartWidget/DataChartWidget';
+import { DecorationWidget } from '../Widgets/DecorationWidget/DecorationWidget';
 import { GroupWidget } from '../Widgets/GroupWidget';
 import { IframeWidget } from '../Widgets/IframeWidget/IframeWidget';
 import { ImageWidget } from '../Widgets/ImageWidget/ImageWidget';
@@ -66,6 +67,8 @@ export const WidgetMapper: React.FC<{
       return <TimerWidget hideTitle={hideTitle} />;
     case ORIGINAL_TYPE_MAP.border:
       return <BorderWidget hideTitle={hideTitle} />;
+    case ORIGINAL_TYPE_MAP.decoration:
+      return <DecorationWidget hideTitle={hideTitle} />;
 
     // tab
     case ORIGINAL_TYPE_MAP.tab:

@@ -952,6 +952,7 @@
         "iframe": "IFrame",
         "video": "Video",
         "border": "Border",
+        "decoration": "Decoration",
         "container": "Container",
         "tab": "Tab",
         "carousel": "Carousel",
