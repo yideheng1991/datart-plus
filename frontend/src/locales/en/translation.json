@@ -951,6 +951,7 @@
         "timer": "Timer",
         "iframe": "IFrame",
         "video": "Video",
+        "border": "Border",
         "container": "Container",
         "tab": "Tab",
         "carousel": "Carousel",

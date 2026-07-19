@@ -19,6 +19,7 @@ import { memo, useContext } from 'react';
 import { ORIGINAL_TYPE_MAP } from '../../constants';
 import { WidgetDataProvider } from '../WidgetProvider/WidgetDataProvider';
 import { WidgetContext } from '../WidgetProvider/WidgetProvider';
+import { BorderWidget } from '../Widgets/BorderWidget/BorderWidget';
 import { ControllerWidget } from '../Widgets/ControllerWidget/ControllerWidget';
 import { DataChartWidget } from '../Widgets/DataChartWidget/DataChartWidget';
 import { GroupWidget } from '../Widgets/GroupWidget';
@@ -63,6 +64,8 @@ export const WidgetMapper: React.FC<{
       return <IframeWidget hideTitle={hideTitle} />;
     case ORIGINAL_TYPE_MAP.timer:
       return <TimerWidget hideTitle={hideTitle} />;
+    case ORIGINAL_TYPE_MAP.border:
+      return <BorderWidget hideTitle={hideTitle} />;
 
     // tab
     case ORIGINAL_TYPE_MAP.tab:

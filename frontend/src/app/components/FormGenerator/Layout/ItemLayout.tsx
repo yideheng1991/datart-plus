@@ -73,7 +73,7 @@ import {
 import { FormGeneratorLayoutProps } from '../types';
 import { groupLayoutComparer, invokeDependencyWatcher } from '../utils';
 
-const PERMIT_COMPONENT_PROPS = ['disabled'];
+const PERMIT_COMPONENT_PROPS = ['disabled', 'hidden'];
 
 const ItemLayout: FC<FormGeneratorLayoutProps<ChartStyleConfig>> = memo(
   ({
@@ -128,6 +128,9 @@ const ItemLayout: FC<FormGeneratorLayoutProps<ChartStyleConfig>> = memo(
     };
 
     const renderBasicComponent = () => {
+      if (data.hidden) {
+        return null;
+      }
       const props = {
         ancestors,
         data,

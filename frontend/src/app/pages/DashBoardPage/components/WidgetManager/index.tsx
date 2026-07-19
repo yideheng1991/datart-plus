@@ -16,6 +16,7 @@
  * limitations under the License.
  */
 import type { WidgetProto } from '../../types/widgetTypes';
+import borderProto from '../Widgets/BorderWidget/borderConfig';
 import checkboxGroupProto from '../Widgets/ControllerWidget/config/checkboxGroup';
 import dropdownListProto from '../Widgets/ControllerWidget/config/dropdownList';
 import dropDownTree from '../Widgets/ControllerWidget/config/dropDownTree';
@@ -49,6 +50,7 @@ const protoList: WidgetProto[] = [
   richTextProto,
   iframeProto,
   timerProto,
+  borderProto, //   border
   queryBtnProto, //   button
   resetBtnProto,
   dropdownListProto, //controller
