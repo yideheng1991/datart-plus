@@ -427,6 +427,7 @@ export const initBackgroundTpl = (color?: string) => {
           image: '',
           size: '100% 100%',
           repeat: 'no-repeat',
+          opacity: 1,
         },
         comType: 'background',
       },

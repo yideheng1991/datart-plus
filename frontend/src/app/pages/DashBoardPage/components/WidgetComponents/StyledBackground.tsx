@@ -27,13 +27,28 @@ export interface StyledBackgroundProps {
 }
 
 const StyledBackground = styled.div<StyledBackgroundProps>`
-  background-color: ${p => p.bg?.color};
-  background-image: ${p => getBackgroundImage(p.bg?.image)};
-  background-repeat: ${p => p.bg?.repeat};
-  background-size: ${p => p.bg?.size};
+  position: relative;
   border-color: ${p => p?.bd?.color};
   border-style: ${p => p?.bd?.style};
   border-width: ${p => (p?.bd?.width || 0) + 'px'};
   border-radius: ${p => (p?.bd?.radius || 0) + 'px'};
+
+  &::before {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    content: '';
+    background-color: ${p => p.bg?.color};
+    background-image: ${p => getBackgroundImage(p.bg?.image)};
+    background-repeat: ${p => p.bg?.repeat};
+    background-size: ${p => p.bg?.size};
+    opacity: ${p => (p.bg?.opacity !== undefined ? p.bg.opacity : 1)};
+  }
+
+  > * {
+    position: relative;
+    z-index: 1;
+  }
 `;
 export default StyledBackground;

@@ -110,6 +110,7 @@ export const BackgroundDefault: BackgroundConfig = {
   image: '',
   size: '100% 100%', // 'auto' | 'contain' | 'cover'|,
   repeat: 'no-repeat', //'repeat' | 'repeat-x' | 'repeat-y' | 'no-repeat',
+  opacity: 1,
 };
 
 export const AutoBoardWidgetBackgroundDefault: BackgroundConfig = {

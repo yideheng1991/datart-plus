@@ -114,12 +114,14 @@ export const initFreeBoardConfig = () => {
                 image: '',
                 size: '100% 100%',
                 repeat: 'no-repeat',
+                opacity: 1,
               },
               value: {
                 color: 'transparent', // TODO 根据当前主题色配置
                 image: '',
                 size: '100% 100%',
                 repeat: 'no-repeat',
+                opacity: 1,
               },
               comType: 'background',
             },
@@ -149,6 +151,7 @@ export const initFreeBoardConfig = () => {
 
             background: {
               background: '背景',
+              opacity: '透明度',
             },
           },
         },
@@ -180,6 +183,7 @@ export const initFreeBoardConfig = () => {
             },
             background: {
               background: 'Background',
+              opacity: 'Opacity',
             },
           },
         },

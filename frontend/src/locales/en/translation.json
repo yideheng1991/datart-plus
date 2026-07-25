@@ -1045,7 +1045,8 @@
         "format": "Format",
         "interval": "Interval",
         "requiredWidgetName": "Widget name cannot be empty, please input a name",
-        "duplicateWidgetName": "Widget name is duplicate with others, please change another one."
+        "duplicateWidgetName": "Widget name is duplicate with others, please change another one.",
+        "opacity": "Opacity"
       }
     },
     "widget": {

@@ -353,6 +353,7 @@ export interface BackgroundConfig {
   image: string;
   size: 'auto' | 'contain' | 'cover' | '100% 100%';
   repeat: 'repeat' | 'repeat-x' | 'repeat-y' | 'no-repeat';
+  opacity?: number;
 }
 
 export interface LineConfig {

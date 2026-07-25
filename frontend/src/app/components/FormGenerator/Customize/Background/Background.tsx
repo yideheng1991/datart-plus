@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { Input } from 'antd';
+import { Input, Slider, Space } from 'antd';
 import { ColorPickerPopover } from 'app/components/ColorPicker';
 import useI18NPrefix from 'app/hooks/useI18NPrefix';
 import { BackgroundConfig } from 'app/pages/DashBoardPage/pages/Board/slice/types';
@@ -35,7 +35,7 @@ export const Background: FC<ItemLayoutProps<ChartStyleConfig>> = memo(
       valRef.current = value;
     }, [value]);
 
-    const handleChange = (obj: { key: string; val: string }) => {
+    const handleChange = (obj: { key: string; val: any }) => {
       const newVal = {
         ...valRef.current,
         [obj.key]: obj.val,
@@ -50,6 +50,9 @@ export const Background: FC<ItemLayoutProps<ChartStyleConfig>> = memo(
     };
     const onColorChange = value => {
       handleChange({ key: 'color', val: value });
+    };
+    const onOpacityChange = (value: number) => {
+      handleChange({ key: 'opacity', val: value });
     };
     return (
       <Wrap>
@@ -76,6 +79,20 @@ export const Background: FC<ItemLayoutProps<ChartStyleConfig>> = memo(
           value={value.image}
           onChange={onImageUrlChange}
         />
+        <OpacityGroup>
+          <span>{gt('opacity')}</span>
+          <Space>
+            <Slider
+              min={0}
+              max={1}
+              step={0.01}
+              value={value.opacity !== undefined ? value.opacity : 1}
+              onChange={onOpacityChange}
+              style={{ width: 120 }}
+            />
+            <span>{Math.round((value.opacity !== undefined ? value.opacity : 1) * 100)}%</span>
+          </Space>
+        </OpacityGroup>
       </Wrap>
     );
   },
@@ -84,5 +101,15 @@ const Wrap = styled.div`
   display: block;
   .ant-upload-list {
     display: none;
+  }
+`;
+
+const OpacityGroup = styled.div`
+  display: flex;
+  align-items: center;
+  margin-top: 8px;
+  
+  span {
+    width: 60px;
   }
 `;
