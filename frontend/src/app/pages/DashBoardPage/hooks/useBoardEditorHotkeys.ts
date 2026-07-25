@@ -16,10 +16,20 @@
  * limitations under the License.
  */
 
-import { useContext } from 'react';
+import { useCallback, useContext, useRef } from 'react';
 import { useHotkeys } from 'react-hotkeys-hook';
+import { useDispatch, useSelector } from 'react-redux';
 import { BoardActionContext } from '../components/ActionProvider/BoardActionProvider';
 import { WidgetActionContext } from '../components/ActionProvider/WidgetActionProvider';
+import { useBoardCanvas } from '../pages/BoardEditor/FreeEditor/BoardCanvasContext';
+import { editBoardStackActions } from '../pages/BoardEditor/slice';
+import {
+  selectAllWidgetMap,
+  selectSelectedIds,
+} from '../pages/BoardEditor/slice/selectors';
+
+const MOVE_STEP = 1;
+const MOVE_STEP_LARGE = 10;
 
 export default function useBoardEditorHotkeys() {
   const { undo, redo } = useContext(BoardActionContext);
@@ -31,6 +41,48 @@ export default function useBoardEditorHotkeys() {
     onEditPasteWidgets,
     onEditComposeGroup,
   } = useContext(WidgetActionContext);
+  const dispatch = useDispatch();
+  const selectedIdsStr = useSelector(selectSelectedIds);
+  const allWidgetMap = useSelector(selectAllWidgetMap);
+  const { scrollCanvas } = useBoardCanvas();
+
+  // Use ref to avoid closure trap - always read latest value
+  const selectedIdsRef = useRef<string>('');
+  const allWidgetMapRef = useRef(allWidgetMap);
+  const scrollCanvasRef = useRef(scrollCanvas);
+
+  selectedIdsRef.current = selectedIdsStr;
+  allWidgetMapRef.current = allWidgetMap;
+  scrollCanvasRef.current = scrollCanvas;
+
+  const moveSelectedWidgets = useCallback((deltaX: number, deltaY: number) => {
+    const idsStr = selectedIdsRef.current;
+    if (!idsStr) return;
+    const ids = idsStr.split(',');
+    const updates = ids
+      .map(id => {
+        const w = allWidgetMapRef.current[id];
+        if (!w) return null;
+        return {
+          id,
+          rect: {
+            ...w.config.rect,
+            x: Number((w.config.rect.x + deltaX).toFixed(1)),
+            y: Number((w.config.rect.y + deltaY).toFixed(1)),
+          },
+          isAutoGroupWidget: false,
+        };
+      })
+      .filter(Boolean) as {
+      id: string;
+      rect: { x: number; y: number; width: number; height: number };
+      isAutoGroupWidget: boolean;
+    }[];
+
+    if (updates.length > 0) {
+      dispatch(editBoardStackActions.batchUpdateWidgetsRect({ updates }));
+    }
+  }, [dispatch]);
 
   useHotkeys('delete,backspace', () => onEditDeleteActiveWidgets(), []);
 
@@ -38,7 +90,9 @@ export default function useBoardEditorHotkeys() {
   useHotkeys('ctrl+shift+z,command+shift+z', () => redo());
 
   useHotkeys('ctrl+shift+up,command+shift+up', () => onEditLayerToTop());
-  useHotkeys('ctrl+shift+down,command+shift+down', () => onEditLayerToBottom());
+  useHotkeys('ctrl+shift+down,command+shift+down', () =>
+    onEditLayerToBottom(),
+  );
 
   useHotkeys('ctrl+c,command+c', () => onEditCopyWidgets());
   useHotkeys('ctrl+v,command+v', () => onEditPasteWidgets());
@@ -47,40 +101,109 @@ export default function useBoardEditorHotkeys() {
     onEditComposeGroup();
     e.preventDefault();
   });
-  //
-  useHotkeys('up', () => {
-    console.log('__ widgets up1');
-  });
 
-  useHotkeys('shift+up', () => {
-    console.log('__ widgets up10');
-  });
-  //
-  useHotkeys('down', () => {
-    console.log('__ widgets down1');
-  });
-  useHotkeys('shift+down', () => {
-    console.log('__ widgets down10');
-  });
-  //
-  useHotkeys('left', () => {
-    console.log('__ widgets left1');
-  });
-  useHotkeys('shift+left', () => {
-    console.log('__ widgets left10');
-  });
-  //
-  useHotkeys('right', () => {
-    console.log('__ widgets right1');
-  });
-  useHotkeys('shift+right', () => {
-    console.log('__ widgets right10');
-  });
+  const handleArrowUp = useCallback((e: KeyboardEvent) => {
+    e.preventDefault();
+    const hasExtraModifier = e.ctrlKey || e.metaKey;
+    if (hasExtraModifier) return;
+    const hasSelection = !!selectedIdsRef.current;
+    if (hasSelection) {
+      moveSelectedWidgets(0, -MOVE_STEP);
+    } else {
+      scrollCanvasRef.current(0, -40);
+    }
+  }, [moveSelectedWidgets]);
 
-  useHotkeys('', () => {
-    console.log('__ widgets lock');
-  });
-  useHotkeys('', () => {
-    console.log('__ widgets unlock');
-  });
+  const handleShiftArrowUp = useCallback((e: KeyboardEvent) => {
+    e.preventDefault();
+    const hasExtraModifier = e.ctrlKey || e.metaKey;
+    if (hasExtraModifier) return;
+    const hasSelection = !!selectedIdsRef.current;
+    if (hasSelection) {
+      moveSelectedWidgets(0, -MOVE_STEP_LARGE);
+    } else {
+      scrollCanvasRef.current(0, -100);
+    }
+  }, [moveSelectedWidgets]);
+
+  const handleArrowDown = useCallback((e: KeyboardEvent) => {
+    e.preventDefault();
+    const hasExtraModifier = e.ctrlKey || e.metaKey;
+    if (hasExtraModifier) return;
+    const hasSelection = !!selectedIdsRef.current;
+    if (hasSelection) {
+      moveSelectedWidgets(0, MOVE_STEP);
+    } else {
+      scrollCanvasRef.current(0, 40);
+    }
+  }, [moveSelectedWidgets]);
+
+  const handleShiftArrowDown = useCallback((e: KeyboardEvent) => {
+    e.preventDefault();
+    const hasExtraModifier = e.ctrlKey || e.metaKey;
+    if (hasExtraModifier) return;
+    const hasSelection = !!selectedIdsRef.current;
+    if (hasSelection) {
+      moveSelectedWidgets(0, MOVE_STEP_LARGE);
+    } else {
+      scrollCanvasRef.current(0, 100);
+    }
+  }, [moveSelectedWidgets]);
+
+  const handleArrowLeft = useCallback((e: KeyboardEvent) => {
+    e.preventDefault();
+    const hasExtraModifier = e.ctrlKey || e.metaKey;
+    if (hasExtraModifier) return;
+    const hasSelection = !!selectedIdsRef.current;
+    if (hasSelection) {
+      moveSelectedWidgets(-MOVE_STEP, 0);
+    } else {
+      scrollCanvasRef.current(-40, 0);
+    }
+  }, [moveSelectedWidgets]);
+
+  const handleShiftArrowLeft = useCallback((e: KeyboardEvent) => {
+    e.preventDefault();
+    const hasExtraModifier = e.ctrlKey || e.metaKey;
+    if (hasExtraModifier) return;
+    const hasSelection = !!selectedIdsRef.current;
+    if (hasSelection) {
+      moveSelectedWidgets(-MOVE_STEP_LARGE, 0);
+    } else {
+      scrollCanvasRef.current(-100, 0);
+    }
+  }, [moveSelectedWidgets]);
+
+  const handleArrowRight = useCallback((e: KeyboardEvent) => {
+    e.preventDefault();
+    const hasExtraModifier = e.ctrlKey || e.metaKey;
+    if (hasExtraModifier) return;
+    const hasSelection = !!selectedIdsRef.current;
+    if (hasSelection) {
+      moveSelectedWidgets(MOVE_STEP, 0);
+    } else {
+      scrollCanvasRef.current(40, 0);
+    }
+  }, [moveSelectedWidgets]);
+
+  const handleShiftArrowRight = useCallback((e: KeyboardEvent) => {
+    e.preventDefault();
+    const hasExtraModifier = e.ctrlKey || e.metaKey;
+    if (hasExtraModifier) return;
+    const hasSelection = !!selectedIdsRef.current;
+    if (hasSelection) {
+      moveSelectedWidgets(MOVE_STEP_LARGE, 0);
+    } else {
+      scrollCanvasRef.current(100, 0);
+    }
+  }, [moveSelectedWidgets]);
+
+  useHotkeys('up', handleArrowUp);
+  useHotkeys('shift+up', handleShiftArrowUp);
+  useHotkeys('down', handleArrowDown);
+  useHotkeys('shift+down', handleShiftArrowDown);
+  useHotkeys('left', handleArrowLeft);
+  useHotkeys('shift+left', handleShiftArrowLeft);
+  useHotkeys('right', handleArrowRight);
+  useHotkeys('shift+right', handleShiftArrowRight);
 }

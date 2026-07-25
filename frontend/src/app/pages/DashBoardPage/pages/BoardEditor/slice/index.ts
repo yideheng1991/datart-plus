@@ -361,6 +361,7 @@ const filterActions = [
   editBoardStackActions.updateBoardConfigByKey,
   editBoardStackActions.updateWidgetStyleConfigByPath,
   editBoardStackActions.changeFreeWidgetRect,
+  editBoardStackActions.batchUpdateWidgetsRect,
   editBoardStackActions.dropWidgetLayer,
 ].map(ele => ele.toString());
 const editBoardStackReducer = undoable(editBoardStackSlice.reducer, {

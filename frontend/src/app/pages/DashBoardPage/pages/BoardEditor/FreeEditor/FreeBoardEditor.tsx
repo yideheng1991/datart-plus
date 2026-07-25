@@ -19,18 +19,22 @@
 import { BoardConfigValContext } from 'app/pages/DashBoardPage/components/BoardProvider/BoardConfigProvider';
 import { BoardContext } from 'app/pages/DashBoardPage/components/BoardProvider/BoardProvider';
 import { WidgetWrapProvider } from 'app/pages/DashBoardPage/components/WidgetProvider/WidgetWrapProvider';
-import { memo, useContext } from 'react';
-import { useSelector } from 'react-redux';
+import { useCallback, useEffect, memo, useContext } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components/macro';
 import SlideBackground from '../../../components/FreeBoardBackground';
 import useClientRect from '../../../hooks/useClientRect';
 import useSlideStyle from '../../../hooks/useSlideStyle';
 import ZoomControl from '../../Board/FreeDashboard/ZoomControl';
 import BoardOverlay from '../components/BoardOverlay';
+import { editWidgetInfoActions } from '../slice';
 import {
   selectEditingWidgetIds,
   selectLayoutWidgetMap,
+  selectSelectedIds,
 } from '../slice/selectors';
+import { BoardCanvasContext } from './BoardCanvasContext';
+import { SmartGuides } from './SmartGuides';
 import { WidgetOfFreeEdit } from './WidgetOfFreeEdit';
 
 export const FreeBoardEditor: React.FC<{}> = memo(() => {
@@ -40,7 +44,10 @@ export const FreeBoardEditor: React.FC<{}> = memo(() => {
     scaleMode,
   } = useContext(BoardConfigValContext);
   const { autoFit, boardId } = useContext(BoardContext);
+  const { setScrollContainer } = useContext(BoardCanvasContext);
+  const dispatch = useDispatch();
   const editingWidgetIds = useSelector(selectEditingWidgetIds);
+  const selectedIds = useSelector(selectSelectedIds);
   const layoutWidgetMap = useSelector(selectLayoutWidgetMap);
   const sortedLayoutWidgets = Object.values(layoutWidgetMap).sort(
     (a, b) => a.config.index - b.config.index,
@@ -57,12 +64,27 @@ export const FreeBoardEditor: React.FC<{}> = memo(() => {
     slideTranslate,
   } = useSlideStyle(autoFit, true, rect, boardWidth, boardHeight, scaleMode);
 
+  const handleCanvasMouseDown = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      if (e.target === e.currentTarget && selectedIds) {
+        dispatch(editWidgetInfoActions.clearSelectedWidgets());
+      }
+    },
+    [dispatch, selectedIds],
+  );
+
+  useEffect(() => {
+    setScrollContainer(refGridBackground.current);
+    return () => setScrollContainer(null);
+  }, [setScrollContainer, refGridBackground]);
+
   return (
     <Container>
       <div
         className="grid-background"
         style={{ ...nextBackgroundStyle }}
         ref={refGridBackground}
+        onMouseDown={handleCanvasMouseDown}
       >
         <SlideBackground scale={scale} slideTranslate={slideTranslate}>
           {sortedLayoutWidgets.map(widgetConfig => (
@@ -75,6 +97,7 @@ export const FreeBoardEditor: React.FC<{}> = memo(() => {
               <WidgetOfFreeEdit />
             </WidgetWrapProvider>
           ))}
+          <SmartGuides />
           {!!editingWidgetIds && <BoardOverlay />}
         </SlideBackground>
       </div>

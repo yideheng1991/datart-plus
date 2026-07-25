@@ -22,7 +22,7 @@ import { G20 } from 'styles/StyleConstants';
 
 // to see useHotkeys in function useBoardEditorHotkeys
 export const Hotkeys = [
-  { key: 'shift + click', text: 'multiSelect' },
+  { key: 'shift / ctrl + click', text: 'multiSelect' },
   { key: 'ctrl + G', text: 'group' },
   { key: 'delete', text: 'delete' },
   { key: 'ctrl + Z', text: 'undo' },
@@ -31,6 +31,8 @@ export const Hotkeys = [
   { key: 'ctrl + V', text: 'paste' },
   { key: 'ctrl + shift + ↑', text: 'toTop' },
   { key: 'ctrl + shift + ↓', text: 'toBottom' },
+  { key: '↑ ↓ ← →', text: 'moveWidget' },
+  { key: 'shift + ↑ ↓ ← →', text: 'moveWidgetFast' },
 ];
 export const ShortcutKeys = () => {
   const t = useI18NPrefix(`viz.board.action`);

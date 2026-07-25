@@ -30,7 +30,7 @@ import React, {
   useState,
 } from 'react';
 import { DraggableCore, DraggableEventHandler } from 'react-draggable';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Resizable, ResizeCallbackData } from 'react-resizable';
 import styled from 'styled-components/macro';
 import { LEVEL_DASHBOARD_EDIT_OVERLAY, WHITE } from 'styles/StyleConstants';
@@ -38,19 +38,22 @@ import { WidgetActionContext } from '../../../components/ActionProvider/WidgetAc
 import { BoardScaleContext } from '../../../components/FreeBoardBackground';
 import { WidgetInfoContext } from '../../../components/WidgetProvider/WidgetInfoProvider';
 import { ORIGINAL_TYPE_MAP } from '../../../constants';
+import { editBoardStackActions } from '../slice';
 import { widgetMove, widgetMoveEnd } from '../slice/events';
-import { selectEditingWidgetIds, selectSelectedIds } from '../slice/selectors';
+import { selectAllWidgetMap, selectEditingWidgetIds, selectSelectedIds } from '../slice/selectors';
 export enum DragTriggerTypes {
   MouseMove = 'mousemove',
   KeyDown = 'keydown',
 }
 
 export const WidgetOfFreeEdit: React.FC<{}> = () => {
+  const dispatch = useDispatch();
   const selectedIds = useSelector(selectSelectedIds);
   const widget = useContext(WidgetContext);
   const { editing: widgetEditing } = useContext(WidgetInfoContext);
   const { onEditFreeWidgetRect } = useContext(WidgetActionContext);
   const editingWidgetIds = useSelector(selectEditingWidgetIds);
+  const allWidgetMap = useSelector(selectAllWidgetMap);
   const scale = useContext(BoardScaleContext);
   const hideHandle = useMemo(() => {
     return (
@@ -62,7 +65,7 @@ export const WidgetOfFreeEdit: React.FC<{}> = () => {
     widget.config.rect.x,
     widget.config.rect.y,
   ]);
-  const curXYRef = useRef<[number, number]>([0, 0]);
+  const curXYRef = useRef<[number, number]>([x, y]);
   const [curW, setCurW] = useState(widget.config.rect.width);
   const [curH, setCurH] = useState(widget.config.rect.height);
   useEffect(() => {
@@ -73,62 +76,96 @@ export const WidgetOfFreeEdit: React.FC<{}> = () => {
   }, [height, width, x, y]);
 
   const move = useCallback(
-    (selectedIds: string, deltaX: number, deltaY: number) => {
-      if (!selectedIds.includes(widget.id)) return;
+    (selectedIdsStr: string, deltaX: number, deltaY: number) => {
+      if (!selectedIdsStr.includes(widget.id)) return;
       setCurXY(c => [c[0] + deltaX, c[1] + deltaY]);
     },
     [widget.id],
   );
-  const moveEnd = useCallback(() => {
-    if (!selectedIds.includes(widget.id)) {
-      return;
-    }
-    const nextRect = {
-      ...widget.config.rect,
-      x: Number(curXY[0].toFixed(1)),
-      y: Number(curXY[1].toFixed(1)),
-    };
-    onEditFreeWidgetRect(nextRect, widget.id, false);
-  }, [curXY, onEditFreeWidgetRect, selectedIds, widget.config.rect, widget.id]);
+
   useEffect(() => {
     widgetMove.on(move);
-    widgetMoveEnd.on(moveEnd);
     return () => {
       widgetMove.off(move);
-      widgetMoveEnd.off(moveEnd);
     };
-  }, [move, moveEnd]);
+  }, [move]);
 
-  const dragStart: DraggableEventHandler = useCallback((e, data) => {
-    e.stopPropagation();
-    if (e.target === data.node.lastElementChild) {
-      return false;
-    }
-    if (
-      typeof (e as MouseEvent).button === 'number' &&
-      (e as MouseEvent).button !== 0
-    ) {
-      return false;
-    }
-  }, []);
+  const dragStart: DraggableEventHandler = useCallback(
+    (e, data) => {
+      e.stopPropagation();
+      if (e.target === data.node.lastElementChild) {
+        return false;
+      }
+      if (
+        typeof (e as MouseEvent).button === 'number' &&
+        (e as MouseEvent).button !== 0
+      ) {
+        return false;
+      }
+    },
+    [],
+  );
   const drag: DraggableEventHandler = useCallback(
     (e, data) => {
       e.stopPropagation();
       const { deltaX, deltaY } = data;
-      widgetMove.emit(
-        !!selectedIds ? `${selectedIds},${widget.id}` : widget.id,
-        deltaX,
-        deltaY,
-      );
+      const selectedArr = selectedIds ? selectedIds.split(',') : [];
+      const dragIds = selectedArr.includes(widget.id)
+        ? selectedIds
+        : widget.id;
+      widgetMove.emit(dragIds, deltaX, deltaY);
     },
     [selectedIds, widget.id],
   );
   const dragStop: DraggableEventHandler = (e, data) => {
     if (curXYRef.current[0] === curXY[0] && curXYRef.current[1] === curXY[1]) {
-      // no change
       return;
     }
-    widgetMoveEnd.emit();
+
+    const selectedArr = selectedIds ? selectedIds.split(',') : [];
+    const isDraggedWidgetSelected = selectedArr.includes(widget.id);
+
+    // Calculate delta from original position
+    const deltaX = curXY[0] - widget.config.rect.x;
+    const deltaY = curXY[1] - widget.config.rect.y;
+
+    if (!isDraggedWidgetSelected || selectedArr.length <= 1) {
+      // Single widget drag - use original method
+      const nextRect = {
+        ...widget.config.rect,
+        x: Number(curXY[0].toFixed(1)),
+        y: Number(curXY[1].toFixed(1)),
+      };
+      onEditFreeWidgetRect(nextRect, widget.id, false);
+    } else {
+      // Multiple widgets drag - batch update
+      const updates = selectedArr
+        .map(id => {
+          const w = allWidgetMap[id];
+          if (!w) return null;
+          return {
+            id,
+            rect: {
+              ...w.config.rect,
+              x: Number((w.config.rect.x + deltaX).toFixed(1)),
+              y: Number((w.config.rect.y + deltaY).toFixed(1)),
+            },
+            isAutoGroupWidget: false,
+          };
+        })
+        .filter(Boolean) as {
+        id: string;
+        rect: { x: number; y: number; width: number; height: number };
+        isAutoGroupWidget: boolean;
+      }[];
+
+      if (updates.length > 0) {
+        dispatch(editBoardStackActions.batchUpdateWidgetsRect({ updates }));
+      }
+    }
+
+    // Update ref to match current state
+    curXYRef.current = [curXY[0], curXY[1]];
     e.stopPropagation();
   };
 

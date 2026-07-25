@@ -27,6 +27,7 @@ import { AddContainer } from './AddContainer/AddContainer';
 import { AddController } from './AddControler/AddControler';
 import { AddMedia } from './AddMedia/AddMedia';
 import { BoardToolRights } from './BoardToolRights';
+import { AlignActions } from './AlignActions';
 import { BoardToolBarContext } from './context/BoardToolBarContext';
 import { CopyBtn, PasteBtn } from './CopyPaste/CopyPaste';
 import { DelWidgetsBtn } from './DelWidgetsBtn';
@@ -77,6 +78,13 @@ export const ToolBar = () => {
 
         <CopyBtn fn={onEditCopyWidgets} title={t('copy')} />
         <PasteBtn fn={onEditPasteWidgets} title={t('paste')} />
+
+        {boardType === 'free' && (
+          <>
+            <Divider type="vertical" />
+            <AlignActions />
+          </>
+        )}
 
         {boardType === 'auto' && (
           <>

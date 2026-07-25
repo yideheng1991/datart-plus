@@ -301,6 +301,67 @@ export const editBoardStackSlice = createSlice({
         state.widgetRecord[id].config.index = index;
       });
     },
+    batchUpdateWidgetsRect(
+      state,
+      action: PayloadAction<{
+        updates: {
+          id: string;
+          rect: RectConfig;
+          isAutoGroupWidget: boolean;
+        }[];
+      }>,
+    ) {
+      const { updates } = action.payload;
+      updates.forEach(({ id, rect: newRect, isAutoGroupWidget }) => {
+        const widgetMap = state.widgetRecord;
+        const targetWidget = widgetMap[id];
+        if (!targetWidget) return;
+        const oldRect = targetWidget.config.rect;
+        const diffRect: RectConfig = {
+          x: newRect.x - oldRect.x,
+          y: newRect.y - oldRect.y,
+          width: newRect.width - oldRect.width,
+          height: newRect.height - oldRect.height,
+        };
+        targetWidget.config.rect = newRect;
+
+        if (isAutoGroupWidget) {
+          return;
+        }
+
+        if (
+          !targetWidget.parentId &&
+          targetWidget.config.originalType !== ORIGINAL_TYPE_MAP.group
+        ) {
+          return;
+        }
+
+        const hasMoveEvent = diffRect.x !== 0 || diffRect.y !== 0;
+        const hasResizeEvent =
+          diffRect.width !== 0 || diffRect.height !== 0;
+
+        if (hasMoveEvent) {
+          const childIds: string[] = [];
+          findChildIds({ widget: targetWidget, widgetMap, childIds });
+          moveGroupAllChildren({ childIds, widgetMap, diffRect });
+          const parentIds: string[] = [];
+          findParentIds({ widget: targetWidget, widgetMap, parentIds });
+          adjustGroupWidgets({
+            groupIds: parentIds,
+            widgetMap,
+          });
+        }
+
+        if (hasResizeEvent) {
+          const parentIds: string[] = [];
+          findParentIds({ widget: targetWidget, widgetMap, parentIds });
+          adjustGroupWidgets({
+            groupIds: parentIds,
+            widgetMap,
+          });
+        }
+      });
+    },
     // group
     changeFreeWidgetRect(
       state,

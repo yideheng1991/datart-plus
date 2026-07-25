@@ -41,13 +41,18 @@ export const BlockMaskLayer: React.FC<BlockMaskLayerProps> = memo(
     const showBlockMask = useSelector(selectShowBlockMask);
     const onMouseDown = useCallback(
       (e: React.MouseEvent<HTMLDivElement>) => {
+        const isSelected = widgetInfo.selected;
+        const hasModifier = e.shiftKey || e.ctrlKey || e.metaKey;
+        if (isSelected && !hasModifier) {
+          return;
+        }
         onEditSelectWidget({
-          multipleKey: e.shiftKey,
+          multipleKey: hasModifier,
           id: widget.id,
-          selected: true,
+          selected: hasModifier ? !isSelected : true,
         });
       },
-      [onEditSelectWidget, widget.id],
+      [onEditSelectWidget, widget.id, widgetInfo.selected],
     );
 
     const doubleClick = useCallback(() => {

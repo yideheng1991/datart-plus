@@ -23,6 +23,7 @@ import styled from 'styled-components/macro';
 import { BoardToolBar } from '../components/BoardToolBar/BoardToolBar';
 import { LayerTreePanel } from '../components/LayerPanel/LayerTreePanel';
 import SlideSetting from '../components/SlideSetting/SlideSetting';
+import { BoardCanvasProvider } from './BoardCanvasContext';
 import { FreeBoardEditor } from './FreeBoardEditor';
 
 export const FreeEditor: React.FC = memo(() => {
@@ -34,25 +35,27 @@ export const FreeEditor: React.FC = memo(() => {
 
   return (
     <Wrapper onClick={clearSelectedWidgets}>
-      <BoardToolBar />
-      <SplitPane
-        defaultSize={256}
-        minSize={200}
-        maxSize={400}
-        pane2Style={{ minWidth: 0 }}
-      >
-        <LayerTreePanel />
+      <BoardCanvasProvider>
+        <BoardToolBar />
         <SplitPane
-          defaultSize={300}
+          defaultSize={256}
           minSize={200}
           maxSize={400}
-          primary="second"
-          pane1Style={{ display: 'flex', minWidth: 0 }}
+          pane2Style={{ minWidth: 0 }}
         >
-          <FreeBoardEditor />
-          <SlideSetting />
+          <LayerTreePanel />
+          <SplitPane
+            defaultSize={300}
+            minSize={200}
+            maxSize={400}
+            primary="second"
+            pane1Style={{ display: 'flex', minWidth: 0 }}
+          >
+            <FreeBoardEditor />
+            <SlideSetting />
+          </SplitPane>
         </SplitPane>
-      </SplitPane>
+      </BoardCanvasProvider>
     </Wrapper>
   );
 });
