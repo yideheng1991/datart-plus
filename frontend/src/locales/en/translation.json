@@ -1741,7 +1741,11 @@
     "colorPicker": {
       "more": "More",
       "ok": "OK",
-      "cancel": "Cancel"
+      "cancel": "Cancel",
+      "eyedropper": "Eyedropper",
+      "recentColors": "Recent Colors",
+      "noRecentColors": "No recent colors",
+      "defaultPalette": "Default Palette"
     },
     "listTitle": {
       "search": "Search",

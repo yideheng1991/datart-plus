@@ -19,7 +19,7 @@
 import { Popover } from 'antd';
 import { defaultPalette, defaultThemes } from 'app/assets/theme/colorsConfig';
 import useI18NPrefix from 'app/hooks/useI18NPrefix';
-import React, { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components/macro';
 import {
   BORDER_RADIUS,
@@ -28,7 +28,9 @@ import {
   SPACE_XS,
 } from 'styles/StyleConstants';
 import ChromeColorPicker from './ChromeColorPicker';
+import { Eyedropper } from './Eyedropper';
 import { colorSelectionPropTypes } from './slice/types';
+import { useRecentColors } from './useRecentColors';
 
 /**
  * 单色选择组件
@@ -41,20 +43,71 @@ function SingleColorSelection({ color, onChange }: colorSelectionPropTypes) {
   const [selectColor, setSelectColor] = useState(color);
   const t = useI18NPrefix('components.colorPicker');
 
-  //更多颜色里的回调函数
-  const moreCallBackFn = value => {
-    if (value) {
-      setSelectColor(value);
-      onChange?.(value);
+  const { recentColors, addRecentColor } = useRecentColors();
+
+  useEffect(() => {
+    if (color) {
+      setSelectColor(color);
     }
-    setMoreStatus(false);
-  };
-  const selectColorFn = (color: string) => {
-    setSelectColor(color);
-    onChange?.(color);
-  };
+  }, [color]);
+
+  const moreCallBackFn = useCallback(
+    value => {
+      if (value) {
+        setSelectColor(value);
+        addRecentColor(value);
+        onChange?.(value);
+      }
+      setMoreStatus(false);
+    },
+    [onChange, addRecentColor],
+  );
+
+  const selectColorFn = useCallback(
+    (color: string) => {
+      setSelectColor(color);
+      addRecentColor(color);
+      onChange?.(color);
+    },
+    [onChange, addRecentColor],
+  );
+
+  const handleEyedropperPick = useCallback(
+    (pickedColor: string) => {
+      setSelectColor(pickedColor);
+      addRecentColor(pickedColor);
+      onChange?.(pickedColor);
+    },
+    [onChange, addRecentColor],
+  );
+
   return (
     <ColorWrap>
+      <HeaderBar>
+        <HeaderLabel>{t('recentColors')}</HeaderLabel>
+        <Eyedropper onPick={handleEyedropperPick} />
+      </HeaderBar>
+
+      <RecentColorWrap>
+        {recentColors.length > 0 ? (
+          recentColors.map((c, i) => (
+            <ColorBlock
+              key={`${c}-${i}`}
+              onClick={() => {
+                selectColorFn(c);
+              }}
+              color={c}
+              className={selectColor === c ? 'active' : ''}
+            ></ColorBlock>
+          ))
+        ) : (
+          <RecentEmpty>{t('noRecentColors')}</RecentEmpty>
+        )}
+      </RecentColorWrap>
+
+      <HeaderBar>
+        <HeaderLabel>{t('defaultPalette')}</HeaderLabel>
+      </HeaderBar>
       <ThemeColorWrap>
         {defaultThemes.map((color, i) => {
           return (
@@ -69,6 +122,7 @@ function SingleColorSelection({ color, onChange }: colorSelectionPropTypes) {
           );
         })}
       </ThemeColorWrap>
+
       <ColorPalette>
         {defaultPalette.map((color, i) => {
           return (
@@ -83,6 +137,7 @@ function SingleColorSelection({ color, onChange }: colorSelectionPropTypes) {
           );
         })}
       </ColorPalette>
+
       <Popover
         destroyTooltipOnHide
         onVisibleChange={setMoreStatus}
@@ -110,6 +165,32 @@ const ColorWrap = styled.div`
   width: 390px;
   min-width: 390px;
   background-color: ${p => p.theme.componentBackground};
+`;
+
+const HeaderBar = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: ${SPACE_XS} ${SPACE_XS} 0;
+`;
+
+const HeaderLabel = styled.span`
+  font-size: ${SPACE_TIMES(3)};
+  color: ${p => p.theme.textColorSnd};
+`;
+
+const RecentColorWrap = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  min-height: ${SPACE_TIMES(9)};
+  padding-top: ${SPACE_XS};
+  border-bottom: 1px solid ${p => p.theme.borderColorSplit};
+`;
+
+const RecentEmpty = styled.span`
+  font-size: ${SPACE_TIMES(3)};
+  line-height: ${SPACE_TIMES(7)};
+  color: ${p => p.theme.textColorDisabled};
 `;
 
 const ThemeColorWrap = styled.div`
