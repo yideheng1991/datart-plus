@@ -20,35 +20,33 @@ import {
   BorderConfig,
 } from 'app/pages/DashBoardPage/pages/Board/slice/types';
 import { getBackgroundImage } from 'app/pages/DashBoardPage/utils';
+import { rgba } from 'polished';
 import styled from 'styled-components/macro';
 export interface StyledBackgroundProps {
   bg: BackgroundConfig;
   bd?: BorderConfig;
 }
 
+const getBackgroundColor = (bg?: BackgroundConfig) => {
+  if (!bg) return undefined;
+  const { color, opacity } = bg;
+  if (!color || color === 'transparent') return color;
+  if (opacity === undefined || opacity >= 1) return color;
+  try {
+    return rgba(color, opacity);
+  } catch (e) {
+    return color;
+  }
+};
+
 const StyledBackground = styled.div<StyledBackgroundProps>`
-  position: relative;
+  background-color: ${p => getBackgroundColor(p.bg)};
+  background-image: ${p => getBackgroundImage(p.bg?.image)};
+  background-repeat: ${p => p.bg?.repeat};
+  background-size: ${p => p.bg?.size};
   border-color: ${p => p?.bd?.color};
   border-style: ${p => p?.bd?.style};
   border-width: ${p => (p?.bd?.width || 0) + 'px'};
   border-radius: ${p => (p?.bd?.radius || 0) + 'px'};
-
-  &::before {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    content: '';
-    background-color: ${p => p.bg?.color};
-    background-image: ${p => getBackgroundImage(p.bg?.image)};
-    background-repeat: ${p => p.bg?.repeat};
-    background-size: ${p => p.bg?.size};
-    opacity: ${p => (p.bg?.opacity !== undefined ? p.bg.opacity : 1)};
-  }
-
-  > * {
-    position: relative;
-    z-index: 1;
-  }
 `;
 export default StyledBackground;
