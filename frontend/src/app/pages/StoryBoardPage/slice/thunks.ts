@@ -192,10 +192,17 @@ export const updateStroyBoardPagesByMoveEvent = createAsyncThunk<
   'storyBoard/updateStroyBoardPagesByMoveEvent',
   async ({ storyId, sortedPages, event }, { getState, dispatch }) => {
     const dropPageIndex = sortedPages?.findIndex(p => p.id === event.dropId);
-    const dragPageIndex = sortedPages?.find(p => p.id === event.dragId);
-    if (dragPageIndex && dropPageIndex && dropPageIndex > -1) {
-      const newSortedPages = sortedPages.filter(p => p.id !== event?.dragId);
-      newSortedPages.splice(dropPageIndex, 0, dragPageIndex);
+    const dragPageIndex = sortedPages?.findIndex(p => p.id === event.dragId);
+    if (dragPageIndex > -1 && dropPageIndex > -1) {
+      const draggedPage = sortedPages[dragPageIndex];
+      const newSortedPages = sortedPages.filter(p => p.id !== event.dragId);
+
+      let insertIndex = dropPageIndex;
+      if (dragPageIndex < dropPageIndex) {
+        insertIndex = dropPageIndex - 1;
+      }
+
+      newSortedPages.splice(insertIndex, 0, draggedPage);
 
       newSortedPages?.forEach((p, index) => {
         if (!isEmpty(p.config.index)) {
