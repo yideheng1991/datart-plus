@@ -30,12 +30,14 @@ import { FC, memo, useMemo } from 'react';
 import { PresentControllerFilterProps } from '.';
 const { RangePicker } = DatePicker;
 
-const toMoment = t => {
+const toMoment = (t, isStart?) => {
   if (!t) {
     return moment();
   }
   if (Boolean(t) && typeof t === 'object' && 'unit' in t) {
-    const time = getTime(+(t.direction + t.amount), t.unit)(t.unit, t.isStart);
+    const offset = t.direction === '+0' ? 0 : +(t.direction + t.amount);
+    const effectiveIsStart = isStart ?? t.isStart;
+    const time = getTime(offset, t.unit)(t.unit, effectiveIsStart);
     return moment(formatTime(time, TIME_FORMATTER));
   }
   return moment(t);
@@ -52,8 +54,8 @@ const RangeTimePickerFilter: FC<PresentControllerFilterProps> = memo(
 
     const rangeTimes = useMemo(() => {
       if (condition?.type === FilterConditionType.RangeTime) {
-        const startTime = toMoment(condition?.value?.[0]);
-        const endTime = toMoment(condition?.value?.[1]);
+        const startTime = toMoment(condition?.value?.[0], true);
+        const endTime = toMoment(condition?.value?.[1], false);
         return [startTime, endTime];
       }
       if (condition?.type === FilterConditionType.RecommendTime) {

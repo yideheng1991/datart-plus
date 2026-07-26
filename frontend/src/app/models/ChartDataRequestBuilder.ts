@@ -285,14 +285,16 @@ export class ChartDataRequestBuilder {
   }
 
   private normalizeFilters = (fields: ChartDataSectionField[]) => {
-    const _timeConverter = (visualType, value, dateFormat = TIME_FORMATTER) => {
+    const _timeConverter = (visualType, value, dateFormat = TIME_FORMATTER, isStartOverride?: boolean) => {
       if (visualType !== 'DATE') {
         return value;
       }
       if (Boolean(value) && typeof value === 'object' && 'unit' in value) {
-        const time = getTime(+(value.direction + value.amount), value.unit)(
+        const effectiveIsStart = isStartOverride !== undefined ? isStartOverride : value.isStart;
+        const offset = value.direction === '+0' ? 0 : +(value.direction + value.amount);
+        const time = getTime(offset, value.unit)(
           value.unit,
-          value.isStart,
+          effectiveIsStart,
         );
         return formatTime(time, dateFormat);
       }
@@ -307,7 +309,7 @@ export class ChartDataRequestBuilder {
       }
       if (Array.isArray(conditionValue)) {
         return conditionValue
-          .map(v => {
+          .map((v, index) => {
             if (IsKeyIn(v as RelationFilterValue, 'key')) {
               const listItem = v as RelationFilterValue;
               if (!listItem.isSelected) {
@@ -323,6 +325,7 @@ export class ChartDataRequestBuilder {
                   field.filter?.condition?.visualType,
                   v,
                   dateFormat,
+                  index === 0,
                 ),
                 valueType: field.type,
               };

@@ -55,11 +55,13 @@ const ManualRangeTimeSelector: FC<
   };
 
   const getRangeStringTimes = () => {
-    return (rangeTimes || []).map(t => {
+    return (rangeTimes || []).map((t, index) => {
       if (Boolean(t) && typeof t === 'object' && 'unit' in t) {
-        const time = getTime(+(t.direction + t.amount), t.unit)(
+        const offset = t.direction === '+0' ? 0 : +(t.direction + t.amount);
+        const effectiveIsStart = t.isStart ?? (index === 0);
+        const time = getTime(offset, t.unit)(
           t.unit,
-          t.isStart,
+          effectiveIsStart,
         );
         return formatTime(time, TIME_FORMATTER);
       }

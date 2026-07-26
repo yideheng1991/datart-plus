@@ -31,7 +31,11 @@ const RelativeTimeSelector: FC<
   } & I18NComponentProps
 > = memo(({ time, i18nPrefix, onChange }) => {
   const t = useI18NPrefix(i18nPrefix);
-  const [amount, setAmount] = useState(() => (time as any)?.amount || 1);
+  const [amount, setAmount] = useState(() => {
+    const t = time as any;
+    if (t?.direction === '+0') return 0;
+    return t?.amount || 1;
+  });
   const [unit, setUnit] = useState<unitOfTime.DurationConstructor>(
     () => (time as any)?.unit || 'd',
   );
@@ -63,7 +67,16 @@ const RelativeTimeSelector: FC<
 
   const handleDirectionChange = newDirection => {
     setDirection(newDirection);
-    handleTimeChange(unit, amount, newDirection);
+    let newAmount = amount;
+    if (newDirection === '+0') {
+      newAmount = 0;
+    } else if (amount === 0) {
+      newAmount = 1;
+    }
+    if (newAmount !== amount) {
+      setAmount(newAmount);
+    }
+    handleTimeChange(unit, newAmount, newDirection);
   };
 
   return (

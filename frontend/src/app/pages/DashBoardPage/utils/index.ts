@@ -337,7 +337,8 @@ export const getControllerDateValues = (obj: {
     timeValues[0] = startTime.exactValue as string;
   } else {
     const { amount, unit, direction } = startTime.relativeValue!;
-    const time = getTime(+(direction + amount), unit)(unit, true);
+    const offset = direction === '+0' ? 0 : +(direction + amount);
+    const time = getTime(offset, unit)(unit, true);
     timeValues[0] = time.format(TIME_FORMATTER);
   }
   if (endTime) {
@@ -356,7 +357,8 @@ export const getControllerDateValues = (obj: {
       // end 相对时间
       const { amount, unit, direction } = endTime.relativeValue!;
       const isStart = !obj.execute;
-      const time = getTime(+(direction + amount), unit)(unit, isStart);
+      const offset = direction === '+0' ? 0 : +(direction + amount);
+      const time = getTime(offset, unit)(unit, isStart);
       timeValues[1] = time.format(TIME_FORMATTER);
     }
   }

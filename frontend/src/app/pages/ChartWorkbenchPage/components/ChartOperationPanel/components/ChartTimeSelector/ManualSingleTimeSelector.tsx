@@ -68,7 +68,7 @@ const ManualSingleTimeSelector: FC<
           <RelativeTimeSelector
             time={time}
             i18nPrefix={i18nPrefix}
-            onChange={onTimeChange}
+            onChange={t => onTimeChange?.({ ...t, isStart })}
           />
         );
     }
