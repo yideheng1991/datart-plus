@@ -858,7 +858,7 @@ describe('ChartDataRequestBuild Test', () => {
         aggOperator: undefined,
         column: ['born'],
         sqlOperator: 'IN',
-        values: [{ value: `${today} 00:00:00`, valueType: 'DATE' }],
+        values: [{ value: moment(today).add(-1, 'd').format('YYYY-MM-DD') + ' 00:00:00', valueType: 'DATE' }],
       },
       {
         aggOperator: undefined,
@@ -1160,7 +1160,13 @@ describe('ChartDataRequestBuild Test', () => {
         aggOperator: undefined,
         column: ['dad', 'born'],
         sqlOperator: 'IN',
-        values: [{ value: `${today} 00:00:00`, valueType: 'DATE' }],
+        values: [
+          {
+            value:
+              moment(today).add(-1, 'd').format('YYYY-MM-DD') + ' 00:00:00',
+            valueType: 'DATE',
+          },
+        ],
       },
       {
         aggOperator: undefined,
