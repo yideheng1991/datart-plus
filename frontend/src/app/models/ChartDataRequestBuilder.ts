@@ -428,7 +428,7 @@ export class ChartDataRequestBuilder {
 
           if (cur.drillable) {
             if (this.isInValidDrillOption()) {
-              return acc.concat(cur.rows?.[0] || []);
+              return acc.concat(rows?.[0] || []);
             }
             return acc.concat(
               rows?.filter(field => {
@@ -449,7 +449,6 @@ export class ChartDataRequestBuilder {
           col?.sort?.type &&
           [SortActionType.ASC, SortActionType.DESC].includes(col?.sort?.type),
       );
-
     const originalSorters = sortColumns.map(aggCol => ({
       column: this.buildColumnName(aggCol),
       operator: aggCol.sort?.type!,
