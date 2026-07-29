@@ -337,8 +337,7 @@ export const editBoardStackSlice = createSlice({
         }
 
         const hasMoveEvent = diffRect.x !== 0 || diffRect.y !== 0;
-        const hasResizeEvent =
-          diffRect.width !== 0 || diffRect.height !== 0;
+        const hasResizeEvent = diffRect.width !== 0 || diffRect.height !== 0;
 
         if (hasMoveEvent) {
           const childIds: string[] = [];

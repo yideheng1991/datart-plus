@@ -283,31 +283,32 @@ export const widgetToolkit: BorderWidgetToolKit = {
     return list;
   },
   getBorderConfig(props) {
-    const [type, firstColor, secondColor, title, titleWidth, titleFont] = getJsonConfigs(
-      props,
-      ['borderGroup'],
-      [
-        'type',
-        'firstColor',
-        'secondColor',
-        'title',
-        'titleWidth',
-        'titleFont',
-      ],
-    ) as [
-      number,
-      string,
-      string,
-      string,
-      number,
-      {
-        fontFamily: string;
-        fontSize: string;
-        fontWeight: string;
-        fontStyle: string;
-        color: string;
-      },
-    ];
+    const [type, firstColor, secondColor, title, titleWidth, titleFont] =
+      getJsonConfigs(
+        props,
+        ['borderGroup'],
+        [
+          'type',
+          'firstColor',
+          'secondColor',
+          'title',
+          'titleWidth',
+          'titleFont',
+        ],
+      ) as [
+        number,
+        string,
+        string,
+        string,
+        number,
+        {
+          fontFamily: string;
+          fontSize: string;
+          fontWeight: string;
+          fontStyle: string;
+          color: string;
+        },
+      ];
     return {
       type: type ?? 1,
       firstColor: firstColor ?? '#4fd2dd',

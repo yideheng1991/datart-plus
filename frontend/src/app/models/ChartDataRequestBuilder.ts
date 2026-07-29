@@ -285,17 +285,21 @@ export class ChartDataRequestBuilder {
   }
 
   private normalizeFilters = (fields: ChartDataSectionField[]) => {
-    const _timeConverter = (visualType, value, dateFormat = TIME_FORMATTER, isStartOverride?: boolean) => {
+    const _timeConverter = (
+      visualType,
+      value,
+      dateFormat = TIME_FORMATTER,
+      isStartOverride?: boolean,
+    ) => {
       if (visualType !== 'DATE') {
         return value;
       }
       if (Boolean(value) && typeof value === 'object' && 'unit' in value) {
-        const effectiveIsStart = isStartOverride !== undefined ? isStartOverride : value.isStart;
-        const offset = value.direction === '+0' ? 0 : +(value.direction + value.amount);
-        const time = getTime(offset, value.unit)(
-          value.unit,
-          effectiveIsStart,
-        );
+        const effectiveIsStart =
+          isStartOverride !== undefined ? isStartOverride : value.isStart;
+        const offset =
+          value.direction === '+0' ? 0 : +(value.direction + value.amount);
+        const time = getTime(offset, value.unit)(value.unit, effectiveIsStart);
         return formatTime(time, dateFormat);
       }
       return formatTime(value, dateFormat);

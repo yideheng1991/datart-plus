@@ -55,34 +55,37 @@ export default function useBoardEditorHotkeys() {
   allWidgetMapRef.current = allWidgetMap;
   scrollCanvasRef.current = scrollCanvas;
 
-  const moveSelectedWidgets = useCallback((deltaX: number, deltaY: number) => {
-    const idsStr = selectedIdsRef.current;
-    if (!idsStr) return;
-    const ids = idsStr.split(',');
-    const updates = ids
-      .map(id => {
-        const w = allWidgetMapRef.current[id];
-        if (!w) return null;
-        return {
-          id,
-          rect: {
-            ...w.config.rect,
-            x: Number((w.config.rect.x + deltaX).toFixed(1)),
-            y: Number((w.config.rect.y + deltaY).toFixed(1)),
-          },
-          isAutoGroupWidget: false,
-        };
-      })
-      .filter(Boolean) as {
-      id: string;
-      rect: { x: number; y: number; width: number; height: number };
-      isAutoGroupWidget: boolean;
-    }[];
+  const moveSelectedWidgets = useCallback(
+    (deltaX: number, deltaY: number) => {
+      const idsStr = selectedIdsRef.current;
+      if (!idsStr) return;
+      const ids = idsStr.split(',');
+      const updates = ids
+        .map(id => {
+          const w = allWidgetMapRef.current[id];
+          if (!w) return null;
+          return {
+            id,
+            rect: {
+              ...w.config.rect,
+              x: Number((w.config.rect.x + deltaX).toFixed(1)),
+              y: Number((w.config.rect.y + deltaY).toFixed(1)),
+            },
+            isAutoGroupWidget: false,
+          };
+        })
+        .filter(Boolean) as {
+        id: string;
+        rect: { x: number; y: number; width: number; height: number };
+        isAutoGroupWidget: boolean;
+      }[];
 
-    if (updates.length > 0) {
-      dispatch(editBoardStackActions.batchUpdateWidgetsRect({ updates }));
-    }
-  }, [dispatch]);
+      if (updates.length > 0) {
+        dispatch(editBoardStackActions.batchUpdateWidgetsRect({ updates }));
+      }
+    },
+    [dispatch],
+  );
 
   useHotkeys('delete,backspace', () => onEditDeleteActiveWidgets(), []);
 
@@ -90,9 +93,7 @@ export default function useBoardEditorHotkeys() {
   useHotkeys('ctrl+shift+z,command+shift+z', () => redo());
 
   useHotkeys('ctrl+shift+up,command+shift+up', () => onEditLayerToTop());
-  useHotkeys('ctrl+shift+down,command+shift+down', () =>
-    onEditLayerToBottom(),
-  );
+  useHotkeys('ctrl+shift+down,command+shift+down', () => onEditLayerToBottom());
 
   useHotkeys('ctrl+c,command+c', () => onEditCopyWidgets());
   useHotkeys('ctrl+v,command+v', () => onEditPasteWidgets());
@@ -102,101 +103,125 @@ export default function useBoardEditorHotkeys() {
     e.preventDefault();
   });
 
-  const handleArrowUp = useCallback((e: KeyboardEvent) => {
-    e.preventDefault();
-    const hasExtraModifier = e.ctrlKey || e.metaKey;
-    if (hasExtraModifier) return;
-    const hasSelection = !!selectedIdsRef.current;
-    if (hasSelection) {
-      moveSelectedWidgets(0, -MOVE_STEP);
-    } else {
-      scrollCanvasRef.current(0, -40);
-    }
-  }, [moveSelectedWidgets]);
+  const handleArrowUp = useCallback(
+    (e: KeyboardEvent) => {
+      e.preventDefault();
+      const hasExtraModifier = e.ctrlKey || e.metaKey;
+      if (hasExtraModifier) return;
+      const hasSelection = !!selectedIdsRef.current;
+      if (hasSelection) {
+        moveSelectedWidgets(0, -MOVE_STEP);
+      } else {
+        scrollCanvasRef.current(0, -40);
+      }
+    },
+    [moveSelectedWidgets],
+  );
 
-  const handleShiftArrowUp = useCallback((e: KeyboardEvent) => {
-    e.preventDefault();
-    const hasExtraModifier = e.ctrlKey || e.metaKey;
-    if (hasExtraModifier) return;
-    const hasSelection = !!selectedIdsRef.current;
-    if (hasSelection) {
-      moveSelectedWidgets(0, -MOVE_STEP_LARGE);
-    } else {
-      scrollCanvasRef.current(0, -100);
-    }
-  }, [moveSelectedWidgets]);
+  const handleShiftArrowUp = useCallback(
+    (e: KeyboardEvent) => {
+      e.preventDefault();
+      const hasExtraModifier = e.ctrlKey || e.metaKey;
+      if (hasExtraModifier) return;
+      const hasSelection = !!selectedIdsRef.current;
+      if (hasSelection) {
+        moveSelectedWidgets(0, -MOVE_STEP_LARGE);
+      } else {
+        scrollCanvasRef.current(0, -100);
+      }
+    },
+    [moveSelectedWidgets],
+  );
 
-  const handleArrowDown = useCallback((e: KeyboardEvent) => {
-    e.preventDefault();
-    const hasExtraModifier = e.ctrlKey || e.metaKey;
-    if (hasExtraModifier) return;
-    const hasSelection = !!selectedIdsRef.current;
-    if (hasSelection) {
-      moveSelectedWidgets(0, MOVE_STEP);
-    } else {
-      scrollCanvasRef.current(0, 40);
-    }
-  }, [moveSelectedWidgets]);
+  const handleArrowDown = useCallback(
+    (e: KeyboardEvent) => {
+      e.preventDefault();
+      const hasExtraModifier = e.ctrlKey || e.metaKey;
+      if (hasExtraModifier) return;
+      const hasSelection = !!selectedIdsRef.current;
+      if (hasSelection) {
+        moveSelectedWidgets(0, MOVE_STEP);
+      } else {
+        scrollCanvasRef.current(0, 40);
+      }
+    },
+    [moveSelectedWidgets],
+  );
 
-  const handleShiftArrowDown = useCallback((e: KeyboardEvent) => {
-    e.preventDefault();
-    const hasExtraModifier = e.ctrlKey || e.metaKey;
-    if (hasExtraModifier) return;
-    const hasSelection = !!selectedIdsRef.current;
-    if (hasSelection) {
-      moveSelectedWidgets(0, MOVE_STEP_LARGE);
-    } else {
-      scrollCanvasRef.current(0, 100);
-    }
-  }, [moveSelectedWidgets]);
+  const handleShiftArrowDown = useCallback(
+    (e: KeyboardEvent) => {
+      e.preventDefault();
+      const hasExtraModifier = e.ctrlKey || e.metaKey;
+      if (hasExtraModifier) return;
+      const hasSelection = !!selectedIdsRef.current;
+      if (hasSelection) {
+        moveSelectedWidgets(0, MOVE_STEP_LARGE);
+      } else {
+        scrollCanvasRef.current(0, 100);
+      }
+    },
+    [moveSelectedWidgets],
+  );
 
-  const handleArrowLeft = useCallback((e: KeyboardEvent) => {
-    e.preventDefault();
-    const hasExtraModifier = e.ctrlKey || e.metaKey;
-    if (hasExtraModifier) return;
-    const hasSelection = !!selectedIdsRef.current;
-    if (hasSelection) {
-      moveSelectedWidgets(-MOVE_STEP, 0);
-    } else {
-      scrollCanvasRef.current(-40, 0);
-    }
-  }, [moveSelectedWidgets]);
+  const handleArrowLeft = useCallback(
+    (e: KeyboardEvent) => {
+      e.preventDefault();
+      const hasExtraModifier = e.ctrlKey || e.metaKey;
+      if (hasExtraModifier) return;
+      const hasSelection = !!selectedIdsRef.current;
+      if (hasSelection) {
+        moveSelectedWidgets(-MOVE_STEP, 0);
+      } else {
+        scrollCanvasRef.current(-40, 0);
+      }
+    },
+    [moveSelectedWidgets],
+  );
 
-  const handleShiftArrowLeft = useCallback((e: KeyboardEvent) => {
-    e.preventDefault();
-    const hasExtraModifier = e.ctrlKey || e.metaKey;
-    if (hasExtraModifier) return;
-    const hasSelection = !!selectedIdsRef.current;
-    if (hasSelection) {
-      moveSelectedWidgets(-MOVE_STEP_LARGE, 0);
-    } else {
-      scrollCanvasRef.current(-100, 0);
-    }
-  }, [moveSelectedWidgets]);
+  const handleShiftArrowLeft = useCallback(
+    (e: KeyboardEvent) => {
+      e.preventDefault();
+      const hasExtraModifier = e.ctrlKey || e.metaKey;
+      if (hasExtraModifier) return;
+      const hasSelection = !!selectedIdsRef.current;
+      if (hasSelection) {
+        moveSelectedWidgets(-MOVE_STEP_LARGE, 0);
+      } else {
+        scrollCanvasRef.current(-100, 0);
+      }
+    },
+    [moveSelectedWidgets],
+  );
 
-  const handleArrowRight = useCallback((e: KeyboardEvent) => {
-    e.preventDefault();
-    const hasExtraModifier = e.ctrlKey || e.metaKey;
-    if (hasExtraModifier) return;
-    const hasSelection = !!selectedIdsRef.current;
-    if (hasSelection) {
-      moveSelectedWidgets(MOVE_STEP, 0);
-    } else {
-      scrollCanvasRef.current(40, 0);
-    }
-  }, [moveSelectedWidgets]);
+  const handleArrowRight = useCallback(
+    (e: KeyboardEvent) => {
+      e.preventDefault();
+      const hasExtraModifier = e.ctrlKey || e.metaKey;
+      if (hasExtraModifier) return;
+      const hasSelection = !!selectedIdsRef.current;
+      if (hasSelection) {
+        moveSelectedWidgets(MOVE_STEP, 0);
+      } else {
+        scrollCanvasRef.current(40, 0);
+      }
+    },
+    [moveSelectedWidgets],
+  );
 
-  const handleShiftArrowRight = useCallback((e: KeyboardEvent) => {
-    e.preventDefault();
-    const hasExtraModifier = e.ctrlKey || e.metaKey;
-    if (hasExtraModifier) return;
-    const hasSelection = !!selectedIdsRef.current;
-    if (hasSelection) {
-      moveSelectedWidgets(MOVE_STEP_LARGE, 0);
-    } else {
-      scrollCanvasRef.current(100, 0);
-    }
-  }, [moveSelectedWidgets]);
+  const handleShiftArrowRight = useCallback(
+    (e: KeyboardEvent) => {
+      e.preventDefault();
+      const hasExtraModifier = e.ctrlKey || e.metaKey;
+      if (hasExtraModifier) return;
+      const hasSelection = !!selectedIdsRef.current;
+      if (hasSelection) {
+        moveSelectedWidgets(MOVE_STEP_LARGE, 0);
+      } else {
+        scrollCanvasRef.current(100, 0);
+      }
+    },
+    [moveSelectedWidgets],
+  );
 
   useHotkeys('up', handleArrowUp);
   useHotkeys('shift+up', handleShiftArrowUp);

@@ -84,6 +84,7 @@ export const ORIGINAL_TYPE_MAP = {
   timer: 'timer',
   richText: 'richText',
   iframe: 'iframe',
+  icon: 'icon',
   border: 'border',
   decoration: 'decoration',
 

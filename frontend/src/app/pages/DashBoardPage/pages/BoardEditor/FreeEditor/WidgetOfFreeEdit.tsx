@@ -39,8 +39,12 @@ import { BoardScaleContext } from '../../../components/FreeBoardBackground';
 import { WidgetInfoContext } from '../../../components/WidgetProvider/WidgetInfoProvider';
 import { ORIGINAL_TYPE_MAP } from '../../../constants';
 import { editBoardStackActions } from '../slice';
-import { widgetMove, widgetMoveEnd } from '../slice/events';
-import { selectAllWidgetMap, selectEditingWidgetIds, selectSelectedIds } from '../slice/selectors';
+import { widgetMove } from '../slice/events';
+import {
+  selectAllWidgetMap,
+  selectEditingWidgetIds,
+  selectSelectedIds,
+} from '../slice/selectors';
 export enum DragTriggerTypes {
   MouseMove = 'mousemove',
   KeyDown = 'keydown',
@@ -90,29 +94,24 @@ export const WidgetOfFreeEdit: React.FC<{}> = () => {
     };
   }, [move]);
 
-  const dragStart: DraggableEventHandler = useCallback(
-    (e, data) => {
-      e.stopPropagation();
-      if (e.target === data.node.lastElementChild) {
-        return false;
-      }
-      if (
-        typeof (e as MouseEvent).button === 'number' &&
-        (e as MouseEvent).button !== 0
-      ) {
-        return false;
-      }
-    },
-    [],
-  );
+  const dragStart: DraggableEventHandler = useCallback((e, data) => {
+    e.stopPropagation();
+    if (e.target === data.node.lastElementChild) {
+      return false;
+    }
+    if (
+      typeof (e as MouseEvent).button === 'number' &&
+      (e as MouseEvent).button !== 0
+    ) {
+      return false;
+    }
+  }, []);
   const drag: DraggableEventHandler = useCallback(
     (e, data) => {
       e.stopPropagation();
       const { deltaX, deltaY } = data;
       const selectedArr = selectedIds ? selectedIds.split(',') : [];
-      const dragIds = selectedArr.includes(widget.id)
-        ? selectedIds
-        : widget.id;
+      const dragIds = selectedArr.includes(widget.id) ? selectedIds : widget.id;
       widgetMove.emit(dragIds, deltaX, deltaY);
     },
     [selectedIds, widget.id],

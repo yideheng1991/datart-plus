@@ -44,7 +44,9 @@ export function useRecentColors() {
   const addRecentColor = useCallback((color: string) => {
     if (!isValidColor(color)) return;
     setRecentColors(prev => {
-      const filtered = prev.filter(c => c.toLowerCase() !== color.toLowerCase());
+      const filtered = prev.filter(
+        c => c.toLowerCase() !== color.toLowerCase(),
+      );
       return [color, ...filtered].slice(0, MAX_COLORS);
     });
   }, []);

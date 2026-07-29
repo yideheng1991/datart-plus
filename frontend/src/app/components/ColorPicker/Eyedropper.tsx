@@ -17,9 +17,9 @@
  */
 
 import { Button, Tooltip } from 'antd';
+import useI18NPrefix from 'app/hooks/useI18NPrefix';
 import React, { useCallback, useState } from 'react';
 import styled from 'styled-components/macro';
-import useI18NPrefix from 'app/hooks/useI18NPrefix';
 
 declare global {
   interface Window {
@@ -44,10 +44,7 @@ const EyedropperIcon: React.FC<{ className?: string }> = ({ className }) => (
   </svg>
 );
 
-export const Eyedropper: React.FC<EyedropperProps> = ({
-  onPick,
-  disabled,
-}) => {
+export const Eyedropper: React.FC<EyedropperProps> = ({ onPick, disabled }) => {
   const t = useI18NPrefix('components.colorPicker');
   const [isPicking, setIsPicking] = useState(false);
   const supported = typeof window !== 'undefined' && !!window.EyeDropper;

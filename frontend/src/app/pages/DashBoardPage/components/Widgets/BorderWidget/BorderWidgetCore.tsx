@@ -24,14 +24,8 @@ import { borderToolkit } from './borderConfig';
 
 export const BorderWidgetCore: React.FC = memo(() => {
   const widget = useContext(WidgetContext);
-  const {
-    type,
-    firstColor,
-    secondColor,
-    title,
-    titleWidth,
-    titleFont,
-  } = borderToolkit.getBorderConfig(widget.config.customConfig.props);
+  const { type, firstColor, secondColor, title, titleWidth, titleFont } =
+    borderToolkit.getBorderConfig(widget.config.customConfig.props);
 
   const renderBorder = () => {
     const color = [firstColor, secondColor];

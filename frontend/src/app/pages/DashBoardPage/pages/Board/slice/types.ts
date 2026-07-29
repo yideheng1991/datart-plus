@@ -335,6 +335,7 @@ export declare const MediaWidgetTypes: [
   'image',
   'video',
   'iframe',
+  'icon',
   'border',
   'decoration',
 ];

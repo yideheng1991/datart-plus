@@ -68,6 +68,11 @@ export const AddMedia: React.FC<{}> = () => {
       type: 'iframe',
     },
     {
+      name: t('icon'),
+      icon: '',
+      type: 'icon',
+    },
+    {
       name: t('video'),
       icon: '',
       type: 'video',
