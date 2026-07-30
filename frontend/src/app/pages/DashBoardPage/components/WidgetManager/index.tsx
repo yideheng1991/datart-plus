@@ -32,6 +32,7 @@ import linkedChartProto from '../Widgets/DataChartWidget/linkedChartConfig';
 import ownedChartProto from '../Widgets/DataChartWidget/ownedChartConfig';
 import decorationProto from '../Widgets/DecorationWidget/decorationConfig';
 import groupProto from '../Widgets/GroupWidget/config';
+import iconProto from '../Widgets/IconWidget/iconConfig';
 import iframeProto from '../Widgets/IframeWidget/iframeConfig';
 import imageProto from '../Widgets/ImageWidget/imageConfig';
 import queryBtnProto from '../Widgets/QueryBtnWidget/queryBtnConfig';
@@ -50,6 +51,7 @@ const protoList: WidgetProto[] = [
   videoProto,
   richTextProto,
   iframeProto,
+  iconProto,
   timerProto,
   borderProto, //   border
   decorationProto, //   decoration

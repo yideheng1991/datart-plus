@@ -90,7 +90,12 @@ export const Background: FC<ItemLayoutProps<ChartStyleConfig>> = memo(
               onChange={onOpacityChange}
               style={{ width: 120 }}
             />
-            <span>{Math.round((value.opacity !== undefined ? value.opacity : 1) * 100)}%</span>
+            <span>
+              {Math.round(
+                (value.opacity !== undefined ? value.opacity : 1) * 100,
+              )}
+              %
+            </span>
           </Space>
         </OpacityGroup>
       </Wrap>
@@ -108,7 +113,7 @@ const OpacityGroup = styled.div`
   display: flex;
   align-items: center;
   margin-top: 8px;
-  
+
   span {
     width: 60px;
   }

@@ -950,6 +950,7 @@
         "richText": "Rich Text",
         "timer": "Timer",
         "iframe": "IFrame",
+        "icon": "Icon",
         "video": "Video",
         "border": "Border",
         "decoration": "Decoration",
@@ -1067,6 +1068,7 @@
         "richText": "Rich Text",
         "timer": "Timer",
         "iframe": "IFrame",
+        "icon": "Icon",
         "video": "Video",
         "tab": "Tab"
       },
@@ -1755,6 +1757,16 @@
       "createDashboard": "Create Dashboard",
       "searchValue": "Search keywords",
       "haveCharts": "The chart already exists in the dashboard and cannot be added repeatedly"
+    },
+    "iconSelectModal": {
+      "title": "Select Icon",
+      "dataCategory": "Data",
+      "generalCategory": "General",
+      "noIcon": "No Icon",
+      "confirm": "OK",
+      "cancel": "Cancel",
+      "selectIcon": "Select Icon",
+      "searchPlaceholder": "Search icon name"
     }
   }
 }

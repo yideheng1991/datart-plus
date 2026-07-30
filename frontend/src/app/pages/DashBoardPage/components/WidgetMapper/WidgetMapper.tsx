@@ -24,6 +24,7 @@ import { ControllerWidget } from '../Widgets/ControllerWidget/ControllerWidget';
 import { DataChartWidget } from '../Widgets/DataChartWidget/DataChartWidget';
 import { DecorationWidget } from '../Widgets/DecorationWidget/DecorationWidget';
 import { GroupWidget } from '../Widgets/GroupWidget';
+import { IconWidget } from '../Widgets/IconWidget/IconWidget';
 import { IframeWidget } from '../Widgets/IframeWidget/IframeWidget';
 import { ImageWidget } from '../Widgets/ImageWidget/ImageWidget';
 import { QueryBtnWidget } from '../Widgets/QueryBtnWidget/QueryBtnWidget';
@@ -63,6 +64,8 @@ export const WidgetMapper: React.FC<{
       return <VideoWidget hideTitle={hideTitle} />;
     case ORIGINAL_TYPE_MAP.iframe:
       return <IframeWidget hideTitle={hideTitle} />;
+    case ORIGINAL_TYPE_MAP.icon:
+      return <IconWidget hideTitle={hideTitle} />;
     case ORIGINAL_TYPE_MAP.timer:
       return <TimerWidget hideTitle={hideTitle} />;
     case ORIGINAL_TYPE_MAP.border:

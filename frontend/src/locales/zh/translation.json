@@ -948,6 +948,7 @@
         "richText": "富文本",
         "timer": "计时器",
         "iframe": "IFrame",
+        "icon": "图标",
         "video": "视频",
         "border": "边框",
         "decoration": "装饰",
@@ -1065,6 +1066,7 @@
         "richText": "富文本",
         "timer": "时间器",
         "iframe": "IFrame",
+        "icon": "图标",
         "video": "视频",
         "tab": "Tab"
       },
@@ -1754,6 +1756,16 @@
       "createDashboard": "新建仪表板",
       "searchValue": "搜索名称关键字",
       "haveCharts": "仪表板中已有该图表，不能重复添加"
+    },
+    "iconSelectModal": {
+      "title": "选择图标",
+      "dataCategory": "数据类",
+      "generalCategory": "通用类",
+      "noIcon": "暂无图标",
+      "confirm": "确认",
+      "cancel": "取消",
+      "selectIcon": "选择图标",
+      "searchPlaceholder": "搜索图标名称"
     }
   }
 }

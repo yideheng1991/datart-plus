@@ -50,6 +50,7 @@ import {
 } from '../Basic';
 import {
   Background,
+  BasicIconPicker,
   CheckboxModal,
   ConditionalStylePanel,
   CrossFilteringPanel,
@@ -219,6 +220,8 @@ const ItemLayout: FC<FormGeneratorLayoutProps<ChartStyleConfig>> = memo(
           return <DataZoomPanel {...props} />;
         case ChartStyleSectionComponentType.Y_AXIS_NUMBER_FORMAT_PANEL:
           return <YAxisNumberFormatPanel {...props} />;
+        case ChartStyleSectionComponentType.ICON_PICKER:
+          return <BasicIconPicker {...props} />;
         default:
           return <div>{`no matched component comType of ${data.comType}`}</div>;
       }

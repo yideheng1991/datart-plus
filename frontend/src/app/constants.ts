@@ -151,7 +151,7 @@ export enum FilterConditionType {
     RecommendTime |
     Time |
     Tree,
-  Relation = 1 << 50,
+  Relation = 1 << 18,
 }
 
 export const ChartDataSectionFieldActionType = {
@@ -234,6 +234,7 @@ export const ChartStyleSectionComponentType = {
   INTERACTION_VIEW_DETAIL_PANEL: 'interaction.viewDetail',
   DATA_ZOOM_PANEL: 'dataZoomPanel',
   Y_AXIS_NUMBER_FORMAT_PANEL: 'YAxisNumberFormatPanel',
+  ICON_PICKER: 'iconPicker',
 };
 
 export enum DownloadFileType {
