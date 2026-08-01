@@ -46,3 +46,4 @@ export { default as StackBarChart } from './StackBarChart';
 export { default as StackColumnChart } from './StackColumnChart';
 export { default as WaterfallChart } from './WaterfallChart';
 export { default as WordCloudChart } from './WordCloudChart';
+export { default as BasicRadarChart } from './BasicRadarChart';

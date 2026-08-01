@@ -41,6 +41,7 @@ import {
   StackColumnChart,
   WaterfallChart,
   WordCloudChart,
+  BasicRadarChart,
 } from 'app/components/ChartGraph';
 import { IChart } from 'app/types/Chart';
 import { getChartPluginPaths } from 'app/utils/fetch';
@@ -132,6 +133,7 @@ class ChartManager {
       new ScatterOutlineMapChart(),
       new BasicGaugeChart(),
       new BasicRichText(),
+      new BasicRadarChart(),
     ];
   }
 }

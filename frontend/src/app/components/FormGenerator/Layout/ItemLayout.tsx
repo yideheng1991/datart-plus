@@ -64,6 +64,7 @@ import {
   ListTemplatePanel,
   NameLocation,
   PivotSheetTheme,
+  RadarIndicatorPanel,
   ScorecardConditionalStylePanel,
   TimerFormat,
   UnControlledTableHeaderPanel,
@@ -222,6 +223,8 @@ const ItemLayout: FC<FormGeneratorLayoutProps<ChartStyleConfig>> = memo(
           return <YAxisNumberFormatPanel {...props} />;
         case ChartStyleSectionComponentType.ICON_PICKER:
           return <BasicIconPicker {...props} />;
+        case ChartStyleSectionComponentType.RADAR_INDICATOR_MAX:
+          return <RadarIndicatorPanel {...props} />;
         default:
           return <div>{`no matched component comType of ${data.comType}`}</div>;
       }

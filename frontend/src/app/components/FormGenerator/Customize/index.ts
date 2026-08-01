@@ -32,6 +32,7 @@ export { default as LegendType } from './LegendType';
 export { default as ListTemplatePanel } from './ListTemplatePanel';
 export { default as NameLocation } from './NameLocation';
 export { default as PivotSheetTheme } from './PivotSheetTheme';
+export { default as RadarIndicatorPanel } from './RadarIndicatorPanel';
 export { default as ScorecardConditionalStylePanel } from './ScorecardConditionalStyle';
 export { default as TimerFormat } from './TimerFormat';
 export { default as UnControlledTableHeaderPanel } from './UnControlledTableHeaderPanel';

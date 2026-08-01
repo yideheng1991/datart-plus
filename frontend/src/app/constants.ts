@@ -235,6 +235,7 @@ export const ChartStyleSectionComponentType = {
   DATA_ZOOM_PANEL: 'dataZoomPanel',
   Y_AXIS_NUMBER_FORMAT_PANEL: 'YAxisNumberFormatPanel',
   ICON_PICKER: 'iconPicker',
+  RADAR_INDICATOR_MAX: 'radarIndicatorMax',
 };
 
 export enum DownloadFileType {

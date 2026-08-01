@@ -23,8 +23,8 @@ const config: ChartConfig = {
     {
       label: 'dimension',
       key: 'dimension',
-      required: true,
       type: 'group',
+      limit: [0, 1],
     },
     {
       label: 'metrics',
@@ -43,6 +43,7 @@ const config: ChartConfig = {
       label: 'colorize',
       key: 'color',
       type: 'color',
+      limit: [0, 1],
     },
     {
       label: 'info',
@@ -52,66 +53,102 @@ const config: ChartConfig = {
   ],
   styles: [
     {
-      label: 'stack.title',
-      key: 'stack',
+      label: 'radarAxis.title',
+      key: 'radarAxis',
       comType: 'group',
       rows: [
         {
-          label: 'stack.enable',
-          key: 'enable',
-          default: false,
-          comType: 'checkbox',
-        },
-        {
-          label: 'stack.percentage',
-          key: 'percentage',
-          default: false,
-          comType: 'checkbox',
-        },
-        {
-          label: 'stack.enableTotal',
-          key: 'enableTotal',
-          default: false,
-          comType: 'checkbox',
-        },
-        {
-          label: 'common.fontFamily',
-          key: 'fontFamily',
-          comType: 'fontFamily',
-          default: '苹方',
-          watcher: {
-            deps: ['enableTotal'],
-            action: props => {
-              return {
-                disabled: props.showLabel,
-              };
-            },
+          label: 'radarAxis.shape',
+          key: 'shape',
+          default: 'polygon',
+          comType: 'select',
+          options: {
+            translateItemLabel: true,
+            items: [
+              {
+                label: 'radarAxis.polygon',
+                value: 'polygon',
+              },
+              {
+                label: 'radarAxis.circle',
+                value: 'circle',
+              },
+            ],
           },
         },
         {
-          label: 'common.fontSize',
-          key: 'fontSize',
-          comType: 'fontSize',
-          default: 8,
-          watcher: {
-            deps: ['enableTotal'],
-            action: props => {
-              return {
-                disabled: props.showLabel,
-              };
-            },
+          label: 'radarAxis.radius',
+          key: 'radius',
+          default: '65%',
+          comType: 'marginWidth',
+        },
+        {
+          label: 'radarAxis.centerX',
+          key: 'centerX',
+          default: '50%',
+          comType: 'marginWidth',
+        },
+        {
+          label: 'radarAxis.centerY',
+          key: 'centerY',
+          default: '50%',
+          comType: 'marginWidth',
+        },
+        {
+          label: 'radarAxis.startAngle',
+          key: 'startAngle',
+          default: 90,
+          comType: 'inputNumber',
+          options: {
+            min: -360,
+            max: 360,
           },
         },
         {
-          label: 'common.fontColor',
-          key: 'fontColor',
-          comType: 'fontColor',
-          default: 'black',
+          label: 'radarAxis.splitNumber',
+          key: 'splitNumber',
+          default: 5,
+          comType: 'inputNumber',
+          options: {
+            min: 1,
+            step: 1,
+          },
+        },
+        {
+          label: 'radarAxis.maxValues',
+          key: 'maxValues',
+          default: [],
+          comType: 'radarIndicatorMax',
+        },
+      ],
+    },
+    {
+      label: 'axisName.title',
+      key: 'axisName',
+      comType: 'group',
+      rows: [
+        {
+          label: 'axisName.show',
+          key: 'show',
+          default: true,
+          comType: 'checkbox',
+        },
+        {
+          label: 'viz.palette.style.font',
+          key: 'font',
+          comType: 'font',
+          default: {
+            fontFamily: 'PingFang SC',
+            fontSize: '12',
+            fontWeight: 'normal',
+            fontStyle: 'normal',
+            color: '#495057',
+          },
           watcher: {
-            deps: ['enableTotal'],
+            deps: ['show'],
             action: props => {
               return {
-                disabled: props.showLabel,
+                disabled: !props.show,
               };
             },
           },
@@ -119,44 +156,206 @@ const config: ChartConfig = {
       ],
     },
     {
-      label: 'bar.title',
-      key: 'bar',
+      label: 'axisLine.title',
+      key: 'axisLine',
       comType: 'group',
       rows: [
         {
-          label: 'bar.enable',
-          key: 'enable',
-          default: false,
+          label: 'axisLine.show',
+          key: 'show',
+          default: true,
           comType: 'checkbox',
         },
         {
-          label: 'common.borderStyle',
-          key: 'borderStyle',
+          label: 'common.lineStyle',
+          key: 'lineStyle',
           comType: 'line',
           default: {
             type: 'solid',
-            width: 0,
-            color: 'black',
+            width: 1,
+            color: '#ced4da',
+          },
+          watcher: {
+            deps: ['show'],
+            action: props => {
+              return {
+                disabled: !props.show,
+              };
+            },
+          },
+        },
+      ],
+    },
+    {
+      label: 'splitLine.title',
+      key: 'splitLine',
+      comType: 'group',
+      rows: [
+        {
+          label: 'splitLine.show',
+          key: 'show',
+          default: true,
+          comType: 'checkbox',
+        },
+        {
+          label: 'common.lineStyle',
+          key: 'lineStyle',
+          comType: 'line',
+          default: {
+            type: 'solid',
+            width: 1,
+            color: '#ced4da',
+          },
+          watcher: {
+            deps: ['show'],
+            action: props => {
+              return {
+                disabled: !props.show,
+              };
+            },
+          },
+        },
+      ],
+    },
+    {
+      label: 'splitArea.title',
+      key: 'splitArea',
+      comType: 'group',
+      rows: [
+        {
+          label: 'splitArea.show',
+          key: 'show',
+          default: true,
+          comType: 'checkbox',
+        },
+        {
+          label: 'splitArea.color',
+          key: 'color',
+          default: '#f8f9fa',
+          comType: 'fontColor',
+          watcher: {
+            deps: ['show'],
+            action: props => {
+              return {
+                disabled: !props.show,
+              };
+            },
           },
         },
         {
-          label: 'bar.radius',
-          key: 'radius',
+          label: 'splitArea.opacity',
+          key: 'opacity',
+          default: 0.5,
+          comType: 'slider',
+          options: {
+            min: 0,
+            max: 1,
+            step: 0.1,
+            dots: false,
+          },
+          watcher: {
+            deps: ['show'],
+            action: props => {
+              return {
+                disabled: !props.show,
+              };
+            },
+          },
+        },
+      ],
+    },
+    {
+      label: 'radarSeries.title',
+      key: 'radarSeries',
+      comType: 'group',
+      rows: [
+        {
+          label: 'radarSeries.symbol',
+          key: 'symbol',
+          default: 'circle',
+          comType: 'select',
+          options: {
+            translateItemLabel: true,
+            items: [
+              {
+                label: 'radarSeries.circle',
+                value: 'circle',
+              },
+              {
+                label: 'radarSeries.rect',
+                value: 'rect',
+              },
+              {
+                label: 'radarSeries.roundRect',
+                value: 'roundRect',
+              },
+              {
+                label: 'radarSeries.triangle',
+                value: 'triangle',
+              },
+              {
+                label: 'radarSeries.diamond',
+                value: 'diamond',
+              },
+              {
+                label: 'radarSeries.none',
+                value: 'none',
+              },
+            ],
+          },
+        },
+        {
+          label: 'radarSeries.symbolSize',
+          key: 'symbolSize',
+          default: 4,
           comType: 'inputNumber',
           options: {
             min: 0,
           },
         },
         {
-          label: 'bar.width',
-          key: 'width',
-          default: 0,
-          comType: 'inputNumber',
+          label: 'radarSeries.lineType',
+          key: 'lineType',
+          default: 'solid',
+          comType: 'select',
+          options: {
+            translateItemLabel: true,
+            items: [
+              {
+                label: 'radarSeries.solid',
+                value: 'solid',
+              },
+              {
+                label: 'radarSeries.dashed',
+                value: 'dashed',
+              },
+              {
+                label: 'radarSeries.dotted',
+                value: 'dotted',
+              },
+            ],
+          },
         },
         {
-          label: 'bar.gap',
-          key: 'gap',
+          label: 'radarSeries.lineWidth',
+          key: 'lineWidth',
+          default: 2,
           comType: 'inputNumber',
+          options: {
+            min: 0,
+          },
+        },
+        {
+          label: 'radarSeries.areaOpacity',
+          key: 'areaOpacity',
+          default: 0.15,
+          comType: 'slider',
+          options: {
+            min: 0,
+            max: 1,
+            step: 0.1,
+            dots: false,
+          },
         },
       ],
     },
@@ -168,14 +367,8 @@ const config: ChartConfig = {
         {
           label: 'label.showLabel',
           key: 'showLabel',
-          default: true,
+          default: false,
           comType: 'checkbox',
-        },
-        {
-          label: 'label.position',
-          key: 'position',
-          comType: 'labelPosition',
-          default: 'top',
         },
         {
           label: 'viz.palette.style.font',
@@ -186,7 +379,15 @@ const config: ChartConfig = {
             fontSize: '12',
             fontWeight: 'normal',
             fontStyle: 'normal',
-            color: 'black',
+            color: '#495057',
+          },
+          watcher: {
+            deps: ['showLabel'],
+            action: props => {
+              return {
+                disabled: !props.showLabel,
+              };
+            },
           },
         },
       ],
@@ -221,115 +422,14 @@ const config: ChartConfig = {
           default: 'right',
         },
         {
-          label: 'viz.palette.style.font',
-          key: 'font',
-          comType: 'font',
-          default: {
-            fontFamily: 'PingFang SC',
-            fontSize: '12',
-            fontWeight: 'normal',
-            fontStyle: 'normal',
-            color: 'black',
-          },
-        },
-      ],
-    },
-    {
-      label: 'xAxis.title',
-      key: 'xAxis',
-      comType: 'group',
-      rows: [
-        {
-          label: 'common.showAxis',
-          key: 'showAxis',
-          default: true,
-          comType: 'checkbox',
-        },
-        {
-          label: 'common.inverseAxis',
-          key: 'inverseAxis',
-          comType: 'checkbox',
-        },
-        {
-          label: 'common.lineStyle',
-          key: 'lineStyle',
-          comType: 'line',
-          default: {
-            type: 'solid',
-            width: 1,
-            color: 'black',
-          },
-        },
-        {
-          label: 'common.showLabel',
-          key: 'showLabel',
-          default: true,
-          comType: 'checkbox',
-        },
-        {
-          label: 'viz.palette.style.font',
-          key: 'font',
-          comType: 'font',
-          default: {
-            fontFamily: 'PingFang SC',
-            fontSize: '12',
-            fontWeight: 'normal',
-            fontStyle: 'normal',
-            color: 'black',
-          },
-        },
-        {
-          label: 'common.rotate',
-          key: 'rotate',
+          label: 'legend.height',
+          key: 'height',
           default: 0,
           comType: 'inputNumber',
-        },
-        {
-          label: 'common.showInterval',
-          key: 'showInterval',
-          default: false,
-          comType: 'checkbox',
-        },
-        {
-          label: 'common.interval',
-          key: 'interval',
-          default: 0,
-          comType: 'inputNumber',
-        },
-      ],
-    },
-    {
-      label: 'yAxis.title',
-      key: 'yAxis',
-      comType: 'group',
-      rows: [
-        {
-          label: 'common.showAxis',
-          key: 'showAxis',
-          default: true,
-          comType: 'checkbox',
-        },
-        {
-          label: 'common.inverseAxis',
-          key: 'inverseAxis',
-          default: false,
-          comType: 'checkbox',
-        },
-        {
-          label: 'common.lineStyle',
-          key: 'lineStyle',
-          comType: 'line',
-          default: {
-            type: 'solid',
-            width: 1,
-            color: 'black',
+          options: {
+            step: 40,
+            min: 0,
           },
-        },
-        {
-          label: 'common.showLabel',
-          key: 'showLabel',
-          default: true,
-          comType: 'checkbox',
         },
         {
           label: 'viz.palette.style.font',
@@ -340,130 +440,8 @@ const config: ChartConfig = {
             fontSize: '12',
             fontWeight: 'normal',
             fontStyle: 'normal',
-            color: 'black',
+            color: '#495057',
           },
-        },
-        {
-          label: 'common.showTitleAndUnit',
-          key: 'showTitleAndUnit',
-          default: true,
-          comType: 'checkbox',
-        },
-        {
-          label: 'common.unitFont',
-          key: 'unitFont',
-          comType: 'font',
-          default: {
-            fontFamily: 'PingFang SC',
-            fontSize: '12',
-            fontWeight: 'normal',
-            fontStyle: 'normal',
-            color: 'black',
-          },
-        },
-        {
-          label: 'common.nameLocation',
-          key: 'nameLocation',
-          default: 'center',
-          comType: 'nameLocation',
-        },
-        {
-          label: 'common.nameRotate',
-          key: 'nameRotate',
-          default: 90,
-          comType: 'inputNumber',
-        },
-        {
-          label: 'common.nameGap',
-          key: 'nameGap',
-          default: 20,
-          comType: 'inputNumber',
-        },
-        {
-          label: 'common.min',
-          key: 'min',
-          comType: 'inputNumber',
-        },
-        {
-          label: 'common.max',
-          key: 'max',
-          comType: 'inputNumber',
-        },
-      ],
-    },
-    {
-      label: 'splitLine.title',
-      key: 'splitLine',
-      comType: 'group',
-      rows: [
-        {
-          label: 'splitLine.showHorizonLine',
-          key: 'showHorizonLine',
-          default: true,
-          comType: 'checkbox',
-        },
-        {
-          label: 'common.lineStyle',
-          key: 'horizonLineStyle',
-          comType: 'line',
-          default: {
-            type: 'dashed',
-            width: 1,
-            color: 'grey',
-          },
-        },
-        {
-          label: 'splitLine.showVerticalLine',
-          key: 'showVerticalLine',
-          default: true,
-          comType: 'checkbox',
-        },
-        {
-          label: 'common.lineStyle',
-          key: 'verticalLineStyle',
-          comType: 'line',
-          default: {
-            type: 'dashed',
-            width: 1,
-            color: 'grey',
-          },
-        },
-      ],
-    },
-    {
-      label: 'viz.palette.style.margin.title',
-      key: 'margin',
-      comType: 'group',
-      rows: [
-        {
-          label: 'viz.palette.style.margin.containLabel',
-          key: 'containLabel',
-          default: true,
-          comType: 'checkbox',
-        },
-        {
-          label: 'viz.palette.style.margin.left',
-          key: 'marginLeft',
-          default: '5%',
-          comType: 'marginWidth',
-        },
-        {
-          label: 'viz.palette.style.margin.right',
-          key: 'marginRight',
-          default: '5%',
-          comType: 'marginWidth',
-        },
-        {
-          label: 'viz.palette.style.margin.top',
-          key: 'marginTop',
-          default: '5%',
-          comType: 'marginWidth',
-        },
-        {
-          label: 'viz.palette.style.margin.bottom',
-          key: 'marginBottom',
-          default: '5%',
-          comType: 'marginWidth',
         },
       ],
     },
@@ -487,50 +465,17 @@ const config: ChartConfig = {
         },
       ],
     },
-    {
-      label: 'reference.title',
-      key: 'reference',
-      comType: 'group',
-      rows: [
-        {
-          label: 'reference.open',
-          key: 'panel',
-          comType: 'reference',
-          options: { type: 'modal' },
-        },
-      ],
-    },
   ],
   i18ns: [
     {
       lang: 'zh-CN',
       translation: {
         common: {
-          showAxis: '显示坐标轴',
-          inverseAxis: '反转坐标轴',
           lineStyle: '线条样式',
-          borderStyle: '边框样式',
-          borderType: '边框线条类型',
-          borderWidth: '边框线条宽度',
-          borderColor: '边框线条颜色',
-          backgroundColor: '背景颜色',
-          showLabel: '显示标签',
-          unitFont: '刻度字体',
-          rotate: '旋转角度',
-          position: '位置',
-          showInterval: '显示刻度',
-          interval: '刻度间隔',
-          showTitleAndUnit: '显示标题和刻度',
-          nameLocation: '标题位置',
-          nameRotate: '标题旋转',
-          nameGap: '标题与轴线距离',
-          min: '最小值',
-          max: '最大值',
         },
         label: {
-          title: '标签',
-          showLabel: '显示标签',
-          position: '位置',
+          title: '数据标签',
+          showLabel: '显示系列名称',
         },
         legend: {
           title: '图例',
@@ -540,37 +485,123 @@ const config: ChartConfig = {
           position: '图例位置',
           height: '图例高度',
         },
-        data: {
-          color: '颜色',
-          colorize: '配色',
+        radarAxis: {
+          title: '雷达轴',
+          shape: '形状',
+          polygon: '多边形',
+          circle: '圆形',
+          radius: '半径',
+          centerX: '水平位置',
+          centerY: '垂直位置',
+          startAngle: '起始角度',
+          splitNumber: '分割段数',
+          maxValues: '指标最大值',
+          noMetrics: '请先在数据面板添加指标',
+          autoMax: '自动',
         },
-        stack: {
-          title: '堆叠',
-          enable: '开启',
-          percentage: '百分比',
-          enableTotal: '显示总计',
+        axisName: {
+          title: '指标名称',
+          show: '显示指标名称',
         },
-        bar: {
-          title: '条形图',
-          enable: '开启横向展示',
-          radius: '边框圆角',
-          width: '柱条宽度',
-          gap: '柱间隙',
-        },
-        xAxis: {
-          title: 'X轴',
-        },
-        yAxis: {
-          title: 'Y轴',
+        axisLine: {
+          title: '轴线',
+          show: '显示轴线',
         },
         splitLine: {
           title: '分割线',
-          showHorizonLine: '显示横向分割线',
-          showVerticalLine: '显示纵向分割线',
+          show: '显示分割线',
         },
-        reference: {
-          title: '参考线',
-          open: '点击参考线配置',
+        splitArea: {
+          title: '分割区域',
+          show: '显示分割区域',
+          color: '区域颜色',
+          opacity: '区域透明度',
+        },
+        radarSeries: {
+          title: '雷达数据',
+          symbol: '标记图形',
+          symbolSize: '标记大小',
+          lineType: '线条类型',
+          lineWidth: '线条宽度',
+          areaOpacity: '填充透明度',
+          circle: '圆形',
+          rect: '矩形',
+          roundRect: '圆角矩形',
+          triangle: '三角形',
+          diamond: '菱形',
+          none: '无',
+          solid: '实线',
+          dashed: '虚线',
+          dotted: '点线',
+        },
+      },
+    },
+    {
+      lang: 'en-US',
+      translation: {
+        common: {
+          lineStyle: 'Line Style',
+        },
+        label: {
+          title: 'Data Label',
+          showLabel: 'Show Series Name',
+        },
+        legend: {
+          title: 'Legend',
+          showLegend: 'Show Legend',
+          type: 'Legend Type',
+          selectAll: 'Select All',
+          position: 'Position',
+          height: 'Height',
+        },
+        radarAxis: {
+          title: 'Radar Axis',
+          shape: 'Shape',
+          polygon: 'Polygon',
+          circle: 'Circle',
+          radius: 'Radius',
+          centerX: 'Horizontal Position',
+          centerY: 'Vertical Position',
+          startAngle: 'Start Angle',
+          splitNumber: 'Split Number',
+          maxValues: 'Indicator Maximums',
+          noMetrics: 'Add metrics in the data panel first',
+          autoMax: 'Auto',
+        },
+        axisName: {
+          title: 'Indicator Name',
+          show: 'Show Indicator Name',
+        },
+        axisLine: {
+          title: 'Axis Line',
+          show: 'Show Axis Line',
+        },
+        splitLine: {
+          title: 'Split Line',
+          show: 'Show Split Line',
+        },
+        splitArea: {
+          title: 'Split Area',
+          show: 'Show Split Area',
+          color: 'Area Color',
+          opacity: 'Area Opacity',
+        },
+        radarSeries: {
+          title: 'Radar Data',
+          symbol: 'Symbol',
+          symbolSize: 'Symbol Size',
+          lineType: 'Line Type',
+          lineWidth: 'Line Width',
+          areaOpacity: 'Area Opacity',
+          circle: 'Circle',
+          rect: 'Rectangle',
+          roundRect: 'Rounded Rectangle',
+          triangle: 'Triangle',
+          diamond: 'Diamond',
+          none: 'None',
+          solid: 'Solid',
+          dashed: 'Dashed',
+          dotted: 'Dotted',
         },
       },
     },

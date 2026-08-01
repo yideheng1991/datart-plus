@@ -16,77 +16,47 @@
  * limitations under the License.
  */
 
-import { ChartConfig } from 'app/types/ChartConfig';
-import ChartDataSetDTO from 'app/types/ChartDataSet';
+import { ChartDataSectionType } from 'app/constants';
+import {
+  ChartConfig,
+  ChartDataSectionField,
+  ChartStyleConfig,
+  LegendStyle,
+} from 'app/types/ChartConfig';
+import ChartDataSetDTO, { IChartDataSet } from 'app/types/ChartDataSet';
 import { BrokerContext, BrokerOption } from 'app/types/ChartLifecycleBroker';
+import {
+  getColumnRenderName,
+  getDataColumnMaxAndMin2,
+  getExtraSeriesRowData,
+  getSeriesTooltips4Polar2,
+  getStyles,
+  getValueByColumnKey,
+  transformToDataSet,
+} from 'app/utils/chartHelper';
 import { init } from 'echarts';
 import Chart from '../../../models/Chart';
 import Config from './config';
+
+type RadarIndicatorMaxValue = {
+  key: string;
+  max: number;
+};
 
 class BasicRadarChart extends Chart {
   config = Config;
   chart: any = null;
 
-  option = {
-    title: {
-      text: '基础雷达图',
-    },
-    tooltip: {},
-    legend: {
-      data: ['预算分配（Allocated Budget）', '实际开销（Actual Spending）'],
-    },
-    radar: {
-      // shape: 'circle',
-      name: {
-        textStyle: {
-          color: '#fff',
-          backgroundColor: '#999',
-          borderRadius: 3,
-          padding: [3, 5],
-        },
-      },
-      indicator: [
-        { name: '销售（sales）', max: 6500 },
-        { name: '管理（Administration）', max: 16000 },
-        { name: '信息技术（Information Techology）', max: 30000 },
-        { name: '客服（Customer Support）', max: 38000 },
-        { name: '研发（Development）', max: 52000 },
-        { name: '市场（Marketing）', max: 25000 },
-      ],
-    },
-    series: [
-      {
-        name: '预算 vs 开销（Budget vs spending）',
-        type: 'radar',
-        // areaStyle: {normal: {}},
-        data: [
-          {
-            value: [4300, 10000, 28000, 35000, 50000, 19000],
-            name: '预算分配（Allocated Budget）',
-          },
-          {
-            value: [5000, 14000, 28000, 31000, 42000, 21000],
-            name: '实际开销（Actual Spending）',
-          },
-        ],
-      },
-    ],
-  };
-
   constructor(props?) {
     super(
       props?.id || 'radar',
       props?.name || 'viz.palette.graph.names.radarChart',
-      props?.icon || 'radarchart',
+      props?.icon || 'radar',
     );
     this.meta.requirements = props?.requirements || [
       {
-        group: 1,
+        group: [0, 1],
         aggregate: [1, 999],
-      },
-      {
-        group: 0,
-        aggregate: [3, 999],
       },
     ];
   }
@@ -126,7 +96,301 @@ class BasicRadarChart extends Chart {
   }
 
   getOptions(dataset: ChartDataSetDTO, config: ChartConfig) {
-    return this.option;
+    const dataConfigs = config.datas || [];
+    const styleConfigs = config.styles || [];
+    const groupConfigs = dataConfigs
+      .filter(config => config.type === ChartDataSectionType.Group)
+      .flatMap(config => config.rows || []);
+    const aggregateConfigs = dataConfigs
+      .filter(config => config.type === ChartDataSectionType.Aggregate)
+      .flatMap(config => config.rows || []);
+    const colorConfigs = dataConfigs
+      .filter(config => config.type === ChartDataSectionType.Color)
+      .flatMap(config => config.rows || []);
+    const infoConfigs = dataConfigs
+      .filter(config => config.type === ChartDataSectionType.Info)
+      .flatMap(config => config.rows || []);
+    const chartDataSet = transformToDataSet(
+      dataset.rows,
+      dataset.columns,
+      dataConfigs,
+    );
+    const seriesData = this.getSeriesData(
+      chartDataSet,
+      groupConfigs,
+      aggregateConfigs,
+      colorConfigs,
+    );
+
+    return {
+      tooltip: this.getTooltip(
+        chartDataSet,
+        groupConfigs,
+        aggregateConfigs,
+        colorConfigs,
+        infoConfigs,
+      ),
+      legend: this.getLegendStyle(
+        styleConfigs,
+        seriesData.map(item => item.name),
+      ),
+      radar: this.getRadarStyle(styleConfigs, aggregateConfigs, chartDataSet),
+      series: [
+        {
+          type: 'radar',
+          ...this.getRadarSeriesStyle(styleConfigs),
+          data: seriesData,
+        },
+      ],
+    };
+  }
+
+  private getRadarStyle(
+    styles: ChartStyleConfig[],
+    aggregateConfigs: ChartDataSectionField[],
+    chartDataSet: IChartDataSet<string>,
+  ) {
+    const [
+      shape,
+      radius,
+      centerX,
+      centerY,
+      startAngle,
+      splitNumber,
+      configuredMaxValues,
+    ] = getStyles(
+      styles,
+      ['radarAxis'],
+      [
+        'shape',
+        'radius',
+        'centerX',
+        'centerY',
+        'startAngle',
+        'splitNumber',
+        'maxValues',
+      ],
+    );
+    const [showAxisName, axisNameFont] = getStyles(
+      styles,
+      ['axisName'],
+      ['show', 'font'],
+    );
+    const [showAxisLine, axisLineStyle] = getStyles(
+      styles,
+      ['axisLine'],
+      ['show', 'lineStyle'],
+    );
+    const [showSplitLine, splitLineStyle] = getStyles(
+      styles,
+      ['splitLine'],
+      ['show', 'lineStyle'],
+    );
+    const [showSplitArea, splitAreaColor, splitAreaOpacity] = getStyles(
+      styles,
+      ['splitArea'],
+      ['show', 'color', 'opacity'],
+    );
+    const maxValues: RadarIndicatorMaxValue[] = Array.isArray(
+      configuredMaxValues,
+    )
+      ? configuredMaxValues
+      : [];
+
+    return {
+      shape,
+      radius,
+      center: [centerX, centerY],
+      startAngle,
+      splitNumber,
+      axisName: {
+        show: showAxisName,
+        ...axisNameFont,
+      },
+      axisLine: {
+        show: showAxisLine,
+        lineStyle: axisLineStyle,
+      },
+      splitLine: {
+        show: showSplitLine,
+        lineStyle: splitLineStyle,
+      },
+      splitArea: {
+        show: showSplitArea,
+        areaStyle: {
+          color: splitAreaColor ? [splitAreaColor] : undefined,
+          opacity: splitAreaOpacity,
+        },
+      },
+      indicator: aggregateConfigs.map(field => ({
+        name: getColumnRenderName(field),
+        max: this.getIndicatorMax(field, chartDataSet, maxValues),
+      })),
+    };
+  }
+
+  private getRadarSeriesStyle(styles: ChartStyleConfig[]) {
+    const [symbol, symbolSize, lineType, lineWidth, areaOpacity] = getStyles(
+      styles,
+      ['radarSeries'],
+      ['symbol', 'symbolSize', 'lineType', 'lineWidth', 'areaOpacity'],
+    );
+    const [showLabel, labelFont] = getStyles(
+      styles,
+      ['label'],
+      ['showLabel', 'font'],
+    );
+
+    return {
+      symbol,
+      symbolSize,
+      lineStyle: {
+        type: lineType,
+        width: lineWidth,
+      },
+      areaStyle:
+        typeof areaOpacity === 'number' && areaOpacity > 0
+          ? { opacity: areaOpacity }
+          : undefined,
+      label: {
+        show: showLabel,
+        formatter: '{b}',
+        ...labelFont,
+      },
+    };
+  }
+
+  private getIndicatorMax(
+    field: ChartDataSectionField,
+    chartDataSet: IChartDataSet<string>,
+    maxValues: RadarIndicatorMaxValue[],
+  ): number {
+    const configuredMax = maxValues.find(
+      item => item.key === getValueByColumnKey(field),
+    )?.max;
+    if (
+      typeof configuredMax === 'number' &&
+      Number.isFinite(configuredMax) &&
+      configuredMax > 0
+    ) {
+      return configuredMax;
+    }
+
+    if (!chartDataSet.length) {
+      return 1;
+    }
+    const { max: dataMax } = getDataColumnMaxAndMin2(chartDataSet, field);
+    return Number.isFinite(dataMax) && dataMax > 0 ? dataMax : 1;
+  }
+
+  private getSeriesData(
+    chartDataSet: IChartDataSet<string>,
+    groupConfigs: ChartDataSectionField[],
+    aggregateConfigs: ChartDataSectionField[],
+    colorConfigs: ChartDataSectionField[],
+  ) {
+    const rows = groupConfigs.length ? chartDataSet : chartDataSet.slice(0, 1);
+    const defaultSeriesName = aggregateConfigs
+      .map(getColumnRenderName)
+      .join(', ');
+    const colorConfig = colorConfigs[0];
+    const colors: Array<{ key: string; value: string }> =
+      colorConfig?.color?.colors || [];
+
+    return Array.from(rows, row => {
+      const colorKey = colorConfig ? row.getCell(colorConfig) : undefined;
+      const color = colors.find(item => item.key === colorKey)?.value;
+
+      return {
+        ...getExtraSeriesRowData(row),
+        name:
+          groupConfigs.map(field => row.getCell(field)).join('-') ||
+          defaultSeriesName,
+        value: aggregateConfigs.map(field => {
+          const value = Number(row.getCell(field));
+          return Number.isFinite(value) ? value : 0;
+        }),
+        itemStyle: color ? { color } : undefined,
+        lineStyle: color ? { color } : undefined,
+        areaStyle: color ? { color } : undefined,
+      };
+    });
+  }
+
+  private getLegendStyle(
+    styles: ChartStyleConfig[],
+    seriesNames: string[],
+  ): LegendStyle {
+    const [show, type, font, legendPosition, selectAll, height] = getStyles(
+      styles,
+      ['legend'],
+      ['showLegend', 'type', 'font', 'position', 'selectAll', 'height'],
+    );
+    let positions = {};
+    let orient = '';
+
+    switch (legendPosition) {
+      case 'top':
+        orient = 'horizontal';
+        positions = { top: 8, left: 8, right: 8, height: 32 };
+        break;
+      case 'bottom':
+        orient = 'horizontal';
+        positions = { bottom: 8, left: 8, right: 8, height: 32 };
+        break;
+      case 'left':
+        orient = 'vertical';
+        positions = { left: 8, top: 16, bottom: 24, width: 96 };
+        break;
+      default:
+        orient = 'vertical';
+        positions = { right: 8, top: 16, bottom: 24, width: 96 };
+        break;
+    }
+    const selected = seriesNames.reduce(
+      (result, name) => ({
+        ...result,
+        [name]: selectAll,
+      }),
+      {},
+    );
+
+    return {
+      ...positions,
+      show,
+      type,
+      height: height || null,
+      orient,
+      selected,
+      data: seriesNames,
+      textStyle: font,
+    };
+  }
+
+  private getTooltip(
+    chartDataSet: IChartDataSet<string>,
+    groupConfigs: ChartDataSectionField[],
+    aggregateConfigs: ChartDataSectionField[],
+    colorConfigs: ChartDataSectionField[],
+    infoConfigs: ChartDataSectionField[],
+  ) {
+    return {
+      trigger: 'item',
+      confine: true,
+      formatter: seriesParams => {
+        if (seriesParams.componentType !== 'series') {
+          return seriesParams.name;
+        }
+        return getSeriesTooltips4Polar2(
+          chartDataSet,
+          seriesParams,
+          groupConfigs,
+          colorConfigs,
+          aggregateConfigs,
+          infoConfigs,
+        );
+      },
+    };
   }
 }
 
