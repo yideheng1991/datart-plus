@@ -17,6 +17,7 @@
  */
 
 import { ChartDataSectionType } from 'app/constants';
+import { ChartSelectionManager } from 'app/models/ChartSelectionManager';
 import {
   ChartConfig,
   ChartDataSectionField,
@@ -46,6 +47,7 @@ type RadarIndicatorMaxValue = {
 class BasicRadarChart extends Chart {
   config = Config;
   chart: any = null;
+  selectionManager?: ChartSelectionManager;
 
   constructor(props?) {
     super(
@@ -62,7 +64,11 @@ class BasicRadarChart extends Chart {
   }
 
   onMount(options: BrokerOption, context: BrokerContext) {
-    if (options.containerId === undefined || !context.document) {
+    if (
+      options.containerId === undefined ||
+      !context.document ||
+      !context.window
+    ) {
       return;
     }
 
@@ -70,9 +76,11 @@ class BasicRadarChart extends Chart {
       context.document.getElementById(options.containerId)!,
       'default',
     );
-    this.mouseEvents?.forEach(event => {
-      this.chart.on(event.name, event.callback);
-    });
+
+    this.selectionManager = new ChartSelectionManager(this.mouseEvents);
+    this.selectionManager.attachWindowListeners(context.window);
+    this.selectionManager.attachZRenderListeners(this.chart);
+    this.selectionManager.attachEChartsListeners(this.chart);
   }
 
   onUpdated(options: BrokerOption, context: BrokerContext) {
@@ -83,11 +91,14 @@ class BasicRadarChart extends Chart {
       this.chart?.clear();
       return;
     }
+    this.selectionManager?.updateSelectedItems(options.selectedItems);
     const newOptions = this.getOptions(options.dataset, options.config);
     this.chart?.setOption(Object.assign({}, newOptions), true);
   }
 
   onUnMount(options: BrokerOption, context: BrokerContext) {
+    this.selectionManager?.removeWindowListeners(context.window);
+    this.selectionManager?.removeZRenderListeners(this.chart);
     this.chart?.dispose();
   }
 
