@@ -117,6 +117,9 @@ export enum AggregateFieldActionType {
   Count_Distinct = 'COUNT_DISTINCT',
   Max = 'MAX',
   Min = 'MIN',
+  Median = 'MEDIAN',
+  Quartile1 = 'QUARTILE_1',
+  Quartile3 = 'QUARTILE_3',
 }
 
 export enum ChartDataSectionType {
@@ -184,6 +187,9 @@ export const AggregateFieldSubAggregateType = {
     AggregateFieldActionType.Count_Distinct,
     AggregateFieldActionType.Max,
     AggregateFieldActionType.Min,
+    AggregateFieldActionType.Median,
+    AggregateFieldActionType.Quartile1,
+    AggregateFieldActionType.Quartile3,
   ],
   [ChartDataSectionFieldActionType.AggregateLimit]: [
     AggregateFieldActionType.Count,

@@ -29,10 +29,11 @@ import java.util.concurrent.ConcurrentSkipListSet;
 import static datart.core.data.provider.StdSqlOperator.*;
 import static datart.core.data.provider.StdSqlOperator.COALESCE;
 
-public class MsSqlStdOperatorSupport extends MssqlSqlDialect implements SqlStdOperatorSupport {
+public class MsSqlStdOperatorSupport extends MssqlSqlDialect
+        implements SqlStdOperatorSupport, StatisticalAggregateDialectSupport {
 
     static ConcurrentSkipListSet<StdSqlOperator> OWN_SUPPORTED = new ConcurrentSkipListSet<>(
-            EnumSet.of(STDDEV, ABS, MEDIAN, ABS, CEILING, FLOOR, POWER, ROUND, SQRT,
+            EnumSet.of(STDDEV, ABS, CEILING, FLOOR, POWER, ROUND, SQRT,
                     EXP, LN, MOD, TRUNC, SIGN, ACOS, ASIN, ATAN, ATAN2, SIN, COS, TAN,
                     LENGTH, CONCAT, REPLACE, SUBSTRING, LOWER, UPPER, LTRIM, RTRIM, TRIM,
                     NOW, COALESCE, AGG_DATE_YEAR, AGG_DATE_QUARTER, AGG_DATE_MONTH, AGG_DATE_WEEK, AGG_DATE_DAY));
@@ -93,5 +94,10 @@ public class MsSqlStdOperatorSupport extends MssqlSqlDialect implements SqlStdOp
     @Override
     public Set<StdSqlOperator> supportedOperators() {
         return OWN_SUPPORTED;
+    }
+
+    @Override
+    public Syntax statisticalAggregateSyntax() {
+        return Syntax.LOCAL_H2;
     }
 }

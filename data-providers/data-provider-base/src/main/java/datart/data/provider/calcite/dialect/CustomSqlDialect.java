@@ -27,7 +27,8 @@ import org.apache.calcite.sql.SqlNode;
 import org.apache.calcite.sql.SqlWriter;
 import org.apache.calcite.sql.validate.SqlConformanceEnum;
 
-public class CustomSqlDialect extends SqlDialect {
+public class CustomSqlDialect extends SqlDialect
+        implements StatisticalAggregateDialectSupport {
 
     private JdbcDriverInfo driverInfo;
 
@@ -59,5 +60,10 @@ public class CustomSqlDialect extends SqlDialect {
         } else {
             super.unparseOffsetFetch(writer, offset, fetch);
         }
+    }
+
+    @Override
+    public Syntax statisticalAggregateSyntax() {
+        return Syntax.LOCAL_H2;
     }
 }

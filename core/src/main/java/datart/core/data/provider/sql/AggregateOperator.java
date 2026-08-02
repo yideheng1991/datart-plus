@@ -22,8 +22,6 @@ package datart.core.data.provider.sql;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import java.io.Serializable;
-
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class AggregateOperator extends ColumnOperator implements Alias {
@@ -32,7 +30,7 @@ public class AggregateOperator extends ColumnOperator implements Alias {
 
     private String alias;
 
-    public enum SqlOperator implements Serializable {
+    public enum SqlOperator {
 
         MIN,
 
@@ -45,6 +43,17 @@ public class AggregateOperator extends ColumnOperator implements Alias {
         COUNT,
 
         COUNT_DISTINCT,
+
+        MEDIAN,
+
+        QUARTILE_1,
+
+        QUARTILE_3;
+
+        // Statistical aggregates require dialect checks or local H2 fallback.
+        public boolean isStatistical() {
+            return this == MEDIAN || this == QUARTILE_1 || this == QUARTILE_3;
+        }
     }
 
     @Override

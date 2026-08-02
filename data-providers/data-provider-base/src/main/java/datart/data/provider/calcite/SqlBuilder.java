@@ -25,6 +25,7 @@ import datart.core.data.provider.SelectColumn;
 import datart.core.data.provider.SingleTypedValue;
 import datart.core.data.provider.sql.*;
 import datart.data.provider.calcite.custom.CustomSqlBetweenOperator;
+import datart.data.provider.calcite.custom.StatisticalAggregateFunction;
 import org.apache.calcite.sql.*;
 import org.apache.calcite.sql.fun.SqlBetweenOperator;
 import org.apache.calcite.sql.fun.SqlStdOperatorTable;
@@ -279,7 +280,7 @@ public class SqlBuilder {
         if (operator.getAggOperator() != null) {
             AggregateOperator agg = new AggregateOperator();
             agg.setSqlOperator(operator.getAggOperator());
-            agg.setColumn(operator.getColumnNames(withNamePrefix, namePrefix));
+            agg.setColumn(operator.getColumnNames(false, null));
             column = createAggNode(agg);
         } else {
             if (functionColumnMap.containsKey(operator.getColumnKey())) {
@@ -447,6 +448,12 @@ public class SqlBuilder {
             case COUNT:
             case COUNT_DISTINCT:
                 return SqlStdOperatorTable.COUNT;
+            case MEDIAN:
+                return StatisticalAggregateFunction.MEDIAN;
+            case QUARTILE_1:
+                return StatisticalAggregateFunction.QUARTILE_1;
+            case QUARTILE_3:
+                return StatisticalAggregateFunction.QUARTILE_3;
             default:
                 Exceptions.msg("message.provider.sql.type.unsupported", sqlOperator.name());
         }

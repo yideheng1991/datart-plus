@@ -10,6 +10,7 @@ import datart.core.data.provider.*;
 import datart.data.provider.base.DataProviderException;
 import datart.data.provider.calcite.SqlParserUtils;
 import datart.data.provider.calcite.dialect.SqlStdOperatorSupport;
+import datart.data.provider.calcite.dialect.StatisticalAggregateDialectUtils;
 import datart.data.provider.jdbc.DataSourceFactory;
 import datart.data.provider.jdbc.DataSourceFactoryDruidImpl;
 import datart.data.provider.jdbc.JdbcDriverInfo;
@@ -89,8 +90,19 @@ public class JdbcDataProvider extends DataProvider {
     @Override
     public Dataframe execute(DataProviderSource source, QueryScript script, ExecuteParam executeParam) throws Exception {
         JdbcDataProviderAdapter adapter = matchProviderAdapter(source);
+        boolean requiresLocalStatisticalAggregation =
+                StatisticalAggregateDialectUtils.requiresLocalAggregation(
+                        adapter.getSqlDialect(), executeParam);
         //If server aggregation is enabled, query the full data before performing server aggregation
-        if (executeParam.isServerAggregate() && !script.isTest()) {
+        if ((executeParam.isServerAggregate()
+                || requiresLocalStatisticalAggregation) && !script.isTest()) {
+            if (requiresLocalStatisticalAggregation
+                    && !executeParam.isServerAggregate()) {
+                log.warn(
+                        "Dialect {} does not support exact statistical aggregates; "
+                                + "querying full source data and aggregating in local H2",
+                        adapter.getSqlDialect().getClass().getSimpleName());
+            }
             return adapter.executeInLocal(script, executeParam);
         } else {
             return adapter.executeOnSource(script, executeParam);

@@ -20,7 +20,8 @@ package datart.data.provider.calcite.dialect;
 
 import org.apache.calcite.sql.dialect.ClickHouseSqlDialect;
 
-public class ClickHouseSqlDialectSupport extends ClickHouseSqlDialect implements FetchAndOffsetSupport {
+public class ClickHouseSqlDialectSupport extends ClickHouseSqlDialect
+        implements FetchAndOffsetSupport, StatisticalAggregateDialectSupport {
 
     private ClickHouseSqlDialectSupport(Context context) {
         super(context);
@@ -30,4 +31,8 @@ public class ClickHouseSqlDialectSupport extends ClickHouseSqlDialect implements
         this(DEFAULT_CONTEXT);
     }
 
+    @Override
+    public Syntax statisticalAggregateSyntax() {
+        return Syntax.CLICKHOUSE_EXACT_INCLUSIVE;
+    }
 }

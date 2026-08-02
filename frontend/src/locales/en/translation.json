@@ -260,7 +260,10 @@
           "COUNT": "Count",
           "COUNT_DISTINCT": "Distinct Count",
           "MAX": "Max",
-          "MIN": "Min"
+          "MIN": "Min",
+          "MEDIAN": "Median",
+          "QUARTILE_1": "First Quartile",
+          "QUARTILE_3": "Third Quartile"
         },
         "controllerFacadeTypes": {
           "dropdownList": "Dropdown List",

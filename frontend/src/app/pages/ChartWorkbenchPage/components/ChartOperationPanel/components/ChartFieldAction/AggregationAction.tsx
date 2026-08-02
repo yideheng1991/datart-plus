@@ -19,13 +19,21 @@
 import { CheckOutlined } from '@ant-design/icons';
 import { Menu, Radio, Space } from 'antd';
 import {
+  AggregateFieldActionType,
   AggregateFieldSubAggregateType,
   ChartDataSectionFieldActionType,
+  DataViewFieldType,
 } from 'app/constants';
 import useI18NPrefix from 'app/hooks/useI18NPrefix';
 import { ChartDataSectionField } from 'app/types/ChartConfig';
 import { updateBy } from 'app/utils/mutation';
 import { FC, useState } from 'react';
+
+const statisticalAggregateTypes: AggregateFieldActionType[] = [
+  AggregateFieldActionType.Median,
+  AggregateFieldActionType.Quartile1,
+  AggregateFieldActionType.Quartile3,
+];
 
 const AggregationAction: FC<{
   config: ChartDataSectionField;
@@ -38,6 +46,13 @@ const AggregationAction: FC<{
   const t = useI18NPrefix(`viz.common.enum.aggregateTypes`);
   const actionNeedNewRequest = true;
   const [aggregate, setAggregate] = useState(config?.aggregate);
+  const aggregateOptions = AggregateFieldSubAggregateType[
+    ChartDataSectionFieldActionType.Aggregate
+  ]?.filter(
+    agg =>
+      config.type === DataViewFieldType.NUMERIC ||
+      !statisticalAggregateTypes.includes(agg),
+  );
 
   const onChange = selectedValue => {
     const newConfig = updateBy(config, draft => {
@@ -51,9 +66,7 @@ const AggregationAction: FC<{
     if (mode === 'menu') {
       return (
         <>
-          {AggregateFieldSubAggregateType[
-            ChartDataSectionFieldActionType.Aggregate
-          ]?.map(agg => {
+          {aggregateOptions?.map(agg => {
             return (
               <Menu.Item
                 key={agg}
@@ -72,9 +85,7 @@ const AggregationAction: FC<{
     return (
       <Radio.Group onChange={e => onChange(e.target?.value)} value={aggregate}>
         <Space direction="vertical">
-          {AggregateFieldSubAggregateType[
-            ChartDataSectionFieldActionType.Aggregate
-          ]?.map(agg => {
+          {aggregateOptions?.map(agg => {
             return (
               <Radio key={agg} value={agg}>
                 {t(agg)}

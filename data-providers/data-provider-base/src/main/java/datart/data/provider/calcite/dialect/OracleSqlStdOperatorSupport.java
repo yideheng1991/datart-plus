@@ -28,7 +28,8 @@ import java.util.concurrent.ConcurrentSkipListSet;
 
 import static datart.core.data.provider.StdSqlOperator.*;
 
-public class OracleSqlStdOperatorSupport extends OracleSqlDialect implements SqlStdOperatorSupport {
+public class OracleSqlStdOperatorSupport extends OracleSqlDialect
+        implements SqlStdOperatorSupport, StatisticalAggregateDialectSupport {
 
     static ConcurrentSkipListSet<StdSqlOperator> OWN_SUPPORTED = new ConcurrentSkipListSet<>(
             EnumSet.of(STDDEV, ABS, CEILING, FLOOR, POWER, ROUND, SQRT, EXP, LOG10, RAND, DEGREES, RADIANS,
@@ -100,4 +101,8 @@ public class OracleSqlStdOperatorSupport extends OracleSqlDialect implements Sql
         return OWN_SUPPORTED;
     }
 
+    @Override
+    public Syntax statisticalAggregateSyntax() {
+        return Syntax.PERCENTILE_CONT;
+    }
 }

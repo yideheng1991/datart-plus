@@ -260,7 +260,10 @@
           "COUNT": "计数",
           "COUNT_DISTINCT": "去重计数",
           "MAX": "最大值",
-          "MIN": "最小值"
+          "MIN": "最小值",
+          "MEDIAN": "中位数",
+          "QUARTILE_1": "第一四分位数",
+          "QUARTILE_3": "第三四分位数"
         },
         "controllerFacadeTypes": {
           "dropdownList": "下拉列表",

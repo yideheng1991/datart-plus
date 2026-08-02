@@ -53,6 +53,7 @@ import {
   getUnusedHeaderRows,
   getValue,
   getValueByColumnKey,
+  hasAggregationFunction,
   isMatchRequirement,
   setRuntimeDateLevelFieldsInChartConfig,
   toFormattedValue,
@@ -61,6 +62,15 @@ import {
 } from '../chartHelper';
 
 describe('Chart Helper ', () => {
+  describe('hasAggregationFunction Test', () => {
+    test.each(['MEDIAN(value)', 'QUARTILE_1(value)', 'QUARTILE_3(value)'])(
+      'should recognize %s',
+      expression => {
+        expect(hasAggregationFunction(expression)).toBe(true);
+      },
+    );
+  });
+
   describe.each([
     [
       [

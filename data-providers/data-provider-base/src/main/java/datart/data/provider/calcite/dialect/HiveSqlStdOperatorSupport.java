@@ -28,7 +28,9 @@ import java.util.concurrent.ConcurrentSkipListSet;
 
 import static datart.core.data.provider.StdSqlOperator.*;
 
-public class HiveSqlStdOperatorSupport extends HiveSqlDialect implements SqlStdOperatorSupport, FetchAndOffsetSupport {
+public class HiveSqlStdOperatorSupport extends HiveSqlDialect
+        implements SqlStdOperatorSupport, FetchAndOffsetSupport,
+        StatisticalAggregateDialectSupport {
 
     static ConcurrentSkipListSet<StdSqlOperator> OWN_SUPPORTED = new ConcurrentSkipListSet<>(
             EnumSet.of(AGG_DATE_YEAR, AGG_DATE_QUARTER, AGG_DATE_MONTH, AGG_DATE_WEEK, AGG_DATE_DAY));
@@ -83,5 +85,10 @@ public class HiveSqlStdOperatorSupport extends HiveSqlDialect implements SqlStdO
     @Override
     public Set<StdSqlOperator> supportedOperators() {
         return OWN_SUPPORTED;
+    }
+
+    @Override
+    public Syntax statisticalAggregateSyntax() {
+        return Syntax.LOCAL_H2;
     }
 }

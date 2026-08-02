@@ -28,7 +28,9 @@ import java.util.concurrent.ConcurrentSkipListSet;
 
 import static datart.core.data.provider.StdSqlOperator.*;
 
-public class MysqlSqlStdOperatorSupport extends MysqlSqlDialect implements SqlStdOperatorSupport, FetchAndOffsetSupport {
+public class MysqlSqlStdOperatorSupport extends MysqlSqlDialect
+        implements SqlStdOperatorSupport, FetchAndOffsetSupport,
+        StatisticalAggregateDialectSupport {
 
     static ConcurrentSkipListSet<StdSqlOperator> OWN_SUPPORTED = new ConcurrentSkipListSet<>(
             EnumSet.of(STDDEV, ABS, CEILING, FLOOR, POWER, ROUND, SQRT, EXP, LOG10, LN, MOD, RAND, DEGREES, RADIANS, TRUNC, SIGN,
@@ -99,5 +101,10 @@ public class MysqlSqlStdOperatorSupport extends MysqlSqlDialect implements SqlSt
     @Override
     public Set<StdSqlOperator> supportedOperators() {
         return OWN_SUPPORTED;
+    }
+
+    @Override
+    public Syntax statisticalAggregateSyntax() {
+        return Syntax.LOCAL_H2;
     }
 }

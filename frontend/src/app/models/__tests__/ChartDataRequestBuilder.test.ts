@@ -80,6 +80,24 @@ describe('ChartDataRequestBuild Test', () => {
             type: DataViewFieldType.NUMERIC,
             category: ChartDataViewFieldCategory.ComputedField as any,
           },
+          {
+            colName: 'median-amount',
+            aggregate: AggregateFieldActionType.Median,
+            type: DataViewFieldType.NUMERIC,
+            category: ChartDataViewFieldCategory.Field as any,
+          },
+          {
+            colName: 'q1-amount',
+            aggregate: AggregateFieldActionType.Quartile1,
+            type: DataViewFieldType.NUMERIC,
+            category: ChartDataViewFieldCategory.Field as any,
+          },
+          {
+            colName: 'q3-amount',
+            aggregate: AggregateFieldActionType.Quartile3,
+            type: DataViewFieldType.NUMERIC,
+            category: ChartDataViewFieldCategory.Field as any,
+          },
         ],
       },
       {
@@ -155,6 +173,21 @@ describe('ChartDataRequestBuild Test', () => {
     expect(requestParams.aggregators).toEqual([
       { alias: 'AVG(amount)', column: ['amount'], sqlOperator: 'AVG' },
       { alias: 'SUM(sub-amount)', column: ['sub-amount'], sqlOperator: 'SUM' },
+      {
+        alias: 'MEDIAN(median-amount)',
+        column: ['median-amount'],
+        sqlOperator: 'MEDIAN',
+      },
+      {
+        alias: 'QUARTILE_1(q1-amount)',
+        column: ['q1-amount'],
+        sqlOperator: 'QUARTILE_1',
+      },
+      {
+        alias: 'QUARTILE_3(q3-amount)',
+        column: ['q3-amount'],
+        sqlOperator: 'QUARTILE_3',
+      },
       { alias: 'COUNT(total)', column: ['total'], sqlOperator: 'COUNT' },
       { alias: 'sex', column: ['sex'], sqlOperator: undefined },
       { alias: 'age', column: ['age'], sqlOperator: undefined },
@@ -858,7 +891,13 @@ describe('ChartDataRequestBuild Test', () => {
         aggOperator: undefined,
         column: ['born'],
         sqlOperator: 'IN',
-        values: [{ value: moment(today).add(-1, 'd').format('YYYY-MM-DD') + ' 00:00:00', valueType: 'DATE' }],
+        values: [
+          {
+            value:
+              moment(today).add(-1, 'd').format('YYYY-MM-DD') + ' 00:00:00',
+            valueType: 'DATE',
+          },
+        ],
       },
       {
         aggOperator: undefined,

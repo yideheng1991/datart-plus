@@ -28,6 +28,8 @@ import datart.core.data.provider.*;
 import datart.data.provider.JdbcDataProvider;
 import datart.data.provider.calcite.dialect.CustomSqlDialect;
 import datart.data.provider.calcite.dialect.FetchAndOffsetSupport;
+import datart.data.provider.calcite.dialect.H2Dialect;
+import datart.data.provider.calcite.dialect.StatisticalAggregateDialectUtils;
 import datart.data.provider.jdbc.DataTypeUtils;
 import datart.data.provider.jdbc.JdbcDriverInfo;
 import datart.data.provider.jdbc.JdbcProperties;
@@ -184,8 +186,29 @@ public class JdbcDataProviderAdapter implements Closeable {
     }
 
     public String getQueryKey(QueryScript script, ExecuteParam executeParam) throws SqlParseException {
-        SqlScriptRender render = new SqlScriptRender(script, executeParam, getSqlDialect(), jdbcProperties.isEnableSpecialSql(), driverInfo.getQuoteIdentifiers());
-        return "Q" + DigestUtils.md5Hex(render.render(true, supportPaging(), true) + ";includeColumns:" + JSON.toJSONString(executeParam.getIncludeColumns()) + ";viewId:" + script.getViewId() + ";pageInfo:" + JSON.toJSONString(executeParam.getPageInfo()));
+        SqlDialect sourceDialect = getSqlDialect();
+        boolean requiresLocalStatisticalAggregation =
+                StatisticalAggregateDialectUtils.requiresLocalAggregation(
+                        sourceDialect, executeParam);
+        SqlDialect queryDialect = requiresLocalStatisticalAggregation
+                ? new H2Dialect()
+                : sourceDialect;
+        SqlScriptRender render = new SqlScriptRender(
+                script,
+                executeParam,
+                queryDialect,
+                jdbcProperties.isEnableSpecialSql(),
+                driverInfo.getQuoteIdentifiers());
+        return "Q" + DigestUtils.md5Hex(
+                render.render(
+                        true,
+                        !requiresLocalStatisticalAggregation && supportPaging(),
+                        true)
+                        + ";includeColumns:"
+                        + JSON.toJSONString(executeParam.getIncludeColumns())
+                        + ";viewId:" + script.getViewId()
+                        + ";pageInfo:"
+                        + JSON.toJSONString(executeParam.getPageInfo()));
     }
 
     protected Column readTableColumn(ResultSet columnMetadata) throws SQLException {

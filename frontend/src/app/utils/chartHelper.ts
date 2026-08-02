@@ -1879,6 +1879,9 @@ export function hasAggregationFunction(exp?: string) {
     AggregateFieldActionType.Count_Distinct,
     AggregateFieldActionType.Max,
     AggregateFieldActionType.Min,
+    AggregateFieldActionType.Median,
+    AggregateFieldActionType.Quartile1,
+    AggregateFieldActionType.Quartile3,
     AggregateFieldActionType.Sum,
   ].some(agg => new RegExp(`${agg}\\(`, 'i').test(exp || ''));
 }
