@@ -35,7 +35,8 @@ public class H2Dialect extends H2SqlDialect implements SqlStdOperatorSupport,
         FetchAndOffsetSupport, StatisticalAggregateDialectSupport {
 
     static ConcurrentSkipListSet<StdSqlOperator> OWN_SUPPORTED = new ConcurrentSkipListSet<>(
-            EnumSet.of(AGG_DATE_YEAR, AGG_DATE_QUARTER, AGG_DATE_MONTH, AGG_DATE_WEEK, AGG_DATE_DAY));
+            EnumSet.of(IF, DATEDIFF, AGG_DATE_YEAR, AGG_DATE_QUARTER,
+                    AGG_DATE_MONTH, AGG_DATE_WEEK, AGG_DATE_DAY));
 
     static {
         OWN_SUPPORTED.addAll(SUPPORTED);
@@ -66,6 +67,29 @@ public class H2Dialect extends H2SqlDialect implements SqlStdOperatorSupport,
     public boolean unparseStdSqlOperator(SqlWriter writer, SqlCall call, int leftPrec, int rightPrec) {
         StdSqlOperator operator = symbolOf(call.getOperator().getName());
         switch (operator) {
+            case IF:
+                if (call.operandCount() != 3) {
+                    return false;
+                }
+                writer.keyword("CASE");
+                writer.keyword("WHEN");
+                call.getOperandList().get(0).unparse(writer, 0, 0);
+                writer.keyword("THEN");
+                call.getOperandList().get(1).unparse(writer, 0, 0);
+                writer.keyword("ELSE");
+                call.getOperandList().get(2).unparse(writer, 0, 0);
+                writer.keyword("END");
+                return true;
+            case DATEDIFF:
+                if (call.operandCount() != 2) {
+                    return false;
+                }
+                writer.print("DATEDIFF('DAY', ");
+                call.getOperandList().get(1).unparse(writer, 0, 0);
+                writer.print(", ");
+                call.getOperandList().get(0).unparse(writer, 0, 0);
+                writer.print(")");
+                return true;
             case AGG_DATE_YEAR:
                 writer.print("YEAR(" + call.getOperandList().get(0).toSqlString(this).getSql() + ")");
                 return true;

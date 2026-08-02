@@ -67,6 +67,7 @@ public enum StdSqlOperator {
     DAY_OF_WEEK("DAY_OF_WEEK"),
     DAY_OF_MONTH("DAY_OF_MONTH"),
     DAY_OF_YEAR("DAY_OF_YEAR"),
+    DATEDIFF("DATEDIFF"),
 
     // date aggregate
     AGG_DATE_YEAR("AGG_DATE_YEAR"),
