@@ -4,55 +4,12 @@
 
 # 0. 在线体验 Demo
 
-- http://datart-demo.retech.cc
+- http://datart-demo.dhyi.top
 - 用户名：demo
 - 密码：123456
 
-# 1. Docker 部署
-
-```shell
-docker run -p 8080:8080 datart/datart 
-```
-启动后可访问 <http://docker_ip:8080>  
-默认账户:用户名`demo`,密码`123456`
-
-## 1.1. 配置外部数据库
-在没有外部数据库配置的情况下，Datart使用H2作为应用程序数据库。 强烈建议您将自己的Mysql数据库配置为应用程序数据库。  
-
-创建空文件 `datart.conf` ,将以下内容粘贴到到文件中。
-
-```shell
-# 数据库连接配置
-datasource.ip=   
-datasource.port=
-datasource.database=
-datasource.username=
-datasource.password=
-
-# server
-server.port=8080
-server.address=0.0.0.0
-
-# datart config
-datart.address=http://127.0.0.1
-datart.send-mail=false
-datart.webdriver-path=http://127.0.0.1:4444/wd/hub
-```
-
-运行 `docker run -d --name datart -v your_path/datart.conf:/datart/config/datart.conf -p 8080:8080 datart/datart`
-
-## 1.2. 将用户文件挂载到外部
-
-默认配置下，用户文件（头像，文件数据源等）保存在 `files` 文件夹下，将这个路径挂载到外部，以在进行应用升级时，能够保留这些文件。
-
-在配置文件中增加参数 `-v your_path/files:/datart/files` 即可。以下是完整命令
-
-`docker run -d --name datart -v your_path/datart.conf:/datart/config/datart.conf -v your_path/files:/datart/files -p 8080:8080 datart/datart`
-
-***更多配置，访问 <http://running-elephant.gitee.io/datart-docs/docs/index.html> ***
-
-# 2. 本地部署 
-## 2.1. 环境准备
+# 1. 本地部署 
+## 1.1. 环境准备
 
 - JDK 1.8+
 - MySql5.7+
@@ -61,36 +18,36 @@ datart.webdriver-path=http://127.0.0.1:4444/wd/hub
 - [ChromeWebDriver](https://chromedriver.chromium.org/) （可选）
 - Redis （可选）
 
-方式1 :解压安装包 (官方提供的包)
+方式1 :解压安装包
 
 ```bash
-unzip datart-server-1.0.0-beta.x-install.zip
+unzip datart-server-1.0.0-rc.x-install.zip
 ```
 
 方式2 :自行编译
 
 ```bash
-git clone https://github.com/running-elephant/datart.git
+git clone https://gitee.com/ydheng/datart.git
 
 cd datart
 
 mvn clean package -Dmaven.test.skip=true
 
-cp ./datart-server-1.0.0-beta.x-install.zip  ${deployment_basedir}
+cp ./datart-server-1.0.0-rc.x-install.zip  ${deployment_basedir}
 
 cd ${deployment_basedir}
 
-unzip datart-server-1.0.0-beta.x-install.zip 
+unzip datart-server-1.0.0-rc.x-install.zip 
 
 ```
 
-## 2.2. 以独立模式运行
+## 1.2. 以独立模式运行
 
 安装包解压后，即可运行 ./bin/datart-server.sh start 来启动datart,启动后默认访问地址是: <http://127.0.0.1:8080>,默认用户`demo/123456`
 
 ***独立模式使用内置数据库作为应用数据库，数据的安全性和数据迁移无法保证，建议配置外部数据库作为应用数据库***
 
-## 2.3. 配置外部数据库，要求Mysql5.7及以上版本。
+## 1.3. 配置外部数据库，要求Mysql5.7及以上版本。
 
 - 创建数据库，指定数据库编码为utf8
 
@@ -120,13 +77,13 @@ mysql> CREATE DATABASE `datart` CHARACTER SET 'utf8' COLLATE 'utf8_general_ci';
     5. datart.webdriver-path(截图驱动)
 ```
 
-## 2.4. 高级配置 (可选) : 配置文件位于 config/profiles/application-config.yml
+## 1.4. 高级配置 (可选) : 配置文件位于 config/profiles/application-config.yml
 
 ***高级配置文件格式是yml格式,配置错误会导致程序无法启动。配置时一定要严格遵循yml格式。***
 
 ***application-config.yml直接由spring-boot处理,其中的oauth2,redis,mail等配置项完全遵循spring-boot-autoconfigure配置***
 
-### 2.4.1 配置文件信息
+### 1.4.1 配置文件信息
 
 ```yaml
 spring:
@@ -201,7 +158,7 @@ datart:
 
 *注意：加密密钥每个服务端部署前应该进行修改，且部署后不能再次修改。如果是集群部署，同一个集群内的secret要保持统一*
 
-### 2.4.2 截图配置 [ChromeWebDriver]-可选
+### 1.4.2 截图配置 [ChromeWebDriver]-可选
 
 ```bash
 
@@ -211,7 +168,7 @@ docker run -p 4444:4444 -d --name selenium-chrome --shm-size="2g" selenium/stand
 
 ```
 
-### 2.5. 启动服务
+### 1.5. 启动服务
 
 *注意：启动脚本 已更新了 start|stop|status|restart*
 
@@ -219,7 +176,7 @@ docker run -p 4444:4444 -d --name selenium-chrome --shm-size="2g" selenium/stand
 ${DATART_HOME}/bin/datart-server.sh (start|stop|status|restart)
 ```
 
-### 2.5 访问服务
+### 1.5 访问服务
 
 *注意：没有默认用户 直接注册 成功后直接登录即可*
 
