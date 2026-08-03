@@ -95,7 +95,7 @@ https://datart-docs.dhyi.top/datart-docs/docs/first-visualization.html
 
 ### 交流讨论
 欢迎加入知识星球参与讨论  
-![](https://datart-docs.dhyi.top/datart-docs/images/about/zhishixingqiu.jpeg)
+![](https://datart-docs.dhyi.top/datart-docs/images/about/zhishixingqiu.jpg)
 
 ### 插件示例仓库
 [示例仓库 v1.0.0](https://gitee.com/running-elephant/datart-extension-charts)
