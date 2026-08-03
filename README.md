@@ -1,64 +1,124 @@
 ![](https://datart-docs.dhyi.top/datart-docs/images/about/logo_with_text.jpg)
-> **新一代数据可视化开放平台，支持报表、仪表板、大屏、分析和可视化数据应用的敏捷构建。**
 
-## What is datart?
-datart 是新一代数据可视化开放平台，支持各类企业数据可视化场景需求，如创建和使用报表、仪表板和大屏，进行可视化数据分析，构建可视化数据应用等。由原 davinci 主创团队出品，datart 更加开放、可塑和智能，并在数据与艺术之间寻求最佳平衡。
+> ⚠️ 本项目基于 datart 进行二次开发与功能增强，**非官方仓库**。  
+> 原 datart 项目自 2023 年 9 月起更新缓慢，本仓库旨在在其基础上持续维护并增强企业级可视化能力。
 
-### 设计理念 Design Philosophy
-#### **开放 Openness**
-BI产品作为标准化产品成熟度已经很高，但大多数BI产品为封闭系统，即用户只能使用BI产品内置提供的数据源、数据图表、可视化元素等。我们认为数据可视化平台可以在其系统边界范围内，在多个层面提供开放可扩展能力，新的扩展支持可以通过即插即用方式安装、更新或卸载。因此 datart 试图建立起一套标准化的 **`数据可视化开放平台`** 体系，标准化和开放性体现在以下方面：
- * ***流程标准化***：基于 Source > View > Chart > Visualization 建立 **`受管控的数据可视化应用`** （Managed VizApp）开发、发布和使用的标准化流程
- * ***交互标准化***：Visualization 支持权限可控的标准化交互能力，如筛选、钻取、联动、跳转、弹窗、分享、下载、发送等
- * ***插件标准化***：在 Source、Chart、Visualization 层提供标准化可插拔扩展接口或SDK规范，支持开放扩展或按需定制
+# datart-plus
+**datart 增强发行版** —— 专注提升大屏编辑体验、统计图表能力与高级表格表现力，更适合企业落地场景。
 
-#### **可塑 Integrability**
-datart 可作为独立平台使用，但不仅限于此，为了更好支持快速构建定制化数据应用系统，datart 可以很容易被整合、被内嵌至其他三方系统，承担数据可视化部分功能。通过 datart 的登录对接能力、权限对接能力、Source 层对接能力和 Visualization 层分享、SDK等能力，用户可以基于 datart 平台对接或二开以快速满足业务系统定制化需求。
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 
-#### **智能 Augmented Analytics**
-传统BI产品只能对已有数据进行勘察，而现代BI产品更加重视对数据延展洞见，以形成完整数据分析洞察能力，或[增强分析](https://www.gartner.com/en/information-technology/glossary/augmented-analytics)能力。datart 会在平台层面提供可扩展数据增强分析能力，基于数据通过可视化方式不仅回答 What，并且可以回答 Why。
+---
 
-### 功能特性 Features
-![](https://datart-docs.dhyi.top/datart-docs/images/about/datart-vs-davinci.png)
+## 🚀 项目定位
 
-### 在线体验 Demo
-> [http://datart-demo.dhyi.top](http://datart-demo.dhyi.top)
-> 
-> 用户名：demo
-> 
-> 密码：123456
+datart-plus 是基于开源项目 [datart](https://gitee.com/running-elephant/datart) 的**增强发行版**。
+datart 由原 davinci 主创团队（跑象科技 / running-elephant）出品。
+
+- ✅ 完全保留 datart 的核心设计理念：`Source → View → Chart → Visualization`
+- ✅ 在不破坏原生模型的前提下，系统性增强编辑体验与分析能力
+- ✅ 针对国内企业常见场景，沉淀高频、实用的可视化能力
+- ✅ **在原项目维护节奏放缓的背景下，提供持续可用的增强版本**
+
+📌 **这不是一个 fork，而是一个独立维护的能力增强版本。**
+
+---
+
+## 🌟 核心增强能力（Highlights）
+
+| 类型 | 分类 | 更新内容 |
+| :--- | :--- | :--- |
+| ✨ 新增功能 | 大屏媒体组件 | • 新增 **13 种大屏边框组件**<br>• 新增 **11 种装饰元素**<br>• 新增 **Icon 图标组件**（支持样式与颜色配置） |
+| ✨ 新增功能 | 自由布局编辑器（重构） | • **多选组件**：支持批量复制、粘贴、撤销/重做<br>• **对齐工具栏**：一键左/右/顶/底对齐，水平/垂直居中<br>• **智能参考线**：拖拽时显示边缘与中心对齐参考线<br>• **方向键交互优化**：<br>　- 选中组件：方向键微调位置<br>　- 未选中组件：方向键滚动画布<br>• **透明度设置**：支持自由布局 / 自动布局的画布及组件背景透明度调整<br>• **颜色增强**：新增颜色取色器 + 最近使用颜色记录 |
+| ✨ 新增功能 | 数据分析 | • 聚合方式新增 **中位数（Median）**、**四分位数（Quartile）** |
+| ✨ 新增功能 | 图表插件 | • 新增 **雷达图图表插件**，支持多维数据对比分析<br>• 新增 **箱线图（Boxplot）**，支持分布统计与异常值分析|
+| 🐛 Bug 修复 | 筛选与时间 | • 修复图表筛选条件「自定义时间」默认值错误问题（原默认 +2，已修正为当前正确时间） |
+| 🐛 Bug 修复 | SQL 生成 | • 修复日期粒度字段排序时 `columnKey` 与 `functionColumns` 不一致导致的 SQL 报错问题 |
+| 🐛 Bug 修复 | 数据源兼容 | • 修复 H2 方言翻译 MySQL `IF` 与 `DATEDIFF` 函数时的语法兼容性问题 |
+
+---
 
 ### 架构模块 Architecture
-![](https://datart-docs.dhyi.top/datart-docs/images/about/architecture.png)
+![](http://datart-docs.dhyi.top/datart-docs/images/about/architecture.png)
 
-## Document
-### 如何部署 Deployment
-1.新手上路 参见 [Deployment](./Deployment.md)
+## 🤔 为什么选择 datart-plus？
 
-2.老司机 参见 [Deployment](https://datart-docs.dhyi.top/datart-docs/docs/)
-### 快速开始 Quick Start
-参见 [Quick Start Guide](https://datart-docs.dhyi.top/datart-docs/docs/first-visualization.html)
-### 用户文档 User Document
-参见 [User Guide](https://datart-docs.dhyi.top/datart-docs/docs/source.html)
+如果你有以下需求，这个版本会比原生 datart 更合适：
 
-### 最新版本 Latest Release
-参见  [Latest Release](https://gitee.com/ydheng/datart/releases)
+- 需要**更高效的大屏编辑体验**
+- 希望使用**箱线图、雷达图**等统计分析图表
+- 需要 **AntV S2 级别的高级表格能力**(单独插件)
+- 在企业内部系统中高频使用 datart
+- 需要**持续维护、可落地、可扩展**的可视化平台
 
-## Community
-### 社区支持 Support
-##### 反馈问题
-平台问题可以查看 [Issue](https://gitee.com/ydheng/datart/issues)，提交新Issue请参考 [Issue描述规范](https://gitee.com/ydheng/datart/tree/master/.gitee/)
-##### 交流讨论
-可以加入社区微信群参与讨论
-![](https://datart-docs.dhyi.top/datart-docs/images/about/wechat-group.jpeg)
+---
 
-#### 插件示例仓库
+## 🔗 与原生 datart 的关系
+
+| 项目 | 说明 |
+|---|---|
+| 基础架构 | 完全继承 datart 官方架构 |
+| 插件体系 | 兼容原生 Source / Chart / Visualization 插件机制 |
+| 数据模型 | 与官方版本保持一致 |
+| 维护状态 | 原项目自 2023 年 9 月起更新较少，本仓库独立维护并持续增强 |
+
+📘 官方仓库：  
+https://gitee.com/running-elephant/datart
+
+---
+
+## 📸 在线体验
+
+> 演示地址
+
+http://datart-demo.dhyi.top  
+用户名：demo  
+密码：123456
+
+---
+
+## ⚡ 快速开始
+
+参见文档：  
+https://datart-docs.dhyi.top/datart-docs/docs/first-visualization.html
+
+---
+
+## 📦 部署指南
+
+- 新手上路：参见 [Deployment](./Deployment.md)
+- 详细文档：https://datart-docs.dhyi.top/datart-docs/docs/
+
+---
+
+## 🌐 社区支持
+
+### 交流讨论
+欢迎加入知识星球参与讨论  
+![](https://datart-docs.dhyi.top/datart-docs/images/about/zhishixingqiu.jpeg)
+
+### 插件示例仓库
 [示例仓库 v1.0.0](https://gitee.com/running-elephant/datart-extension-charts)
 
-### 参与贡献 Contributing
-非常欢迎和感谢参与贡献，如何参与可参见 [Contributing]()
+### 反馈问题
+平台问题可查看 [Issue](https://gitee.com/ydheng/datart/issues)，提交新 Issue 请参考 [Issue 描述规范](https://gitee.com/ydheng/datart/tree/master/.gitee/)
 
-### 谁在使用 Adopters
-参见 [Adopters](https://gitee.com/running-elephant/datart/issues/137)
+---
 
-## License
-datart is under the Apache 2.0 license. See the [LICENSE](https://gitee.com/running-elephant/datart/blob/master/LICENSE) file for details.
+## 📝 版本说明
+
+本项目遵循 datart 原有 **Apache 2.0** 协议，新增代码同样开源。
+
+---
+
+## 🙏 致谢
+
+本项目由 **datart（原 davinci 主创团队，跑象科技 / running-elephant）** 的设计理念启发而来。  
+在原项目维护节奏放缓的背景下，datart-plus 希望延续其开放、可塑、智能的设计理念，进一步降低企业可视化落地成本。
+
+---
+
+## 📄 License
+
+datart-plus is licensed under the Apache License 2.0.  
+See the [LICENSE](https://gitee.com/running-elephant/datart/blob/master/LICENSE) file for details.
