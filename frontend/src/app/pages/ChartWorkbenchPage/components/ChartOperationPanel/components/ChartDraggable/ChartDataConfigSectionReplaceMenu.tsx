@@ -42,11 +42,17 @@ export const ChartDataConfigSectionReplaceMenu: FC<{
   const handleFieldConfigChanged = (item: ChartDataViewMeta) => {
     const newFieldConfig: ChartDataSectionField = {
       ...item,
-      aggregate: undefined,
       category: item.category as any,
       colName: item.name,
       type: item.type!,
       uid: columnConfig.uid,
+      aggregate: columnConfig.aggregate,
+      format: columnConfig.format,
+      alias: columnConfig.alias,
+      sort: columnConfig.sort,
+      filter: columnConfig.filter,
+      color: columnConfig.color,
+      size: columnConfig.size,
     };
     newFieldConfig.aggregate = getDefaultAggregate(newFieldConfig, config);
     const newConfig = updateDataConfigByField(
