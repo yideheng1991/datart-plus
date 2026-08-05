@@ -102,6 +102,7 @@ export interface ViewViewModel<T = object>
   fragment: string;
   isSaveAs?: Boolean;
   warnings?: string[] | null;
+  nlSqlGenerating?: boolean;
 }
 
 export interface QueryResult {
@@ -162,7 +163,30 @@ export type HierarchyModel = {
   columns?: ColumnsModel;
   path?: string[];
   computedFields?: ChartDataViewMeta[];
+  nlSql?: NlSqlMetadata;
 };
+
+export interface SchemaTableIdentifier {
+  database: string;
+  table: string;
+}
+
+export type NlSqlSelectedTable = SchemaTableIdentifier;
+
+export interface NlSqlMetadata {
+  prompt: string;
+  llmConfigId: string;
+  model: string;
+  generatedAt: string;
+  schemaUpdatedAt?: string;
+  sourceId?: string;
+  selectedTables?: NlSqlSelectedTable[];
+}
+
+export interface NlSqlGenerateResult
+  extends Omit<NlSqlMetadata, 'prompt' | 'sourceId' | 'selectedTables'> {
+  sql: string;
+}
 
 export interface ColumnPermissionRaw {
   id: string;
@@ -255,4 +279,4 @@ export interface JoinTableRequestProps {
   conditions?: Array<{ left: Array<string>; right: Array<string> }>;
 }
 
-export type ViewType = 'SQL' | 'STRUCT';
+export type ViewType = 'SQL' | 'STRUCT' | 'NL_SQL';

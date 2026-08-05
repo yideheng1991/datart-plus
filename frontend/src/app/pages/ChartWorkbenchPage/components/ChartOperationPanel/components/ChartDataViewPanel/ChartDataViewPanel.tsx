@@ -265,7 +265,7 @@ const ChartDataViewPanel: FC<{
 
   const buildFieldsForComputedFieldSettingPanel = useCallback(
     meta => {
-      if (dataView?.type === 'SQL') {
+      if (dataView?.type !== 'STRUCT') {
         return getAllColumnInMeta(meta);
       } else {
         const allColumn = getAllColumnInMeta(meta);
@@ -405,7 +405,7 @@ const ChartDataViewPanel: FC<{
 
   const buildAllMetaFields = useCallback(
     (isGroup: boolean, sortType) => {
-      if (dataView?.type === 'SQL' || !isGroup) {
+      if (dataView?.type !== 'STRUCT' || !isGroup) {
         setAllMetaFields(noGroupMetaFields(sortType));
       } else {
         setAllMetaFields(GroupMetaFields(sortType));

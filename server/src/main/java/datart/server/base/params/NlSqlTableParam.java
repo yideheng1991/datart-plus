@@ -15,14 +15,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package datart.core.data.provider;
 
-public enum ScriptType {
+package datart.server.base.params;
 
-    SQL,
+import lombok.Data;
 
-    STRUCT,
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
-    NL_SQL
+@Data
+public class NlSqlTableParam {
 
+    @NotBlank
+    @Size(max = 256)
+    private String database;
+
+    @NotBlank
+    @Size(max = 256)
+    private String table;
 }

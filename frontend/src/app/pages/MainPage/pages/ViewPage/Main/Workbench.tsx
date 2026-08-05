@@ -40,6 +40,7 @@ import { EditorContext } from '../EditorContext';
 import { useViewSlice } from '../slice';
 import { selectCurrentEditingViewAttr, selectViews } from '../slice/selectors';
 import { getSchemaBySourceId } from '../slice/thunks';
+import { ViewType } from '../slice/types';
 import { Editor } from './Editor';
 import { Outputs } from './Outputs';
 import { Properties } from './Properties';
@@ -62,7 +63,7 @@ export const Workbench = memo(() => {
   ) as string;
   const viewType = useSelector(state =>
     selectCurrentEditingViewAttr(state, { name: 'type' }),
-  ) as string;
+  ) as ViewType;
 
   const path = useMemo(
     () =>
@@ -109,7 +110,7 @@ export const Workbench = memo(() => {
   );
 
   const handleSelectViewType = useCallback(
-    viewType => {
+    (viewType: ViewType) => {
       dispatch(
         actions.changeCurrentEditingView({
           type: viewType,
@@ -158,7 +159,11 @@ export const Workbench = memo(() => {
               </LoadingWrap>
             )
           ) : viewType !== 'STRUCT' ? (
-            <Editor allowManage={allowManage} allowEnableViz={allowEnableViz} />
+            <Editor
+              viewType={viewType}
+              allowManage={allowManage}
+              allowEnableViz={allowEnableViz}
+            />
           ) : (
             <StructView
               allowManage={allowManage}

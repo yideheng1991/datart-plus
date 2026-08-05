@@ -30,7 +30,13 @@ import { ToolbarButton } from 'app/components';
 import { Chronograph } from 'app/components/Chronograph';
 import useI18NPrefix from 'app/hooks/useI18NPrefix';
 import { CommonFormTypes } from 'globalConstants';
-import React, { memo, useCallback, useContext, useEffect } from 'react';
+import React, {
+  memo,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
 import { format } from 'sql-formatter';
@@ -61,11 +67,12 @@ import {
   selectViews,
 } from '../../slice/selectors';
 import { saveView } from '../../slice/thunks';
+import { ViewType } from '../../slice/types';
 import { isNewView } from '../../utils';
 interface ToolbarProps {
   allowManage: boolean;
   allowEnableViz: boolean | undefined;
-  type: 'STRUCT' | 'SQL';
+  type: ViewType;
 }
 
 export const Toolbar = memo(
@@ -75,6 +82,13 @@ export const Toolbar = memo(
     const { onRun, onSave } = useContext(EditorContext);
     const { showSaveForm } = useContext(SaveFormContext);
     const sources = useSelector(selectSources);
+    const selectableSources = useMemo(
+      () =>
+        type === 'NL_SQL'
+          ? sources.filter(source => source.type === 'JDBC')
+          : sources,
+      [sources, type],
+    );
     const history = useHistory();
     const histState = history.location.state as any;
     const viewsData = useSelector(selectViews);
@@ -193,7 +207,7 @@ export const Toolbar = memo(
       <Container>
         <Operates>
           <Space split={<Divider type="vertical" className="divider" />}>
-            {type === 'SQL' && (
+            {type !== 'STRUCT' && (
               <>
                 {allowManage && (
                   <Select
@@ -204,7 +218,7 @@ export const Toolbar = memo(
                     onChange={sourceChange}
                     className="source"
                   >
-                    {sources.map(({ id, name }) => (
+                    {selectableSources.map(({ id, name }) => (
                       <Select.Option key={id} value={id}>
                         {name}
                       </Select.Option>

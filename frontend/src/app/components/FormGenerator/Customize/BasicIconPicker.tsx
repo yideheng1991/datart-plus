@@ -22,9 +22,9 @@ import { ChartStyleConfig } from 'app/types/ChartConfig';
 import React, { FC, memo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components/macro';
+import { BW } from '../Basic/components/BasicWrapper';
 import { ItemLayoutProps } from '../types';
 import { itemLayoutComparer } from '../utils';
-import { BW } from '../Basic/components/BasicWrapper';
 
 const BasicIconPicker: FC<ItemLayoutProps<ChartStyleConfig>> = memo(
   ({ ancestors, translate: t = title => title, data, onChange }) => {

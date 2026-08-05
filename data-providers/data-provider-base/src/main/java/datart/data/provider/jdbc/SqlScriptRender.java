@@ -114,6 +114,7 @@ public class SqlScriptRender extends ScriptRender {
     public QueryScriptProcessor getScriptProcessor() {
         switch (queryScript.getScriptType()) {
             case SQL:
+            case NL_SQL:
                 return new SqlQueryScriptProcessor(enableSpecialSQL, sqlDialect);
             case STRUCT:
                 return new StructScriptProcessor();

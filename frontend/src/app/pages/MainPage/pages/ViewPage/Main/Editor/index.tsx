@@ -18,26 +18,32 @@
 
 import React, { memo } from 'react';
 import styled from 'styled-components/macro';
+import { ViewType } from '../../slice/types';
+import { NlSqlBuilder } from '../NlSqlBuilder';
 import { SQLEditor } from './SQLEditor';
 import { Toolbar } from './Toolbar';
 
 interface EditorProps {
   allowManage: boolean;
   allowEnableViz: boolean | undefined;
+  viewType: ViewType;
 }
 
-export const Editor = memo(({ allowManage, allowEnableViz }: EditorProps) => {
-  return (
-    <Wrapper>
-      <Toolbar
-        type="SQL"
-        allowManage={allowManage}
-        allowEnableViz={allowEnableViz}
-      />
-      <SQLEditor />
-    </Wrapper>
-  );
-});
+export const Editor = memo(
+  ({ allowManage, allowEnableViz, viewType }: EditorProps) => {
+    return (
+      <Wrapper>
+        <Toolbar
+          type={viewType}
+          allowManage={allowManage}
+          allowEnableViz={allowEnableViz}
+        />
+        {viewType === 'NL_SQL' && <NlSqlBuilder allowManage={allowManage} />}
+        <SQLEditor />
+      </Wrapper>
+    );
+  },
+);
 
 const Wrapper = styled.div`
   display: flex;

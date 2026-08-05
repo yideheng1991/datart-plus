@@ -15,14 +15,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package datart.core.data.provider;
 
-public enum ScriptType {
+package datart.server.base.dto;
 
-    SQL,
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
-    STRUCT,
+import java.util.Date;
 
-    NL_SQL
+@Data
+@AllArgsConstructor
+public class NlSqlGenerateResult {
 
+    private String sql;
+
+    private String llmConfigId;
+
+    private String model;
+
+    private Date generatedAt;
+
+    private Date schemaUpdatedAt;
 }

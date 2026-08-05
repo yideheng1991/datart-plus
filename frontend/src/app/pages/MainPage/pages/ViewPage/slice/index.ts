@@ -26,6 +26,7 @@ import {
 } from '../utils';
 import {
   deleteView,
+  generateNlSql,
   getArchivedViews,
   getSchemaBySourceId,
   getViewDetail,
@@ -437,6 +438,48 @@ const slice = createSlice({
       }
       state.sourceDatabaseSchema[action.payload?.sourceId] =
         action.payload.data.schemaItems;
+    });
+
+    // generateNlSql
+    builder.addCase(generateNlSql.pending, (state, action) => {
+      const editingView = state.editingViews.find(
+        view => view.id === action.meta.arg.id,
+      );
+      if (editingView) {
+        editingView.nlSqlGenerating = true;
+        editingView.error = '';
+      }
+    });
+    builder.addCase(generateNlSql.fulfilled, (state, action) => {
+      const editingView = state.editingViews.find(
+        view => view.id === action.meta.arg.id,
+      );
+      if (editingView) {
+        const { sql, ...metadata } = action.payload;
+        editingView.nlSqlGenerating = false;
+        editingView.script = sql;
+        editingView.fragment = '';
+        editingView.model = {
+          ...editingView.model,
+          nlSql: {
+            prompt: action.meta.arg.prompt,
+            sourceId: editingView.sourceId,
+            selectedTables: action.meta.arg.selectedTables,
+            ...metadata,
+          },
+        };
+        editingView.touched = true;
+        editingView.stage = ViewViewModelStages.Initialized;
+      }
+    });
+    builder.addCase(generateNlSql.rejected, (state, action) => {
+      const editingView = state.editingViews.find(
+        view => view.id === action.meta.arg.id,
+      );
+      if (editingView) {
+        editingView.nlSqlGenerating = false;
+        editingView.error = action.payload || action.error.message || '';
+      }
     });
   },
 });

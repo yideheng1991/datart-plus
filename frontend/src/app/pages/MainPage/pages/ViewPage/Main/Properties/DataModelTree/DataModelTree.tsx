@@ -660,7 +660,7 @@ const DataModelTree: FC = memo(() => {
   );
 
   const GroupTableColumn = useCallback((TableColumn, viewType) => {
-    if (viewType === 'SQL') {
+    if (viewType !== 'STRUCT') {
       return TableColumn;
     }
     const hierarchyColumn = CloneValueDeep(TableColumn).filter(

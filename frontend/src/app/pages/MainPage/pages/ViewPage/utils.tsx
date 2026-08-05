@@ -66,6 +66,7 @@ export function generateEditingView(
     previewResults: [],
     error: '',
     fragment: '',
+    nlSqlGenerating: false,
     ...attrs,
   };
 }

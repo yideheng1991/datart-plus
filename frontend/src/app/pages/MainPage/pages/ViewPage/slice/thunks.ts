@@ -52,6 +52,8 @@ import {
 } from './selectors';
 import {
   DeleteViewParams,
+  NlSqlGenerateResult,
+  NlSqlSelectedTable,
   QueryResult,
   SaveFolderParams,
   SaveViewParams,
@@ -148,6 +150,37 @@ export const getSchemaBySourceId = createAsyncThunk<any, string>(
   },
 );
 
+export const generateNlSql = createAsyncThunk<
+  NlSqlGenerateResult,
+  { id: string; prompt: string; selectedTables: NlSqlSelectedTable[] },
+  { state: RootState; rejectValue: string }
+>(
+  'view/generateNlSql',
+  async ({ id, prompt, selectedTables }, { getState, rejectWithValue }) => {
+    const editingView = selectEditingViews(getState()).find(
+      view => view.id === id,
+    );
+    if (!editingView?.sourceId) {
+      return rejectWithValue(i18n.t('view.selectSource'));
+    }
+
+    try {
+      const { data } = await request2<NlSqlGenerateResult>({
+        url: '/views/nl-sql/generate',
+        method: 'POST',
+        data: {
+          sourceId: editingView.sourceId,
+          prompt,
+          selectedTables,
+        },
+      });
+      return data;
+    } catch (error) {
+      return rejectWithValue(getErrorMessage(error));
+    }
+  },
+);
+
 export const runSql = createAsyncThunk<
   QueryResult | null,
   { id: string; isFragment: boolean; script?: StructViewQueryProps },
@@ -162,11 +195,12 @@ export const runSql = createAsyncThunk<
   let sql = '';
   let structure: StructViewQueryProps | null = null;
   let script = '';
+  const isSqlView = type === 'SQL' || type === 'NL_SQL';
 
   if (scriptProps) {
     structure = scriptProps;
   } else {
-    if (type === 'SQL') {
+    if (isSqlView) {
       sql = currentEditingView.script as string;
     } else {
       structure = currentEditingView.script as StructViewQueryProps;
@@ -183,7 +217,7 @@ export const runSql = createAsyncThunk<
     return {} as any;
   }
 
-  if (type === 'SQL' && !(sql as string).trim()) {
+  if (isSqlView && !(sql as string).trim()) {
     dispatch(
       viewActions.changeCurrentEditingView({
         stage: ViewViewModelStages.Initialized,
@@ -193,7 +227,7 @@ export const runSql = createAsyncThunk<
     return {} as any;
   }
 
-  if (type === 'SQL') {
+  if (isSqlView) {
     script = fragment || sql;
   } else {
     script = handleObjectScriptToString(

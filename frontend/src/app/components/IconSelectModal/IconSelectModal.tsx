@@ -217,11 +217,17 @@ const IconSelectModal: React.FC<IconSelectModalProps> = ({
       </SearchWrapper>
       <TabWrapper>
         <Tabs activeKey={activeTab} onChange={setActiveTab} size="small">
-          <TabPane tab={t('components.iconSelectModal.dataCategory')} key="data">
+          <TabPane
+            tab={t('components.iconSelectModal.dataCategory')}
+            key="data"
+          >
             {renderIconGrid(paginateIcons(filteredDataIcons, dataPage))}
             {renderPagination(dataPage, dataPageCount, setDataPage)}
           </TabPane>
-          <TabPane tab={t('components.iconSelectModal.generalCategory')} key="general">
+          <TabPane
+            tab={t('components.iconSelectModal.generalCategory')}
+            key="general"
+          >
             {renderIconGrid(paginateIcons(filteredGeneralIcons, generalPage))}
             {renderPagination(generalPage, generalPageCount, setGeneralPage)}
           </TabPane>

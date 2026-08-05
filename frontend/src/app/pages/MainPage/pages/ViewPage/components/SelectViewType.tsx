@@ -16,7 +16,11 @@
  * limitations under the License.
  */
 
-import { ConsoleSqlOutlined, PartitionOutlined } from '@ant-design/icons';
+import {
+  ConsoleSqlOutlined,
+  PartitionOutlined,
+  RobotOutlined,
+} from '@ant-design/icons';
 import useI18NPrefix from 'app/hooks/useI18NPrefix';
 import { memo } from 'react';
 import styled from 'styled-components/macro';
@@ -32,24 +36,27 @@ import {
   SPACE_TIMES,
   SPACE_XS,
 } from 'styles/StyleConstants';
+import { ViewType } from '../slice/types';
 
 interface selectViewTypeProps {
-  selectViewType: (viewType: string) => void;
+  selectViewType: (viewType: ViewType) => void;
 }
 
 const SelectViewType = memo(({ selectViewType }: selectViewTypeProps) => {
-  const viewTypeList = ['STRUCT', 'SQL'];
+  const viewTypeList: ViewType[] = ['STRUCT', 'SQL', 'NL_SQL'];
   const t = useI18NPrefix('view.structView');
 
   return (
     <Wrapper>
       <Title>{t('title')}</Title>
       <ViewTypeList>
-        {viewTypeList.map((v, i) => {
+        {viewTypeList.map(v => {
           return (
-            <ViewTypeItem onClick={() => selectViewType(v)} key={i}>
+            <ViewTypeItem onClick={() => selectViewType(v)} key={v}>
               {v === 'STRUCT' ? (
                 <PartitionOutlined className="icon" />
+              ) : v === 'NL_SQL' ? (
+                <RobotOutlined className="icon" />
               ) : (
                 <ConsoleSqlOutlined className="icon" />
               )}
@@ -78,6 +85,7 @@ const Title = styled.h2`
 
 const ViewTypeList = styled.div`
   display: flex;
+  flex-wrap: wrap;
 `;
 
 const ViewTypeItem = styled.div`

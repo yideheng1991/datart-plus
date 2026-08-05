@@ -1,0 +1,64 @@
+/*
+ * Datart
+ * <p>
+ * Copyright 2021
+ * <p>
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package datart.server.llm;
+
+import datart.core.base.consts.ValueType;
+import datart.core.data.provider.Column;
+import datart.core.data.provider.SchemaInfo;
+import datart.core.data.provider.SchemaItem;
+import datart.core.data.provider.TableInfo;
+import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.LinkedHashSet;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+class NlSqlPromptBuilderTest {
+
+    @Test
+    void shouldIncludeDialectAndSchemaInSystemPrompt() {
+        TableInfo table = new TableInfo();
+        table.setTableName("orders");
+        table.setColumns(new LinkedHashSet<>(Arrays.asList(
+                Column.of(ValueType.STRING, "orders", "region"),
+                Column.of(ValueType.NUMERIC, "orders", "amount")
+        )));
+
+        SchemaItem schemaItem = new SchemaItem();
+        schemaItem.setDbName("analytics");
+        schemaItem.setTables(Collections.singletonList(table));
+
+        SchemaInfo schemaInfo = new SchemaInfo();
+        schemaInfo.setSchemaItems(Collections.singletonList(schemaItem));
+
+        String prompt = new NlSqlPromptBuilder()
+                .buildSystemPrompt(schemaInfo, "POSTGRESQL");
+
+        assertTrue(prompt.contains("Target dialect: POSTGRESQL"));
+        assertTrue(prompt.contains("TABLE analytics.orders"));
+        assertTrue(prompt.contains("region STRING"));
+        assertTrue(prompt.contains("amount NUMERIC"));
+        assertTrue(prompt.contains("Return exactly one SELECT or WITH query"));
+        assertTrue(prompt.contains("Represent variables as $variable_name$"));
+        assertTrue(prompt.contains("WHERE region = $region$"));
+        assertTrue(prompt.contains("never quote a variable placeholder"));
+    }
+}

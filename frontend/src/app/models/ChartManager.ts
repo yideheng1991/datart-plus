@@ -21,6 +21,7 @@ import {
   BasicDoubleYChart,
   BasicFunnelChart,
   BasicGaugeChart,
+  BasicRadarChart,
   BasicRichText,
   BasicScatterChart,
   ClusterBarChart,
@@ -41,7 +42,6 @@ import {
   StackColumnChart,
   WaterfallChart,
   WordCloudChart,
-  BasicRadarChart,
 } from 'app/components/ChartGraph';
 import { IChart } from 'app/types/Chart';
 import { getChartPluginPaths } from 'app/utils/fetch';
