@@ -25,18 +25,25 @@ import datart.core.data.provider.TableInfo;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 @Component
 public class NlSqlPromptBuilder {
 
-    private static final int MAX_SCHEMA_LENGTH = 60000;
+    private static final int MAX_SCHEMA_TOKENS = 8000;
+
+    private static final int APPROXIMATE_CHARS_PER_TOKEN = 4;
+
+    private static final int MAX_SCHEMA_LENGTH =
+            MAX_SCHEMA_TOKENS * APPROXIMATE_CHARS_PER_TOKEN;
 
     public String buildSystemPrompt(SchemaInfo schemaInfo, String dialect) {
         return "You generate SQL for Datart.\n"
                 + "Target dialect: " + dialect + ".\n"
-                + "Database schema:\n"
+                + "Database schema (database.table(column:TYPE,...); "
+                + "* marks a primary key):\n"
                 + buildSchemaText(schemaInfo)
                 + "\nRules:\n"
                 + "1. Return exactly one SELECT or WITH query.\n"
@@ -56,13 +63,18 @@ public class NlSqlPromptBuilder {
                 ? Collections.emptyList()
                 : schemaInfo.getSchemaItems();
 
+        boolean firstTable = true;
         outer:
         for (SchemaItem schemaItem : schemaItems) {
             List<TableInfo> tables = schemaItem.getTables() == null
                     ? Collections.emptyList()
                     : schemaItem.getTables();
             for (TableInfo table : tables) {
+                if (!firstTable) {
+                    schema.append('\n');
+                }
                 appendTable(schema, schemaItem.getDbName(), table);
+                firstTable = false;
                 if (schema.length() >= MAX_SCHEMA_LENGTH) {
                     schema.append("\n-- schema truncated");
                     break outer;
@@ -73,25 +85,30 @@ public class NlSqlPromptBuilder {
     }
 
     private void appendTable(StringBuilder schema, String database, TableInfo table) {
-        schema.append("\nTABLE ");
         if (database != null && !database.trim().isEmpty()) {
             schema.append(database).append('.');
         }
-        schema.append(table.getTableName()).append(" (\n");
+        schema.append(table.getTableName()).append('(');
 
         Set<Column> columns = table.getColumns() == null
                 ? Collections.emptySet()
                 : table.getColumns();
+        Set<String> primaryKeys = table.getPrimaryKeys() == null
+                ? Collections.emptySet()
+                : new HashSet<>(table.getPrimaryKeys());
         int index = 0;
         for (Column column : columns) {
             if (index++ > 0) {
-                schema.append(",\n");
+                schema.append(',');
             }
-            schema.append("  ")
-                    .append(column.columnName())
-                    .append(' ')
+            String columnName = column.columnName();
+            schema.append(columnName);
+            if (primaryKeys.contains(columnName)) {
+                schema.append('*');
+            }
+            schema.append(':')
                     .append(column.getType() == null ? "UNKNOWN" : column.getType().name());
         }
-        schema.append("\n);");
+        schema.append(')');
     }
 }

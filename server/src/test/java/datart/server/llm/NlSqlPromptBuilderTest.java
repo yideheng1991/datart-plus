@@ -29,6 +29,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class NlSqlPromptBuilderTest {
@@ -37,6 +38,7 @@ class NlSqlPromptBuilderTest {
     void shouldIncludeDialectAndSchemaInSystemPrompt() {
         TableInfo table = new TableInfo();
         table.setTableName("orders");
+        table.setPrimaryKeys(Collections.singletonList("region"));
         table.setColumns(new LinkedHashSet<>(Arrays.asList(
                 Column.of(ValueType.STRING, "orders", "region"),
                 Column.of(ValueType.NUMERIC, "orders", "amount")
@@ -53,12 +55,44 @@ class NlSqlPromptBuilderTest {
                 .buildSystemPrompt(schemaInfo, "POSTGRESQL");
 
         assertTrue(prompt.contains("Target dialect: POSTGRESQL"));
-        assertTrue(prompt.contains("TABLE analytics.orders"));
-        assertTrue(prompt.contains("region STRING"));
-        assertTrue(prompt.contains("amount NUMERIC"));
+        assertTrue(prompt.contains(
+                "analytics.orders(region*:STRING,amount:NUMERIC)"
+        ));
         assertTrue(prompt.contains("Return exactly one SELECT or WITH query"));
         assertTrue(prompt.contains("Represent variables as $variable_name$"));
         assertTrue(prompt.contains("WHERE region = $region$"));
         assertTrue(prompt.contains("never quote a variable placeholder"));
+    }
+
+    @Test
+    void shouldKeepFullColumnNamesAndAllColumns() {
+        String longColumnName =
+                "this_is_a_column_name_longer_than_forty_characters";
+        LinkedHashSet<Column> columns = new LinkedHashSet<>();
+        columns.add(Column.of(ValueType.STRING, "wide_table", longColumnName));
+        for (int index = 0; index <= 80; index++) {
+            columns.add(Column.of(
+                    ValueType.NUMERIC,
+                    "wide_table",
+                    "column_" + index
+            ));
+        }
+
+        TableInfo table = new TableInfo();
+        table.setTableName("wide_table");
+        table.setColumns(columns);
+
+        SchemaItem schemaItem = new SchemaItem();
+        schemaItem.setDbName("analytics");
+        schemaItem.setTables(Collections.singletonList(table));
+
+        SchemaInfo schemaInfo = new SchemaInfo();
+        schemaInfo.setSchemaItems(Collections.singletonList(schemaItem));
+
+        String schema = new NlSqlPromptBuilder().buildSchemaText(schemaInfo);
+
+        assertTrue(schema.contains(longColumnName + ":STRING"));
+        assertTrue(schema.contains("column_80:NUMERIC"));
+        assertFalse(schema.contains("..."));
     }
 }
