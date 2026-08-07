@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Datart
  *
  * Copyright 2021
@@ -21,7 +21,8 @@ import {
   MenuUnfoldOutlined,
 } from '@ant-design/icons';
 import { message } from 'antd';
-import { ListNav, ListPane, ListTitle } from 'app/components';
+import { ListNav, ListPane } from 'app/components/ListNav';
+import { ListTitle } from 'app/components/ListTitle';
 import { useDebouncedSearch } from 'app/hooks/useDebouncedSearch';
 import useGetSourceDbTypeIcon from 'app/hooks/useGetSourceDbTypeIcon';
 import useI18NPrefix from 'app/hooks/useI18NPrefix';

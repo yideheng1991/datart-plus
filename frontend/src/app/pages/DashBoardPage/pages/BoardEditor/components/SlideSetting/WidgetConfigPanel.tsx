@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Datart
  *
  * Copyright 2021
@@ -17,7 +17,8 @@
  */
 
 import { Collapse } from 'antd';
-import { CollapseHeader, ItemLayout } from 'app/components/FormGenerator';
+import CollapseHeader from 'app/components/FormGenerator/Layout/CollapseHeader';
+import ItemLayout from 'app/components/FormGenerator/Layout/ItemLayout';
 import { FormGroupLayoutMode } from 'app/components/FormGenerator/constants';
 import GroupLayout from 'app/components/FormGenerator/Layout/GroupLayout';
 import useI18NPrefix from 'app/hooks/useI18NPrefix';

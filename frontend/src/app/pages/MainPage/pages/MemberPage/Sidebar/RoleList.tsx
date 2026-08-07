@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Datart
  *
  * Copyright 2021
@@ -18,7 +18,8 @@
 
 import { LoadingOutlined, PlusOutlined } from '@ant-design/icons';
 import { List } from 'antd';
-import { ListItem, ListTitle } from 'app/components';
+import { ListItem } from 'app/components/ListItem';
+import { ListTitle } from 'app/components/ListTitle';
 import { useDebouncedSearch } from 'app/hooks/useDebouncedSearch';
 import useI18NPrefix from 'app/hooks/useI18NPrefix';
 import { memo, useCallback, useEffect, useMemo } from 'react';

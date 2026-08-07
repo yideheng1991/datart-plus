@@ -1,9 +1,10 @@
-﻿import {
+import {
   DeleteOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
 } from '@ant-design/icons';
-import { ListNav, ListPane, ListTitle } from 'app/components';
+import { ListNav, ListPane } from 'app/components/ListNav';
+import { ListTitle } from 'app/components/ListTitle';
 import { useDebouncedSearch } from 'app/hooks/useDebouncedSearch';
 import useGetVizIcon from 'app/hooks/useGetVizIcon';
 import useI18NPrefix, { I18NComponentProps } from 'app/hooks/useI18NPrefix';

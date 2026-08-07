@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Datart
  *
  * Copyright 2021
@@ -18,7 +18,9 @@
 
 import { LoadingOutlined, UserAddOutlined } from '@ant-design/icons';
 import { List, Modal } from 'antd';
-import { Avatar, ListItem, ListTitle } from 'app/components';
+import { Avatar } from 'app/components/Avatar';
+import { ListItem } from 'app/components/ListItem';
+import { ListTitle } from 'app/components/ListTitle';
 import { TenantManagementMode } from 'app/constants';
 import { useDebouncedSearch } from 'app/hooks/useDebouncedSearch';
 import useI18NPrefix from 'app/hooks/useI18NPrefix';

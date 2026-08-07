@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Datart
  *
  * Copyright 2021
@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { ListTitle } from 'app/components';
+import { ListTitle } from 'app/components/ListTitle';
 import useI18NPrefix from 'app/hooks/useI18NPrefix';
 import { FC, memo, useMemo } from 'react';
 import styled from 'styled-components';
