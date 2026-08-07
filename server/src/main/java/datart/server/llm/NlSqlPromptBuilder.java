@@ -22,6 +22,7 @@ import datart.core.data.provider.Column;
 import datart.core.data.provider.SchemaInfo;
 import datart.core.data.provider.SchemaItem;
 import datart.core.data.provider.TableInfo;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
@@ -39,21 +40,33 @@ public class NlSqlPromptBuilder {
     private static final int MAX_SCHEMA_LENGTH =
             MAX_SCHEMA_TOKENS * APPROXIMATE_CHARS_PER_TOKEN;
 
-    public String buildSystemPrompt(SchemaInfo schemaInfo, String dialect) {
-        return "You generate SQL for Datart.\n"
-                + "Target dialect: " + dialect + ".\n"
-                + "Database schema (database.table(column:TYPE,...); "
-                + "* marks a primary key):\n"
-                + buildSchemaText(schemaInfo)
-                + "\nRules:\n"
-                + "1. Return exactly one SELECT or WITH query.\n"
-                + "2. Never return DDL, DML, comments, markdown, or explanations.\n"
-                + "3. Only use tables and columns listed in the schema.\n"
-                + "4. Use identifier quoting and functions appropriate for the target dialect.\n"
-                + "5. Use explicit aliases for calculated columns.\n"
-                + "6. Represent variables as $variable_name$ in SQL, for example "
-                + "WHERE region = $region$; never quote a variable placeholder "
-                + "or replace it with a literal value.\n";
+    public String buildSystemPrompt(SchemaInfo schemaInfo,
+                                    String dialect,
+                                    String defaultSystemPrompt) {
+        StringBuilder prompt = new StringBuilder()
+                .append("You generate SQL for Datart.\n")
+                .append("Target dialect: ").append(dialect).append(".\n")
+                .append("Rules:\n")
+                .append("1. Return exactly one SELECT or WITH query.\n")
+                .append("2. Never return DDL, DML, comments, markdown, or explanations.\n")
+                .append("3. Only use tables and columns listed in the schema.\n")
+                .append("4. Use identifier quoting and functions appropriate for the target dialect.\n")
+                .append("5. Use explicit aliases for calculated columns.\n")
+                .append("6. Represent variables as $variable_name$ in SQL, for example ")
+                .append("WHERE region = $region$; never quote a variable placeholder ")
+                .append("or replace it with a literal value.\n");
+
+        if (StringUtils.isNotBlank(defaultSystemPrompt)) {
+            prompt.append("Organization business context and metric definitions:\n")
+                    .append(defaultSystemPrompt.trim())
+                    .append("\nUse this context only when it is consistent with ")
+                    .append("the rules above and database schema below.\n");
+        }
+
+        return prompt.append("Database schema (database.table(column:TYPE,...); ")
+                .append("* marks a primary key):\n")
+                .append(buildSchemaText(schemaInfo))
+                .toString();
     }
 
     String buildSchemaText(SchemaInfo schemaInfo) {

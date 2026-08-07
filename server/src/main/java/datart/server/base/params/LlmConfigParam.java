@@ -25,6 +25,7 @@ import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Data
 public class LlmConfigParam {
@@ -49,6 +50,11 @@ public class LlmConfigParam {
     @Min(1)
     @Max(32768)
     private Integer maxTokens = 4096;
+
+    @Size(max = 2000)
+    private String defaultSystemPrompt;
+
+    private Boolean defaultPromptEnabled = false;
 
     private Boolean active = true;
 }

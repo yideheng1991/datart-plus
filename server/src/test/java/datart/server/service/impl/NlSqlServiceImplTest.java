@@ -19,12 +19,18 @@
 package datart.server.service.impl;
 
 import datart.core.base.exception.BaseException;
+import datart.core.data.provider.DataProviderSource;
 import datart.core.data.provider.SchemaInfo;
 import datart.core.data.provider.SchemaItem;
 import datart.core.data.provider.TableInfo;
+import datart.core.entity.LlmConfig;
 import datart.core.entity.Source;
 import datart.server.base.params.NlSqlGenerateParam;
 import datart.server.base.params.NlSqlTableParam;
+import datart.server.llm.LlmClient;
+import datart.server.llm.NlSqlPromptBuilder;
+import datart.server.service.DataProviderService;
+import datart.server.service.LlmConfigService;
 import datart.server.service.SourceService;
 import org.junit.jupiter.api.Test;
 
@@ -97,6 +103,76 @@ class NlSqlServiceImplTest {
                 exception.getMessage()
         );
         verify(sourceService, never()).getSourceSchemaInfo("source-id");
+    }
+
+    @Test
+    void shouldApplyEnabledDefaultPromptToGeneration() {
+        SourceService sourceService = mock(SourceService.class);
+        DataProviderService dataProviderService = mock(DataProviderService.class);
+        LlmConfigService llmConfigService = mock(LlmConfigService.class);
+        LlmClient llmClient = mock(LlmClient.class);
+        NlSqlPromptBuilder promptBuilder = mock(NlSqlPromptBuilder.class);
+
+        Source source = new Source();
+        source.setId("source-id");
+        source.setOrgId("org-id");
+        source.setType("JDBC");
+        source.setIsFolder(false);
+        SchemaInfo schemaInfo = new SchemaInfo();
+        schemaInfo.setSchemaItems(Collections.singletonList(
+                schemaItem("analytics", "orders")
+        ));
+        LlmConfig config = new LlmConfig();
+        config.setId("config-id");
+        config.setModel("model");
+        config.setDefaultPromptEnabled(true);
+        config.setDefaultSystemPrompt("GMV includes paid orders only.");
+        DataProviderSource providerSource = new DataProviderSource();
+        providerSource.setProperties(Collections.singletonMap(
+                "dbType",
+                "MYSQL"
+        ));
+
+        when(sourceService.retrieve("source-id")).thenReturn(source);
+        when(sourceService.getSourceSchemaInfo("source-id"))
+                .thenReturn(schemaInfo);
+        when(dataProviderService.parseDataProviderConfig(source))
+                .thenReturn(providerSource);
+        when(llmConfigService.getActiveConfig("org-id")).thenReturn(config);
+        when(promptBuilder.buildSystemPrompt(
+                schemaInfo,
+                "MYSQL",
+                "GMV includes paid orders only."
+        )).thenReturn("system prompt");
+        when(llmClient.chat(
+                config,
+                "system prompt",
+                "List paid orders"
+        )).thenReturn("SELECT 1");
+
+        NlSqlGenerateParam param = new NlSqlGenerateParam();
+        param.setSourceId("source-id");
+        param.setPrompt("List paid orders");
+        NlSqlServiceImpl serviceWithPrompt = new NlSqlServiceImpl(
+                sourceService,
+                dataProviderService,
+                llmConfigService,
+                llmClient,
+                promptBuilder
+        );
+
+        serviceWithPrompt.generate(param);
+
+        verify(promptBuilder).buildSystemPrompt(
+                schemaInfo,
+                "MYSQL",
+                "GMV includes paid orders only."
+        );
+        verify(llmClient).chat(
+                config,
+                "system prompt",
+                "List paid orders"
+        );
     }
 
     @Test

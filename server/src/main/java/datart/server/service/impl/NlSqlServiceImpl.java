@@ -105,7 +105,10 @@ public class NlSqlServiceImpl implements NlSqlService {
         String dialect = resolveDialect(source);
         String systemPrompt = promptBuilder.buildSystemPrompt(
                 selectedSchemaInfo,
-                dialect
+                dialect,
+                Boolean.TRUE.equals(config.getDefaultPromptEnabled())
+                        ? config.getDefaultSystemPrompt()
+                        : null
         );
         String output = llmClient.chat(config, systemPrompt, param.getPrompt().trim());
         String sql = extractAndValidateSql(output);

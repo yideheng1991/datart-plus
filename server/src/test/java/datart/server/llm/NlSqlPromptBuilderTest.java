@@ -52,7 +52,7 @@ class NlSqlPromptBuilderTest {
         schemaInfo.setSchemaItems(Collections.singletonList(schemaItem));
 
         String prompt = new NlSqlPromptBuilder()
-                .buildSystemPrompt(schemaInfo, "POSTGRESQL");
+                .buildSystemPrompt(schemaInfo, "POSTGRESQL", null);
 
         assertTrue(prompt.contains("Target dialect: POSTGRESQL"));
         assertTrue(prompt.contains(
@@ -62,6 +62,30 @@ class NlSqlPromptBuilderTest {
         assertTrue(prompt.contains("Represent variables as $variable_name$"));
         assertTrue(prompt.contains("WHERE region = $region$"));
         assertTrue(prompt.contains("never quote a variable placeholder"));
+    }
+
+    @Test
+    void shouldIncludeOrganizationPromptBeforeSchema() {
+        SchemaInfo schemaInfo = new SchemaInfo();
+        schemaInfo.setSchemaItems(Collections.emptyList());
+
+        String prompt = new NlSqlPromptBuilder().buildSystemPrompt(
+                schemaInfo,
+                "MYSQL",
+                "GMV is the sum of paid order amounts."
+        );
+
+        int rulesIndex = prompt.indexOf("Rules:");
+        int organizationPromptIndex = prompt.indexOf(
+                "Organization business context and metric definitions:"
+        );
+        int schemaIndex = prompt.indexOf("Database schema");
+        assertTrue(rulesIndex < organizationPromptIndex);
+        assertTrue(organizationPromptIndex < schemaIndex);
+        assertTrue(prompt.contains("GMV is the sum of paid order amounts."));
+        assertTrue(prompt.contains(
+                "the rules above and database schema below"
+        ));
     }
 
     @Test

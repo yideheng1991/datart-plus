@@ -48,6 +48,8 @@ interface LlmConfig {
   model: string;
   temperature: number;
   maxTokens: number;
+  defaultSystemPrompt?: string;
+  defaultPromptEnabled: boolean;
   active: boolean;
 }
 
@@ -58,6 +60,8 @@ interface LlmConfigFormValues {
   model: string;
   temperature: number;
   maxTokens: number;
+  defaultSystemPrompt?: string;
+  defaultPromptEnabled: boolean;
   active: boolean;
 }
 
@@ -93,6 +97,7 @@ export const LlmConfigDrawer: FC<LlmConfigDrawerProps> = ({
   const [editing, setEditing] = useState<LlmConfig>();
   const [formVisible, setFormVisible] = useState(false);
   const [provider, setProvider] = useState('OPENAI');
+  const [defaultPromptEnabled, setDefaultPromptEnabled] = useState(false);
   const modelOptions = PROVIDER_MODELS[provider] || [];
 
   const showError = useCallback(error => {
@@ -124,11 +129,14 @@ export const LlmConfigDrawer: FC<LlmConfigDrawerProps> = ({
   const openCreateForm = useCallback(() => {
     setEditing(undefined);
     setProvider('OPENAI');
+    setDefaultPromptEnabled(false);
     form.resetFields();
     form.setFieldsValue({
       provider: 'OPENAI',
       temperature: 0.3,
       maxTokens: 4096,
+      defaultSystemPrompt: '',
+      defaultPromptEnabled: false,
       active: true,
     });
     setFormVisible(true);
@@ -138,6 +146,7 @@ export const LlmConfigDrawer: FC<LlmConfigDrawerProps> = ({
     (config: LlmConfig) => {
       setEditing(config);
       setProvider(config.provider);
+      setDefaultPromptEnabled(config.defaultPromptEnabled);
       form.setFieldsValue({
         provider: config.provider,
         apiBaseUrl: config.apiBaseUrl,
@@ -145,6 +154,8 @@ export const LlmConfigDrawer: FC<LlmConfigDrawerProps> = ({
         model: config.model,
         temperature: config.temperature,
         maxTokens: config.maxTokens,
+        defaultSystemPrompt: config.defaultSystemPrompt,
+        defaultPromptEnabled: config.defaultPromptEnabled,
         active: config.active,
       });
       setFormVisible(true);
@@ -163,6 +174,8 @@ export const LlmConfigDrawer: FC<LlmConfigDrawerProps> = ({
             orgId,
             ...values,
             apiKey: values.apiKey?.trim() || undefined,
+            defaultSystemPrompt:
+              values.defaultSystemPrompt?.trim() || undefined,
           },
         });
         message.success(t(editing ? 'updateSuccess' : 'createSuccess'));
@@ -287,6 +300,9 @@ export const LlmConfigDrawer: FC<LlmConfigDrawerProps> = ({
                       <span>{config.model}</span>
                       <Tag>{config.provider}</Tag>
                       {config.active && <Tag color="green">{t('active')}</Tag>}
+                      {config.defaultPromptEnabled && (
+                        <Tag color="blue">{t('defaultPromptEnabledTag')}</Tag>
+                      )}
                     </Space>
                   }
                   description={
@@ -308,6 +324,7 @@ export const LlmConfigDrawer: FC<LlmConfigDrawerProps> = ({
       <Modal
         title={t(editing ? 'editTitle' : 'createTitle')}
         visible={formVisible}
+        width={720}
         confirmLoading={saving}
         destroyOnClose
         onOk={() => form.submit()}
@@ -375,6 +392,37 @@ export const LlmConfigDrawer: FC<LlmConfigDrawerProps> = ({
             rules={[{ required: true }]}
           >
             <InputNumber min={1} max={32768} />
+          </Form.Item>
+          <Form.Item
+            label={t('defaultPromptEnabled')}
+            name="defaultPromptEnabled"
+            valuePropName="checked"
+          >
+            <Switch onChange={setDefaultPromptEnabled} />
+          </Form.Item>
+          <Form.Item
+            label={t('defaultSystemPrompt')}
+            name="defaultSystemPrompt"
+            extra={t('defaultSystemPromptTip')}
+            rules={[
+              { max: 2000 },
+              {
+                validator: (_, value) =>
+                  !form.getFieldValue('defaultPromptEnabled') || value?.trim()
+                    ? Promise.resolve()
+                    : Promise.reject(
+                        new Error(t('defaultSystemPromptRequired')),
+                      ),
+              },
+            ]}
+          >
+            <Input.TextArea
+              rows={6}
+              maxLength={2000}
+              showCount
+              disabled={!defaultPromptEnabled}
+              placeholder={t('defaultSystemPromptPlaceholder')}
+            />
           </Form.Item>
           <Form.Item label={t('active')} name="active" valuePropName="checked">
             <Switch />

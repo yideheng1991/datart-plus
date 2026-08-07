@@ -21,5 +21,9 @@ public class LlmConfig extends BaseEntity {
 
     private Integer maxTokens;
 
+    private String defaultSystemPrompt;
+
+    private Boolean defaultPromptEnabled;
+
     private Boolean active;
 }

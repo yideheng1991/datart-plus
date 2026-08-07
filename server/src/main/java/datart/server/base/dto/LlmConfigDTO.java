@@ -43,6 +43,10 @@ public class LlmConfigDTO {
 
     private Integer maxTokens;
 
+    private String defaultSystemPrompt;
+
+    private Boolean defaultPromptEnabled;
+
     private Boolean active;
 
     private Date createTime;
@@ -59,6 +63,8 @@ public class LlmConfigDTO {
         dto.setModel(config.getModel());
         dto.setTemperature(config.getTemperature());
         dto.setMaxTokens(config.getMaxTokens());
+        dto.setDefaultSystemPrompt(config.getDefaultSystemPrompt());
+        dto.setDefaultPromptEnabled(config.getDefaultPromptEnabled());
         dto.setActive(config.getActive());
         dto.setCreateTime(config.getCreateTime());
         dto.setUpdateTime(config.getUpdateTime());

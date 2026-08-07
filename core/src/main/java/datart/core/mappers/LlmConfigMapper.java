@@ -19,16 +19,20 @@ public interface LlmConfigMapper {
 
     @Insert({
             "INSERT INTO llm_config (id, org_id, provider, api_base_url, api_key, model,",
-            "temperature, max_tokens, is_active, create_by, create_time, update_by, update_time)",
+            "temperature, max_tokens, default_system_prompt, default_prompt_enabled,",
+            "is_active, create_by, create_time, update_by, update_time)",
             "VALUES (#{id}, #{orgId}, #{provider}, #{apiBaseUrl}, #{apiKey}, #{model},",
-            "#{temperature}, #{maxTokens}, #{active}, #{createBy}, #{createTime}, #{updateBy}, #{updateTime})"
+            "#{temperature}, #{maxTokens}, #{defaultSystemPrompt}, #{defaultPromptEnabled},",
+            "#{active}, #{createBy}, #{createTime}, #{updateBy}, #{updateTime})"
     })
     int insert(LlmConfig config);
 
     @Update({
             "UPDATE llm_config SET provider = #{provider}, api_base_url = #{apiBaseUrl},",
             "api_key = #{apiKey}, model = #{model}, temperature = #{temperature},",
-            "max_tokens = #{maxTokens}, is_active = #{active}, update_by = #{updateBy},",
+            "max_tokens = #{maxTokens}, default_system_prompt = #{defaultSystemPrompt},",
+            "default_prompt_enabled = #{defaultPromptEnabled}, is_active = #{active},",
+            "update_by = #{updateBy},",
             "update_time = #{updateTime} WHERE id = #{id}"
     })
     int update(LlmConfig config);
@@ -38,7 +42,8 @@ public interface LlmConfigMapper {
 
     @Select({
             "SELECT id, org_id, provider, api_base_url, api_key, model, temperature,",
-            "max_tokens, is_active, create_by, create_time, update_by, update_time",
+            "max_tokens, default_system_prompt, default_prompt_enabled, is_active,",
+            "create_by, create_time, update_by, update_time",
             "FROM llm_config WHERE id = #{id}"
     })
     @Results(id = "llmConfigResult", value = {
@@ -50,6 +55,16 @@ public interface LlmConfigMapper {
             @Result(column = "model", property = "model", jdbcType = JdbcType.VARCHAR),
             @Result(column = "temperature", property = "temperature", jdbcType = JdbcType.DOUBLE),
             @Result(column = "max_tokens", property = "maxTokens", jdbcType = JdbcType.INTEGER),
+            @Result(
+                    column = "default_system_prompt",
+                    property = "defaultSystemPrompt",
+                    jdbcType = JdbcType.LONGVARCHAR
+            ),
+            @Result(
+                    column = "default_prompt_enabled",
+                    property = "defaultPromptEnabled",
+                    jdbcType = JdbcType.TINYINT
+            ),
             @Result(column = "is_active", property = "active", jdbcType = JdbcType.TINYINT),
             @Result(column = "create_by", property = "createBy", jdbcType = JdbcType.VARCHAR),
             @Result(column = "create_time", property = "createTime", jdbcType = JdbcType.TIMESTAMP),
@@ -60,7 +75,8 @@ public interface LlmConfigMapper {
 
     @Select({
             "SELECT id, org_id, provider, api_base_url, api_key, model, temperature,",
-            "max_tokens, is_active, create_by, create_time, update_by, update_time",
+            "max_tokens, default_system_prompt, default_prompt_enabled, is_active,",
+            "create_by, create_time, update_by, update_time",
             "FROM llm_config WHERE org_id = #{orgId} ORDER BY create_time DESC"
     })
     @ResultMap("llmConfigResult")
@@ -68,7 +84,8 @@ public interface LlmConfigMapper {
 
     @Select({
             "SELECT id, org_id, provider, api_base_url, api_key, model, temperature,",
-            "max_tokens, is_active, create_by, create_time, update_by, update_time",
+            "max_tokens, default_system_prompt, default_prompt_enabled, is_active,",
+            "create_by, create_time, update_by, update_time",
             "FROM llm_config WHERE org_id = #{orgId} AND is_active = 1 LIMIT 1"
     })
     @ResultMap("llmConfigResult")

@@ -175,6 +175,19 @@ public class LlmConfigServiceImpl extends BaseService implements LlmConfigServic
         config.setModel(param.getModel().trim());
         config.setTemperature(param.getTemperature() == null ? 0.3D : param.getTemperature());
         config.setMaxTokens(param.getMaxTokens() == null ? 4096 : param.getMaxTokens());
+        String defaultSystemPrompt = StringUtils.trimToNull(
+                param.getDefaultSystemPrompt()
+        );
+        boolean defaultPromptEnabled = Boolean.TRUE.equals(
+                param.getDefaultPromptEnabled()
+        );
+        if (defaultPromptEnabled && defaultSystemPrompt == null) {
+            throw new ParamException(
+                    "Default prompt cannot be empty when enabled"
+            );
+        }
+        config.setDefaultSystemPrompt(defaultSystemPrompt);
+        config.setDefaultPromptEnabled(defaultPromptEnabled);
         config.setActive(param.getActive() == null || param.getActive());
     }
 
