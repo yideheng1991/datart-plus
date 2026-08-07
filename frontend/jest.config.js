@@ -24,7 +24,18 @@ module.exports = {
   setupFiles: ['jest-canvas-mock'],
   setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
   testMatch: ['<rootDir>/src/**/__tests__/**/*.{spec,test}.{js,jsx,ts,tsx}'],
-  moduleFileExtensions: ['web.js', 'js', 'web.ts', 'ts', 'web.tsx', 'tsx', 'json', 'web.jsx', 'jsx', 'node'],
+  moduleFileExtensions: [
+    'web.js',
+    'js',
+    'web.ts',
+    'ts',
+    'web.tsx',
+    'tsx',
+    'json',
+    'web.jsx',
+    'jsx',
+    'node',
+  ],
   transform: {
     '^.+\\.(ts|tsx|js|jsx)$': 'babel-jest',
   },
@@ -32,6 +43,8 @@ module.exports = {
     '/node_modules/(?!(echarts|zrender|react-monaco-editor|monaco-editor|monaco-editor-webpack-plugin)/)',
   ],
   moduleNameMapper: {
+    // Handle Vite's ?svgr suffix imports (must be before path aliases)
+    '^(.*)\\.svg\\?svgr$': '<rootDir>/src/__mocks__/svgrMock.js',
     // Path aliases matching tsconfig.json
     '^@app/(.*)$': '<rootDir>/src/app/$1',
     '^@styles/(.*)$': '<rootDir>/src/styles/$1',

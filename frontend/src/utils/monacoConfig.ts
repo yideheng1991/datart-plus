@@ -1,4 +1,4 @@
-﻿// Monaco Editor configuration for Vite
+﻿﻿﻿// Monaco Editor configuration for Vite
 // This configures Monaco to use workers from public directory
 
 export const setupMonacoEnvironment = () => {
