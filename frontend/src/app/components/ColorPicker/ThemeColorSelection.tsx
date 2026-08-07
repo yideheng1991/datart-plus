@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -20,7 +20,7 @@ import { List, Popover } from 'antd';
 import { colorThemes } from 'app/assets/theme/colorsConfig';
 import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { FONT_SIZE_BODY, SPACE_TIMES } from 'styles/StyleConstants';
 import { themeColorPropTypes } from './slice/types';
 

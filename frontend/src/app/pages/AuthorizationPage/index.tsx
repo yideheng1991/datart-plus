@@ -1,4 +1,4 @@
-import { Alert } from 'app/components/Alert';
+﻿import { Alert } from 'app/components/Alert';
 import { AuthorizationStatus } from 'app/constants';
 import { getUserInfoByToken } from 'app/slice/thunks';
 import { StorageKeys } from 'globalConstants';

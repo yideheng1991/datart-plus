@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -30,7 +30,7 @@ import {
   useMemo,
   useState,
 } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { Group } from '../SettingPanel';
 const { Panel } = Collapse;
 export const RectSet: FC<{ wid: string; rect: RectConfig }> = memo(

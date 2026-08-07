@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -21,7 +21,7 @@ import useI18NPrefix from 'app/hooks/useI18NPrefix';
 import React, { memo, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouteMatch } from 'react-router-dom';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { selectOrgId } from '../../../slice/selectors';
 import { useMemberSlice } from '../../MemberPage/slice';
 import { useSourceSlice } from '../../SourcePage/slice';

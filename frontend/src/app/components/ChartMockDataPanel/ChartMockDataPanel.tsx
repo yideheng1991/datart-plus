@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -21,7 +21,7 @@ import { MockDataEditor } from 'app/pages/DashBoardPage/components/MockDataPanel
 import { exportChartTpl } from 'app/pages/MainPage/pages/VizPage/slice/thunks';
 import { FC, memo, useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { LEVEL_100 } from 'styles/StyleConstants';
 import { getDataChartData } from './utils';
 

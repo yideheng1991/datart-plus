@@ -1,4 +1,4 @@
-import { Button, Card, Form, Input, message, Upload } from 'antd';
+﻿import { Button, Card, Form, Input, message, Upload } from 'antd';
 import { Avatar } from 'app/components';
 import useI18NPrefix from 'app/hooks/useI18NPrefix';
 import { fetchCheckName } from 'app/utils/fetch';
@@ -10,7 +10,7 @@ import {
 } from 'globalConstants';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import {
   BORDER_RADIUS,
   SPACE_LG,

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -20,7 +20,7 @@ import { ChartDataSectionType } from 'app/constants';
 import useI18NPrefix from 'app/hooks/useI18NPrefix';
 import { ChartDataConfig } from 'app/types/ChartConfig';
 import { FC, memo, useContext } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { SPACE_XS } from 'styles/StyleConstants';
 import ChartAggregationContext from '../../../../contexts/ChartAggregationContext';
 import PaletteDataConfig from '../ChartDataConfigSection';

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -46,7 +46,7 @@ import RGL, { Layout, WidthProvider } from 'react-grid-layout';
 import 'react-grid-layout/css/styles.css';
 import { useDispatch, useSelector } from 'react-redux';
 import 'react-resizable/css/styles.css';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import {
   BORDER_RADIUS,
   LEVEL_100,

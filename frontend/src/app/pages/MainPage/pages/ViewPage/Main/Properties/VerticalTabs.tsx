@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -19,7 +19,7 @@
 import classnames from 'classnames';
 import { cloneElement, memo, ReactElement, useCallback, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import {
   FONT_SIZE_TITLE,
   FONT_WEIGHT_MEDIUM,

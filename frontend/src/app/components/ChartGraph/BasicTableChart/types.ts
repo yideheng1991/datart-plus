@@ -1,4 +1,4 @@
-import { AggregateFieldActionType } from 'app/constants';
+﻿import { AggregateFieldActionType } from 'app/constants';
 import { ChartDataSectionField, FontStyle } from 'app/types/ChartConfig';
 
 export interface TableStyle {

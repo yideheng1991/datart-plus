@@ -1,7 +1,7 @@
-import { Space } from 'antd';
+﻿import { Space } from 'antd';
 import classnames from 'classnames';
 import { ReactElement } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import {
   FONT_SIZE_ICON_SM,
   FONT_WEIGHT_MEDIUM,

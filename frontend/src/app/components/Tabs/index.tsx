@@ -1,4 +1,4 @@
-import { Tabs as AntdTabs, TabsProps as AntdTabsProps } from 'antd';
+﻿import { Tabs as AntdTabs, TabsProps as AntdTabsProps } from 'antd';
 import { DashboardTabStyle } from './DashboardTabStyle';
 import { EditorTabsStyle } from './EditorTabStyle';
 const { TabPane } = AntdTabs;

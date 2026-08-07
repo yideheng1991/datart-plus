@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -22,7 +22,7 @@ import { useSplitSizes } from 'app/hooks/useSplitSizes';
 import { dispatchResize } from 'app/utils/dispatchResize';
 import { useCallback, useState } from 'react';
 import { Route } from 'react-router-dom';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { SaveForm } from './SaveForm';
 import { SaveFormContext, useSaveFormContext } from './SaveFormContext';
 import { Sidebar } from './Sidebar';

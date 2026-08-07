@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -22,7 +22,7 @@ import { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import useStateModal, { StateModalSize } from 'app/hooks/useStateModal';
 import { ChartStyleConfig } from 'app/types/ChartConfig';
 import { FC, memo } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { SPACE_TIMES } from 'styles/StyleConstants';
 import { CollectionLayout } from '../Layout';
 import { ItemLayoutProps } from '../types';

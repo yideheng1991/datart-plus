@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -22,7 +22,7 @@ import { WidgetWrapProvider } from 'app/pages/DashBoardPage/components/WidgetPro
 import useBoardWidthHeight from 'app/pages/DashBoardPage/hooks/useBoardWidthHeight';
 import useLayoutMap from 'app/pages/DashBoardPage/hooks/useLayoutMap';
 import { memo, useContext, useMemo } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import SlideBackground from '../../../components/FreeBoardBackground';
 import useClientRect from '../../../hooks/useClientRect';
 import useSlideStyle from '../../../hooks/useSlideStyle';

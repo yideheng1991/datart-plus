@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -29,7 +29,7 @@ import {
   useHistory,
   useRouteMatch,
 } from 'react-router';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { NotFoundPage } from '../NotFoundPage';
 import { StoryEditor } from '../StoryBoardPage/Editor';
 import { StoryPlayer } from '../StoryBoardPage/Player';

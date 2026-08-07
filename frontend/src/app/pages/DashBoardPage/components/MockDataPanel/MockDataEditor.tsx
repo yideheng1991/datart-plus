@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -22,7 +22,7 @@ import 'monaco-editor/esm/vs/basic-languages/javascript/javascript.contribution'
 import { FC, memo, useCallback, useMemo } from 'react';
 import MonacoEditor, { monaco } from 'react-monaco-editor';
 import { useSelector } from 'react-redux';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { FONT_SIZE_BASE } from 'styles/StyleConstants';
 import { selectThemeKey } from 'styles/theme/slice/selectors';
 export const MockDataEditor: FC<{ originalData: object; onDataChange: any }> =

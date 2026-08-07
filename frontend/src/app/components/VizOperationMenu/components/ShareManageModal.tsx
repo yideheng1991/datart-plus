@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -20,7 +20,7 @@ import { Button, Empty, message, Modal, Popconfirm, Space, Table } from 'antd';
 import useI18NPrefix from 'app/hooks/useI18NPrefix';
 import produce from 'immer';
 import { FC, memo, useCallback, useEffect, useMemo, useState } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { SPACE_TIMES } from 'styles/StyleConstants';
 import { getServerDomain, request2 } from 'utils/request';
 import ShareLinkModal from './ShareLinkModal';

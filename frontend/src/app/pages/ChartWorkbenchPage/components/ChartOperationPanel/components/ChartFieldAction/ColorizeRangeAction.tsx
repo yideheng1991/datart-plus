@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -25,7 +25,7 @@ import { ChartDataSectionField } from 'app/types/ChartConfig';
 import ChartDataSetDTO from 'app/types/ChartDataSet';
 import { updateBy } from 'app/utils/mutation';
 import { FC, memo, useState } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 
 const ColorizeRangeAction: FC<{
   config: ChartDataSectionField;

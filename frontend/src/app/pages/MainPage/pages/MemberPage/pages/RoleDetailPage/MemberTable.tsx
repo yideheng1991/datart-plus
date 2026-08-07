@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -27,7 +27,7 @@ import { User } from 'app/slice/types';
 import { DEFAULT_DEBOUNCE_WAIT } from 'globalConstants';
 import debounce from 'lodash/debounce';
 import { Key, memo, useCallback, useMemo, useState } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { SPACE } from 'styles/StyleConstants';
 
 interface MemberTableProps {

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+﻿import { useCallback, useEffect, useState } from 'react';
 
 const STORAGE_KEY = 'datart_recent_colors';
 const MAX_COLORS = 10;

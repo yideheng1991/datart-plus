@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 import { memo, useContext } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { WidgetContext } from '../../WidgetProvider/WidgetProvider';
 import { iframeWidgetToolKit } from './iframeConfig';
 

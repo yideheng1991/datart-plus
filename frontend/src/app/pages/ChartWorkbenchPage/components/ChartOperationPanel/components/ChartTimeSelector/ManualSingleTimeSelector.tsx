@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -24,7 +24,7 @@ import { formatTime } from 'app/utils/time';
 import { TIME_FORMATTER } from 'globalConstants';
 import moment from 'moment';
 import { FC, memo, useState } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import ExactTimeSelector from './ExactTimeSelector';
 import RelativeTimeSelector from './RelativeTimeSelector';
 

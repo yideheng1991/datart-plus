@@ -30,6 +30,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.util.List;
@@ -44,6 +45,49 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     public WebMvcConfig(LoginInterceptor loginInterceptor) {
         this.loginInterceptor = loginInterceptor;
+    }
+
+    @Override
+    public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        String userDir = System.getProperty("user.dir");
+        String staticDir = "file:" + userDir + "/static/";
+
+        // Frontend static assets (JS, CSS, images, fonts)
+        // /static/js/main.js  ->  <userDir>/static/static/js/main.js
+        registry.addResourceHandler("/static/**")
+                .addResourceLocations(staticDir + "static/");
+
+        // Monaco Editor workers
+        registry.addResourceHandler("/monaco-editor/**")
+                .addResourceLocations(staticDir + "monaco-editor/");
+
+        // Root-level frontend files
+        registry.addResourceHandler("/")
+                .addResourceLocations(staticDir + "index.html");
+        registry.addResourceHandler("/index.html")
+                .addResourceLocations(staticDir + "index.html");
+        registry.addResourceHandler("/favicon.ico")
+                .addResourceLocations(staticDir + "favicon.ico");
+        registry.addResourceHandler("/manifest.json")
+                .addResourceLocations(staticDir + "manifest.json");
+        registry.addResourceHandler("/robots.txt")
+                .addResourceLocations(staticDir + "robots.txt");
+
+        // Share pages
+        registry.addResourceHandler("/shareChart.html")
+                .addResourceLocations(staticDir + "shareChart.html");
+        registry.addResourceHandler("/shareDashboard.html")
+                .addResourceLocations(staticDir + "shareDashboard.html");
+        registry.addResourceHandler("/shareStoryPlayer.html")
+                .addResourceLocations(staticDir + "shareStoryPlayer.html");
+
+        // Custom chart plugins
+        registry.addResourceHandler("/custom-chart-plugins/**")
+                .addResourceLocations(staticDir + "custom-chart-plugins/");
+
+        // Monaco editor root resources
+        registry.addResourceHandler("/loader.js")
+                .addResourceLocations(staticDir + "monaco-editor/loader.js");
     }
 
     @Override

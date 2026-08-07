@@ -1,4 +1,4 @@
-import { Form, FormInstance, Input, Radio, TreeSelect } from 'antd';
+﻿import { Form, FormInstance, Input, Radio, TreeSelect } from 'antd';
 import { ModalForm, ModalFormProps } from 'app/components';
 import useI18NPrefix from 'app/hooks/useI18NPrefix';
 import { BoardTypes } from 'app/pages/DashBoardPage/pages/Board/slice/types';
@@ -11,7 +11,7 @@ import {
 } from 'globalConstants';
 import { useCallback, useContext, useEffect, useMemo, useRef } from 'react';
 import { useSelector } from 'react-redux';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { getCascadeAccess } from '../../Access';
 import {
   selectIsOrgOwner,

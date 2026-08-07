@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -24,7 +24,7 @@ import {
 import useI18NPrefix from 'app/hooks/useI18NPrefix';
 import React, { useCallback, useState } from 'react';
 import { useSelector } from 'react-redux';
-import styled, { keyframes } from 'styled-components/macro';
+import styled, { keyframes } from 'styled-components';
 import {
   FONT_SIZE_ICON_MD,
   FONT_WEIGHT_MEDIUM,

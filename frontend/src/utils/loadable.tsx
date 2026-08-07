@@ -1,4 +1,4 @@
-import { LoadingOutlined } from '@ant-design/icons';
+﻿import { LoadingOutlined } from '@ant-design/icons';
 import React, { lazy, Suspense } from 'react';
 
 interface Opts {

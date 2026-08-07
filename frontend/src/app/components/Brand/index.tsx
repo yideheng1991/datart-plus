@@ -1,2 +1,2 @@
-export { Brand } from './Brand';
+﻿export { Brand } from './Brand';
 export { LayoutWithBrand } from './LayoutWithBrand';

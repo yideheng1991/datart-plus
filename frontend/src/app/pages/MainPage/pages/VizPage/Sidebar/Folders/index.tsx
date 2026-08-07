@@ -1,4 +1,4 @@
-import {
+﻿import {
   DeleteOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -13,7 +13,7 @@ import { CommonFormTypes } from 'globalConstants';
 import React, { memo, useCallback, useContext, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { SPACE_XS } from 'styles/StyleConstants';
 import { useAddViz } from '../../hooks/useAddViz';
 import { SaveFormContext } from '../../SaveFormContext';

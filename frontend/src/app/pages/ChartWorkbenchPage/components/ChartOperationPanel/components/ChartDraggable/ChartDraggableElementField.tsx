@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -33,7 +33,7 @@ import ChartDataViewContext from 'app/pages/ChartWorkbenchPage/contexts/ChartDat
 import { getColumnRenderName } from 'app/utils/chartHelper';
 import classnames from 'classnames';
 import { FC, memo, useContext, useMemo } from 'react';
-import styled, { keyframes } from 'styled-components/macro';
+import styled, { keyframes } from 'styled-components';
 import { ERROR, WARNING, WHITE } from 'styles/StyleConstants';
 import {
   findSameFieldInView,

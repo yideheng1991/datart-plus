@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -17,7 +17,7 @@
  */
 import { Tabs } from 'antd';
 import { FC, memo, useEffect, useState } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { MockDataEditor } from './MockDataEditor';
 const { TabPane } = Tabs;
 export interface MockDataPanelProps {

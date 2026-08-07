@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -31,7 +31,7 @@ import {
 import useI18NPrefix from 'app/hooks/useI18NPrefix';
 import { TITLE_SUFFIX } from 'globalConstants';
 import { FC, memo, useCallback, useMemo, useState } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { ChartMockDataPanel } from '../ChartMockDataPanel';
 import { DetailPageHeader } from '../DetailPageHeader';
 

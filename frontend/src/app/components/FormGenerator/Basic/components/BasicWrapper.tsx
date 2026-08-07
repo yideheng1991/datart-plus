@@ -1,5 +1,5 @@
-import { Form, FormItemProps } from 'antd';
-import styled from 'styled-components/macro';
+﻿import { Form, FormItemProps } from 'antd';
+import styled from 'styled-components';
 
 export function BW(props: FormItemProps) {
   return <Wrapper {...props} colon={false} />;

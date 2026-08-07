@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -23,7 +23,7 @@ import {
   ChartStyleSelectorItem,
 } from 'app/types/ChartConfig';
 import { FC, memo, useState } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { AssignDeep, CloneValueDeep } from 'utils/object';
 import { uuidv4 } from 'utils/utils';
 import { ItemLayoutProps } from '../../types';

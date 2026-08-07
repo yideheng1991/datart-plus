@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -40,7 +40,7 @@ import {
 import ChartDataView from 'app/types/ChartDataView';
 import { FC, memo } from 'react';
 import { useSelector } from 'react-redux';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import {
   BORDER_RADIUS,
   FONT_WEIGHT_MEDIUM,

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -19,7 +19,7 @@
 import { useCacheWidthHeight } from 'app/hooks/useCacheWidthHeight';
 import { WidgetContext } from 'app/pages/DashBoardPage/components/WidgetProvider/WidgetProvider';
 import { memo, useContext, useEffect } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { LEVEL_10 } from 'styles/StyleConstants';
 import { WidgetActionContext } from '../../ActionProvider/WidgetActionProvider';
 import { BoardContext } from '../../BoardProvider/BoardProvider';

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -21,7 +21,7 @@ import IconSelectModal from 'app/components/IconSelectModal';
 import { ChartStyleConfig } from 'app/types/ChartConfig';
 import React, { FC, memo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { BW } from '../Basic/components/BasicWrapper';
 import { ItemLayoutProps } from '../types';
 import { itemLayoutComparer } from '../utils';

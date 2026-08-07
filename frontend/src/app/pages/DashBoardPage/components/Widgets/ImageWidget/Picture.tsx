@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -17,7 +17,7 @@
  */
 
 import useI18NPrefix from 'app/hooks/useI18NPrefix';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 
 export function Picture() {
   const t = useI18NPrefix(`viz.board.setting`);

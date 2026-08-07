@@ -1,4 +1,4 @@
-import { Menu, MenuProps } from 'antd';
+﻿import { Menu, MenuProps } from 'antd';
 import React, { useCallback } from 'react';
 
 interface MenuWrapperProps extends MenuProps {

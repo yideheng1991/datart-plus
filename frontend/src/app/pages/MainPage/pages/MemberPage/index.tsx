@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -17,7 +17,7 @@
  */
 
 import { Route, Switch } from 'react-router-dom';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { MemberDetailPage } from './pages/MemberDetailPage';
 import { RoleDetailPage } from './pages/RoleDetailPage';
 import { Sidebar } from './Sidebar';

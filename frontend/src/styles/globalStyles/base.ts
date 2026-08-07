@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-import { createGlobalStyle } from 'styled-components/macro';
+import { createGlobalStyle } from 'styled-components';
 import { FONT_FAMILY, FONT_SIZE_BODY } from 'styles/StyleConstants';
 
 /* istanbul ignore next */

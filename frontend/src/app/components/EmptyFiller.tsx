@@ -1,6 +1,6 @@
-import { Empty, EmptyProps, Spin } from 'antd';
+﻿import { Empty, EmptyProps, Spin } from 'antd';
 import { memo, ReactNode } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import {
   FONT_SIZE_TITLE,
   LINE_HEIGHT_ICON_XL,

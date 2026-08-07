@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -61,7 +61,7 @@ import React, {
   useRef,
 } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { isEmptyArray } from 'utils/object';
 import { uuidv4 } from 'utils/utils';
 import { changeSelectedItems } from '../../../pages/BoardEditor/slice/actions/actions';

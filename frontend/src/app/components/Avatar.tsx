@@ -1,7 +1,7 @@
-import { Avatar as AntdAvatar, AvatarProps } from 'antd';
+﻿import { Avatar as AntdAvatar, AvatarProps } from 'antd';
 import endsWith from 'lodash/endsWith';
 import { CSSProperties, useState } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 
 export function Avatar(props: AvatarProps) {
   let style: CSSProperties = {};

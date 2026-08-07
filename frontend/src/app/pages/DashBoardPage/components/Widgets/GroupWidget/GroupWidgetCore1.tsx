@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -18,7 +18,7 @@
 import WidgetOfFree from 'app/pages/DashBoardPage/pages/Board/FreeDashboard/WidgetOfFree';
 import WidgetOfFreeEdit from 'app/pages/DashBoardPage/pages/BoardEditor/FreeEditor/WidgetOfFreeEdit';
 import { memo, useContext } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { BoardContext } from '../../BoardProvider/BoardProvider';
 import { WidgetWrapProvider } from '../../WidgetProvider/WidgetWrapProvider';
 

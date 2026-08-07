@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -21,7 +21,7 @@ import ChartDataViewContext from 'app/pages/ChartWorkbenchPage/contexts/ChartDat
 import { renderMataProps } from 'app/pages/ChartWorkbenchPage/slice/types';
 import { getAllColumnInMeta } from 'app/utils/chartHelper';
 import { FC, memo, useCallback, useContext, useState } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { stopPPG } from 'utils/utils';
 import { ChartDraggableSourceContainer } from './ChartDraggableSourceContainer';
 import ChartDragLayer from './ChartDragLayer';

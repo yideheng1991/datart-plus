@@ -1,4 +1,4 @@
-interface IHeadlessBrowserIdentifierProps {
+﻿interface IHeadlessBrowserIdentifierProps {
   renderSign: boolean;
   width: number;
   height: number;

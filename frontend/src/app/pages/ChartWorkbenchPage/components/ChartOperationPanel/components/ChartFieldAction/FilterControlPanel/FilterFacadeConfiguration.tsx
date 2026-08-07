@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -27,7 +27,7 @@ import useI18NPrefix, { I18NComponentProps } from 'app/hooks/useI18NPrefix';
 import ChartFilterCondition from 'app/models/ChartFilterCondition';
 import { FilterFacade } from 'app/types/ChartConfig';
 import { FC, memo, useEffect, useState } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { IsKeyIn } from 'utils/object';
 
 const isDisableSingleDropdownListFacade = condition => {

@@ -1,8 +1,8 @@
-import { Store } from '@reduxjs/toolkit';
+﻿import { Store } from '@reduxjs/toolkit';
 import { render } from '@testing-library/react';
 import * as React from 'react';
 import { Provider } from 'react-redux';
-import { configureAppStore } from 'redux/configureStore';
+import { configureAppStore } from '@redux-store/configureStore';
 import { useTheme } from 'styled-components';
 import { selectTheme } from '../slice/selectors';
 import { ThemeProvider } from '../ThemeProvider';

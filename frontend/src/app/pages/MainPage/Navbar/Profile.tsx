@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -27,7 +27,7 @@ import { saveProfile, updateUser } from 'app/slice/thunks';
 import { BASE_API_URL, BASE_RESOURCE_URL } from 'globalConstants';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { SPACE_LG, SPACE_MD, SPACE_UNIT } from 'styles/StyleConstants';
 import { APIResponse } from 'types';
 import { getToken } from 'utils/auth';

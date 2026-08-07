@@ -1,10 +1,10 @@
-import { CalendarOutlined } from '@ant-design/icons';
+﻿import { CalendarOutlined } from '@ant-design/icons';
 import { Row } from 'antd';
 import { IW } from 'app/components/IconWrapper';
 import { ColumnRole } from 'app/pages/MainPage/pages/ViewPage/slice/types';
 import { CHART_DRAG_ELEMENT_TYPE } from 'globalConstants';
 import { useDrag } from 'react-dnd';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { FONT_SIZE_TITLE, INFO } from 'styles/StyleConstants';
 import { dateLevelFieldsProps } from '../../../../slice/types';
 import { handleDateLevelsName } from '../../utils';

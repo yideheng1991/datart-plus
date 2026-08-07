@@ -1,1 +1,1 @@
-export { default, default as IconSelectModal } from './IconSelectModal';
+﻿export { default, default as IconSelectModal } from './IconSelectModal';

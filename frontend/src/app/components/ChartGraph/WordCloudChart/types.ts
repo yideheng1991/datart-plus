@@ -1,4 +1,4 @@
-export interface WordCloudConfig {
+﻿export interface WordCloudConfig {
   drawOutOfBound: boolean;
   shape: string;
   width: string;

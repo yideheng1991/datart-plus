@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -29,7 +29,7 @@ import { getControllerDateValues } from 'app/pages/DashBoardPage/utils';
 import { RelationFilterValue } from 'app/types/ChartConfig';
 import produce from 'immer';
 import React, { memo, useCallback, useContext, useMemo } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { isEmpty } from 'utils/object';
 import { convertToTree } from '../../../utils/widget';
 import { WidgetActionContext } from '../../ActionProvider/WidgetActionProvider';

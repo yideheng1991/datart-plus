@@ -1,4 +1,4 @@
-import { LeftOutlined, MoreOutlined, SearchOutlined } from '@ant-design/icons';
+﻿import { LeftOutlined, MoreOutlined, SearchOutlined } from '@ant-design/icons';
 import { Input, Space, Tooltip } from 'antd';
 import {
   MenuListItem,
@@ -8,7 +8,7 @@ import {
 } from 'app/components';
 import useI18NPrefix from 'app/hooks/useI18NPrefix';
 import React, { ReactElement, useCallback, useState } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import {
   FONT_SIZE_SUBTITLE,
   FONT_SIZE_TITLE,

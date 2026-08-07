@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -19,7 +19,7 @@
 import { DatabaseOutlined, TableOutlined } from '@ant-design/icons';
 import { Select } from 'antd';
 import { FC, useCallback, useMemo } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { SPACE_XS } from 'styles/StyleConstants';
 import { DatabaseSchema, SchemaTableIdentifier } from '../slice/types';
 

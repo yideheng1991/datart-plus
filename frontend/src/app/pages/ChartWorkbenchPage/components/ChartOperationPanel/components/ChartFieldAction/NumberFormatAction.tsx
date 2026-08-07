@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -41,7 +41,7 @@ import {
   NumericUnitDescriptions,
 } from 'globalConstants';
 import { FC, useState } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { SPACE_TIMES } from 'styles/StyleConstants';
 
 const DefaultFormatDetailConfig: FormatFieldAction = {

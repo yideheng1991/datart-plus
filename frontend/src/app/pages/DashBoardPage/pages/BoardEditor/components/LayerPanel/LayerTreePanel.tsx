@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -18,7 +18,7 @@
 import { ListTitle } from 'app/components';
 import useI18NPrefix from 'app/hooks/useI18NPrefix';
 import { FC, memo, useMemo } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { LayerTree } from './LayerTree';
 
 export const LayerTreePanel: FC<{}> = memo(() => {

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -19,7 +19,7 @@ import { Button, Col, Popconfirm, Row, Space, Table, Tag } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import { ChartStyleConfig } from 'app/types/ChartConfig';
 import { FC, memo, useState } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { SPACE_SM } from 'styles/StyleConstants';
 import { CloneValueDeep } from 'utils/object';
 import { uuidv4 } from 'utils/utils';

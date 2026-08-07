@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -18,7 +18,7 @@
 
 import { updateBy } from 'app/utils/mutation';
 import { FC } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { DraggableItem } from './DraggableItem';
 
 interface Source {

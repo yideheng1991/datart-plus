@@ -1,4 +1,4 @@
-import { LabelStyle, MarkArea, MarkLine } from 'app/types/ChartConfig';
+﻿import { LabelStyle, MarkArea, MarkLine } from 'app/types/ChartConfig';
 
 export type ScatterMetricAndSizeSerie = {
   data: {

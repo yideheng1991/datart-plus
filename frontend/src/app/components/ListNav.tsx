@@ -1,4 +1,4 @@
-import {
+﻿import {
   Children,
   cloneElement,
   memo,
@@ -7,7 +7,7 @@ import {
   useLayoutEffect,
   useState,
 } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { ListTitle } from './ListTitle';
 
 interface ListNavProps {

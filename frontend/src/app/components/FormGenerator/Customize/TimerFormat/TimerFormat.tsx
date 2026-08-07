@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -20,7 +20,7 @@ import useI18NPrefix from 'app/hooks/useI18NPrefix';
 import { ITimeDefault } from 'app/pages/DashBoardPage/types/widgetTypes';
 import { ChartStyleConfig } from 'app/types/ChartConfig';
 import { FC, memo, useEffect, useRef } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { BW } from '../../Basic/components/BasicWrapper';
 import { Group } from '../../Basic/components/Group';
 import { ItemLayoutProps } from '../../types';

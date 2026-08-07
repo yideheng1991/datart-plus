@@ -1,6 +1,6 @@
-import { LoadingOutlined } from '@ant-design/icons';
+﻿import { LoadingOutlined } from '@ant-design/icons';
 import { cloneElement, ReactElement } from 'react';
-import styled, { createGlobalStyle } from 'styled-components/macro';
+import styled, { createGlobalStyle } from 'styled-components';
 import { LEVEL_1 } from 'styles/StyleConstants';
 
 interface LoadingMaskProps {

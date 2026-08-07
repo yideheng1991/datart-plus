@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -20,7 +20,7 @@ import { Popover } from 'antd';
 import { defaultPalette, defaultThemes } from 'app/assets/theme/colorsConfig';
 import useI18NPrefix from 'app/hooks/useI18NPrefix';
 import { useCallback, useEffect, useState } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import {
   BORDER_RADIUS,
   SPACE,

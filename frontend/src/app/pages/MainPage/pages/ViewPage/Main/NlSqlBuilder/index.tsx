@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -22,7 +22,7 @@ import useI18NPrefix from 'app/hooks/useI18NPrefix';
 import { selectIsOrgOwner } from 'app/pages/MainPage/slice/selectors';
 import { FC, useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { SPACE, SPACE_MD, SPACE_XS } from 'styles/StyleConstants';
 import { getErrorMessage } from 'utils/utils';
 import { SchemaTableSelector } from '../../components/SchemaTableSelector';

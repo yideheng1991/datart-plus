@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -24,7 +24,7 @@ import { selectWidgetInfoDatachartId } from 'app/pages/DashBoardPage/pages/Board
 import { Folder } from 'app/pages/MainPage/pages/VizPage/slice/types';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { listToTree } from 'utils/utils';
 
 export interface IProps {

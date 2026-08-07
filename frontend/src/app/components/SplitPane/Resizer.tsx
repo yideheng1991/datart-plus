@@ -1,4 +1,4 @@
-import { Component, CSSProperties, MouseEvent, TouchEvent } from 'react';
+﻿import { Component, CSSProperties, MouseEvent, TouchEvent } from 'react';
 
 export const RESIZER_DEFAULT_CLASSNAME = 'Resizer';
 

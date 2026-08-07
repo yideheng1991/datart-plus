@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -18,7 +18,7 @@
 import Board from 'app/pages/DashBoardPage/pages/Board';
 import { VizRenderMode } from 'app/pages/DashBoardPage/pages/Board/slice/types';
 import React, { useMemo } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { StoryPage } from '../slice/types';
 const StoryPageItem: React.FC<{
   page: StoryPage;

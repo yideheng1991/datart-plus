@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -36,7 +36,7 @@ import { CHART_DRAG_ELEMENT_TYPE } from 'globalConstants';
 import { rgba } from 'polished';
 import { FC, memo, useContext, useEffect, useState } from 'react';
 import { DropTargetMonitor, useDrop } from 'react-dnd';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import {
   BORDER_RADIUS,
   FONT_SIZE_SUBTITLE,

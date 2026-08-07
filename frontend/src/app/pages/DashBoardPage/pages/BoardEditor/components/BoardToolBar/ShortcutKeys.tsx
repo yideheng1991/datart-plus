@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -17,7 +17,7 @@
  */
 import { Button, Dropdown, Menu } from 'antd';
 import useI18NPrefix from 'app/hooks/useI18NPrefix';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { G20 } from 'styles/StyleConstants';
 
 // to see useHotkeys in function useBoardEditorHotkeys

@@ -1,4 +1,4 @@
-import { TIME_FORMATTER } from 'globalConstants';
+﻿import { TIME_FORMATTER } from 'globalConstants';
 import moment from 'moment';
 import { PermissionLevels, ResourceTypes } from '../PermissionPage/constants';
 import { JobTypes, TimeModes, VizTypes } from './constants';

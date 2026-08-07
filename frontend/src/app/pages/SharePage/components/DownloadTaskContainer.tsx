@@ -1,10 +1,10 @@
-import {
+﻿import {
   DownloadListPopup,
   OnLoadTasksType,
 } from 'app/pages/MainPage/Navbar/DownloadListPopup';
 import { FC, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { SPACE_MD } from 'styles/StyleConstants';
 import { DownloadTask } from '../../MainPage/slice/types';
 import { useShareSlice } from '../slice';

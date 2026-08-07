@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -23,7 +23,7 @@ import { widgetManagerInstance } from 'app/pages/DashBoardPage/components/Widget
 import { WidgetContext } from 'app/pages/DashBoardPage/components/WidgetProvider/WidgetProvider';
 import { WidgetWrapProvider } from 'app/pages/DashBoardPage/components/WidgetProvider/WidgetWrapProvider';
 import { FC, memo, useContext } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { stopPPG } from 'utils/utils';
 
 export interface LayerNode extends TreeDataNode {

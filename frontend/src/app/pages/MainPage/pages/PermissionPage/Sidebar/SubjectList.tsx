@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -22,7 +22,7 @@ import { ListItem } from 'app/components';
 import { useDebouncedSearch } from 'app/hooks/useDebouncedSearch';
 import useI18NPrefix from 'app/hooks/useI18NPrefix';
 import { memo } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { SubjectTypes } from '../constants';
 import { DataSourceViewModel } from '../slice/types';
 import { Searchbar } from './Searchbar';

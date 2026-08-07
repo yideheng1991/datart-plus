@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -18,7 +18,7 @@
 
 import { ChartStyleConfig } from 'app/types/ChartConfig';
 import { FC, memo, useCallback } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { FormGeneratorLayoutProps } from '../types';
 import { groupLayoutComparer } from '../utils';
 import ItemLayout from './ItemLayout';

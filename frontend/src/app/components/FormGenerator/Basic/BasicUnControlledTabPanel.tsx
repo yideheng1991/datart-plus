@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -26,7 +26,7 @@ import {
 import { addByKey, updateByAction } from 'app/utils/mutation';
 import produce from 'immer';
 import { FC, memo, useReducer, useState } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import {
   cleanChartConfigValueByDefaultValue,
   CloneValueDeep,

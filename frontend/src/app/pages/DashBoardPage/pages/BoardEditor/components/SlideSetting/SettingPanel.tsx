@@ -1,5 +1,5 @@
-import { ReactElement } from 'react';
-import styled from 'styled-components/macro';
+﻿import { ReactElement } from 'react';
+import styled from 'styled-components';
 import { SPACE_LG, SPACE_MD } from 'styles/StyleConstants';
 import { stopPPG } from 'utils/utils';
 

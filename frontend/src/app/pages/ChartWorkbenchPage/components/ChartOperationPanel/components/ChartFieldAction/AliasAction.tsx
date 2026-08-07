@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -23,7 +23,7 @@ import { ChartDataSectionField } from 'app/types/ChartConfig';
 import { getColumnRenderOriginName } from 'app/utils/internalChartHelper';
 import { updateBy } from 'app/utils/mutation';
 import { FC, useState } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 
 const AliasAction: FC<{
   config: ChartDataSectionField;

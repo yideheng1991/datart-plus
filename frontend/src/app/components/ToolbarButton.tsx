@@ -1,6 +1,6 @@
-import { Button, ButtonProps } from 'antd';
+﻿import { Button, ButtonProps } from 'antd';
 import { lighten } from 'polished';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { FONT_SIZE_BASE } from 'styles/StyleConstants';
 import { mergeClassNames } from 'utils/utils';
 

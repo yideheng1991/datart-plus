@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -20,7 +20,7 @@ import useI18NPrefix from 'app/hooks/useI18NPrefix';
 import { BoardActionContext } from 'app/pages/DashBoardPage/components/ActionProvider/BoardActionProvider';
 import useBoardEditorHotkeys from 'app/pages/DashBoardPage/hooks/useBoardEditorHotkeys';
 import React, { useContext } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { WidgetActionContext } from '../../../../components/ActionProvider/WidgetActionProvider';
 import { AddChart } from './AddChart/AddChart';
 import { AddContainer } from './AddContainer/AddContainer';

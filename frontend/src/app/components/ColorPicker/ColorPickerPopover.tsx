@@ -1,4 +1,4 @@
-import { Popover, PopoverProps } from 'antd';
+﻿import { Popover, PopoverProps } from 'antd';
 import { FC, useCallback, useMemo, useState } from 'react';
 import { SketchPickerProps } from 'react-color';
 import { ColorPicker } from './ColorTag';

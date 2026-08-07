@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -18,7 +18,7 @@
 import { WidgetWrapProvider } from 'app/pages/DashBoardPage/components/WidgetProvider/WidgetWrapProvider';
 import { FC, memo, useContext, useMemo } from 'react';
 import { useSelector } from 'react-redux';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { BoardContext } from '../../../../components/BoardProvider/BoardProvider';
 import { selectSelectedIds } from '../../slice/selectors';
 import { BoardConfigPanel } from './BoardConfigPanel';

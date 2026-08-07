@@ -1,4 +1,4 @@
-import { message, TreeDataNode, TreeNodeProps } from 'antd';
+﻿import { message, TreeDataNode, TreeNodeProps } from 'antd';
 import { ColumnRole } from 'app/pages/MainPage/pages/ViewPage/slice/types';
 import { AxiosError, AxiosResponse } from 'axios';
 import classnames from 'classnames';
@@ -10,7 +10,7 @@ import {
   FONT_WEIGHT_REGULAR,
 } from 'styles/StyleConstants';
 import { APIResponse } from 'types';
-import { default as uuidv4 } from 'uuid/dist/umd/uuidv4.min';
+import { v4 as uuidv4 } from 'uuid';
 import { SaveFormModel } from '../app/pages/MainPage/pages/VizPage/SaveFormContext';
 import { removeToken } from './auth';
 

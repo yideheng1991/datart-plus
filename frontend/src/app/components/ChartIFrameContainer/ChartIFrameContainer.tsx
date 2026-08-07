@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-import { ReactComponent as Loading } from 'app/assets/images/loading.svg';
+import Loading from 'app/assets/images/loading.svg?svgr';
 import {
   Frame,
   FrameContextConsumer,
@@ -27,7 +27,7 @@ import { ChartConfig, SelectedItem } from 'app/types/ChartConfig';
 import { IChartDrillOption } from 'app/types/ChartDrillOption';
 import { setRuntimeDateLevelFieldsInChartConfig } from 'app/utils/chartHelper';
 import { FC, memo } from 'react';
-import styled, { StyleSheetManager } from 'styled-components/macro';
+import styled, { StyleSheetManager } from 'styled-components';
 import { LEVEL_1000 } from 'styles/StyleConstants';
 import { isEmpty } from 'utils/object';
 import ChartIFrameLifecycleAdapter from './ChartIFrameLifecycleAdapter';

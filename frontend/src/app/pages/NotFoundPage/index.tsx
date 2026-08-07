@@ -1,7 +1,7 @@
-import { SearchOutlined } from '@ant-design/icons';
+﻿import { SearchOutlined } from '@ant-design/icons';
 import useI18NPrefix from 'app/hooks/useI18NPrefix';
 import { Helmet } from 'react-helmet-async';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { SPACE_TIMES } from 'styles/StyleConstants';
 
 export function NotFoundPage() {

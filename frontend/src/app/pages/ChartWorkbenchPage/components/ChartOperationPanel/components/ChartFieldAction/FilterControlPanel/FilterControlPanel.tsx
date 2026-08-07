@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -33,7 +33,7 @@ import { getColumnRenderName } from 'app/utils/chartHelper';
 import { updateBy } from 'app/utils/mutation';
 import { CONTROLLER_WIDTH_OPTIONS } from 'globalConstants';
 import { FC, memo, useRef, useState } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { FilterOptionForwardRef } from '.';
 import CategoryConditionConfiguration from './CategoryConditionConfiguration';
 import DateConditionConfiguration from './DateConditionConfiguration';

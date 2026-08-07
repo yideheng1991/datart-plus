@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -19,7 +19,7 @@ import { WidgetMapper } from 'app/pages/DashBoardPage/components/WidgetMapper/Wi
 import { WidgetContext } from 'app/pages/DashBoardPage/components/WidgetProvider/WidgetProvider';
 import { getFreeWidgetStyle } from 'app/pages/DashBoardPage/utils/widget';
 import React, { memo, useContext } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 
 export const WidgetOfFree: React.FC<{}> = memo(() => {
   const widget = useContext(WidgetContext);

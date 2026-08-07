@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -36,7 +36,7 @@ import { Variable } from 'app/pages/MainPage/pages/VariablePage/slice/types';
 import ChartDataView from 'app/types/ChartDataView';
 import { hasAggregationFunction } from 'app/utils/chartHelper';
 import React, { memo, useCallback } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { filterValueTypeByControl, isRangeTypeController } from './utils';
 
 export interface RelatedViewFormProps {

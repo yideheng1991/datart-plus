@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -22,7 +22,7 @@ import { DrillMode } from 'app/models/ChartDrillOption';
 import { ChartConfig } from 'app/types/ChartConfig';
 import { getColumnRenderName } from 'app/utils/chartHelper';
 import { FC, memo, useContext } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { SPACE_SM, SPACE_XS } from 'styles/StyleConstants';
 
 const ChartDrillPaths: FC<{ chartConfig?: ChartConfig }> = memo(

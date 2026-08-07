@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -20,7 +20,7 @@ import { Button } from 'antd';
 import { selectVizs } from 'app/pages/MainPage/pages/VizPage/slice/selectors';
 import React, { memo, useCallback, useContext, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import {
   FONT_SIZE_ICON_SM,
   FONT_WEIGHT_MEDIUM,

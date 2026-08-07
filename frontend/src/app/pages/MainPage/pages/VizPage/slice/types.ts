@@ -1,4 +1,4 @@
-import { TreeNodeProps } from 'antd';
+﻿import { TreeNodeProps } from 'antd';
 import { ChartConfig, SelectedItem } from 'app/types/ChartConfig';
 import ChartDataSetDTO from 'app/types/ChartDataSet';
 import { ChartDTO } from 'app/types/ChartDTO';

@@ -1,5 +1,5 @@
-import { CSSProperties, FC, useMemo } from 'react';
-import styled from 'styled-components/macro';
+﻿import { CSSProperties, FC, useMemo } from 'react';
+import styled from 'styled-components';
 import { BORDER_RADIUS, SPACE_TIMES } from 'styles/StyleConstants';
 interface ColorTagProps {
   color?: string;

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -20,7 +20,7 @@ import { ChartStyleConfig } from 'app/types/ChartConfig';
 import { mergeChartStyleConfigs } from 'app/utils/internalChartHelper';
 import { updateBy, updateByKey } from 'app/utils/mutation';
 import { FC, memo, useEffect } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { CloneValueDeep, mergeDefaultToValue } from 'utils/object';
 import { GroupLayout } from '../Layout';
 import { ItemLayoutProps } from '../types';

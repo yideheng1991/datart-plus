@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -19,7 +19,7 @@
 import { Divider, Input, List, Space } from 'antd';
 import debounce from 'lodash/debounce';
 import { FC, memo, useEffect, useState } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 
 const ChartSearchableList: FC<{
   source: Array<{ value: string; label: string }>;

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -23,7 +23,7 @@ import { selectOrgId } from 'app/pages/MainPage/slice/selectors';
 import { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useHistory, useRouteMatch } from 'react-router-dom';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { SPACE_XS } from 'styles/StyleConstants';
 import { MemberList } from './MemberList';
 import { RoleList } from './RoleList';

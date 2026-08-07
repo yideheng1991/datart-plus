@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -25,7 +25,7 @@ import {
 import { Widget } from 'app/pages/DashBoardPage/types/widgetTypes';
 import { FilterSqlOperator } from 'globalConstants';
 import { FC, memo, useCallback } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { ControllerConfig } from '../types';
 
 const ControllerVisibility: FC<{

@@ -1,4 +1,4 @@
-import { Alert } from 'app/components/Alert';
+﻿import { Alert } from 'app/components/Alert';
 import { AuthorizationStatus } from 'app/constants';
 import useI18NPrefix from 'app/hooks/useI18NPrefix';
 import { getUserInfoByToken } from 'app/slice/thunks';

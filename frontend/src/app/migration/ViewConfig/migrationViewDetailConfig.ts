@@ -1,4 +1,4 @@
-import { APP_VERSION_BETA_2 } from '../constants';
+﻿import { APP_VERSION_BETA_2 } from '../constants';
 import MigrationEvent from '../MigrationEvent';
 import MigrationEventDispatcher from '../MigrationEventDispatcher';
 

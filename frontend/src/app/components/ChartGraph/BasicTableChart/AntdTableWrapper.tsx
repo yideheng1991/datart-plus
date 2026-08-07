@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -20,7 +20,7 @@ import { ConfigProvider, Table } from 'antd';
 import { antdLocales } from 'locales/i18n';
 import { FC, memo } from 'react';
 import { useTranslation } from 'react-i18next';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 
 interface TableStyleConfigProps {
   odd?: {

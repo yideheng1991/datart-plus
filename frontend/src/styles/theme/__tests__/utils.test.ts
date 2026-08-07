@@ -1,4 +1,4 @@
-import * as utils from '../utils';
+﻿import * as utils from '../utils';
 
 describe('theme utils', () => {
   it('should get storage item', () => {

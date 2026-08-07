@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -22,7 +22,7 @@ import { BORDER_STYLES } from 'app/pages/DashBoardPage/constants';
 import { BorderConfig } from 'app/pages/DashBoardPage/pages/Board/slice/types';
 import { ChartStyleConfig } from 'app/types/ChartConfig';
 import { FC, memo, useEffect, useRef } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { BW } from '../../Basic/components/BasicWrapper';
 import { Group, WithColorPicker } from '../../Basic/components/Group';
 import { ItemLayoutProps } from '../../types';

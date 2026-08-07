@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 import { memo } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { LEVEL_50 } from 'styles/StyleConstants';
 export const StyledWidgetToolBar: React.FC<{}> = memo(props => {
   return <StyleWrap>{props.children} </StyleWrap>;

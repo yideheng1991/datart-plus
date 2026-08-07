@@ -1,4 +1,4 @@
-import { BorderStyle } from 'app/types/ChartConfig';
+﻿import { BorderStyle } from 'app/types/ChartConfig';
 
 export type WaterfallBorderStyle = {
   borderRadius?: number;

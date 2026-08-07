@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -18,7 +18,7 @@
 import { UploadOutlined } from '@ant-design/icons';
 import { Button, Upload } from 'antd';
 import { FC, memo, useState } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 
 export const FileUpload: FC<{
   suffix: string;

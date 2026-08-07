@@ -1,4 +1,4 @@
-import {
+﻿import {
   Node,
   Palette,
   S2DataConfig,

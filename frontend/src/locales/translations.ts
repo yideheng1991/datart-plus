@@ -1,4 +1,4 @@
-import { ConvertedToObjectType, TranslationJsonType } from './types';
+﻿import { ConvertedToObjectType, TranslationJsonType } from './types';
 
 /**
  * This file is seperate from the './i18n.ts' simply to make the Hot Module Replacement work seamlessly.

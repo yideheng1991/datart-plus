@@ -1,4 +1,4 @@
-//@ts-nocheck
+﻿//@ts-nocheck
 import Quill from 'quill';
 import CalcFieldBlot from './CalcFieldBlot';
 

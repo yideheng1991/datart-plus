@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -21,7 +21,7 @@ import { SheetComponent } from '@antv/s2-react';
 import '@antv/s2-react/dist/style.min.css';
 import { getLang } from 'locales/i18n';
 import { FC, memo } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { FONT_SIZE_LABEL } from 'styles/StyleConstants';
 import { AndvS2Config } from './types';
 

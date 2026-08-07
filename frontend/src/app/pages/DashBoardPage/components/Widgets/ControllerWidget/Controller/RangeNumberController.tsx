@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -20,7 +20,7 @@ import { valueType } from 'antd/lib/statistic/utils';
 import useI18NPrefix from 'app/hooks/useI18NPrefix';
 import { rangeNumberValidator } from 'app/pages/DashBoardPage/pages/BoardEditor/components/ControllerWidgetPanel/utils';
 import React, { memo, useEffect, useState } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 
 export interface NumberControllerFormProps {
   value?: any;

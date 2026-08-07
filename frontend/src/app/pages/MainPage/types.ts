@@ -1,3 +1,3 @@
-export interface MainPageRouteParams {
+﻿export interface MainPageRouteParams {
   orgId: string;
 }

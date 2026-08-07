@@ -1,4 +1,4 @@
-import { ChartDataConfig } from 'app/types/ChartConfig';
+﻿import { ChartDataConfig } from 'app/types/ChartConfig';
 import { FormGroupLayoutMode } from './constants';
 
 export interface ItemLayoutProps<T> {

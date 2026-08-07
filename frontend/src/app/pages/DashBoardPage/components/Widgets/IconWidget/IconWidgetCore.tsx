@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -19,7 +19,7 @@ import * as AntDesignIcons from '@ant-design/icons';
 import { WidgetContext } from 'app/pages/DashBoardPage/components/WidgetProvider/WidgetProvider';
 import { getIconConfig } from 'app/pages/DashBoardPage/components/Widgets/IconWidget/iconConfig';
 import React, { useContext, useMemo } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 
 const sanitizeSvg = (svgString: string): string => {
   if (!svgString) return '';

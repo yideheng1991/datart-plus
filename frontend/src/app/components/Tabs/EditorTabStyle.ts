@@ -1,4 +1,4 @@
-import { createGlobalStyle } from 'styled-components/macro';
+﻿import { createGlobalStyle } from 'styled-components';
 import { SPACE_SM, SPACE_TIMES, SPACE_XS } from 'styles/StyleConstants';
 
 export const EditorTabsStyle = createGlobalStyle`

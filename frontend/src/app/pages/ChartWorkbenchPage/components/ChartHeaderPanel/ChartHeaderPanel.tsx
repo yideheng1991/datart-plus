@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -28,7 +28,7 @@ import { getFolders } from 'app/pages/MainPage/pages/VizPage/slice/thunks';
 import { downloadFile } from 'app/utils/fetch';
 import { FC, memo, useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import {
   FONT_SIZE_ICON_SM,
   FONT_WEIGHT_MEDIUM,

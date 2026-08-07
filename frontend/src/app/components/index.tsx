@@ -1,4 +1,4 @@
-export { Authorized, AuthorizedRoute } from './Authorized';
+﻿export { Authorized, AuthorizedRoute } from './Authorized';
 export { Avatar } from './Avatar';
 export { Brand, LayoutWithBrand } from './Brand';
 export { Configuration } from './Configuration';

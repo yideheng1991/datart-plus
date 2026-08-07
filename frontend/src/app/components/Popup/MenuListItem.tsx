@@ -1,6 +1,6 @@
-import { Menu, MenuItemProps } from 'antd';
+﻿import { Menu, MenuItemProps } from 'antd';
 import { cloneElement, ReactElement, ReactNode } from 'react';
-import styled, { css } from 'styled-components/macro';
+import styled, { css } from 'styled-components';
 import { LINE_HEIGHT_HEADING, SPACE, SPACE_XS } from 'styles/StyleConstants';
 import { mergeClassNames } from 'utils/utils';
 

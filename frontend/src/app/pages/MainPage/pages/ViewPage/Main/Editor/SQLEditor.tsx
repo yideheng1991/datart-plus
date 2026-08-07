@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -31,7 +31,7 @@ import React, {
 import { useHotkeys } from 'react-hotkeys-hook';
 import MonacoEditor, { monaco } from 'react-monaco-editor';
 import { useDispatch, useSelector } from 'react-redux';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { FONT_SIZE_BASE } from 'styles/StyleConstants';
 import { selectThemeKey } from 'styles/theme/slice/selectors';
 import { RootState } from 'types';

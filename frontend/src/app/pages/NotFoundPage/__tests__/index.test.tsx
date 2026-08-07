@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { HelmetProvider } from 'react-helmet-async';
 import { MemoryRouter } from 'react-router-dom';
 import renderer from 'react-test-renderer';

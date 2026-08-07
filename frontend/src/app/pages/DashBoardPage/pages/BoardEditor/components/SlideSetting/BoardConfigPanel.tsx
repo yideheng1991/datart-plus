@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -26,7 +26,7 @@ import { BoardConfigContext } from 'app/pages/DashBoardPage/components/BoardProv
 import { ChartStyleConfig } from 'app/types/ChartConfig';
 import { FC, memo, useContext } from 'react';
 import { useDispatch } from 'react-redux';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { editBoardStackActions } from '../../slice';
 
 const StyledWrapper = styled.div`

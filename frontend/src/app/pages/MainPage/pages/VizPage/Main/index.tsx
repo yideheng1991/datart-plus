@@ -1,4 +1,4 @@
-import { CloseOutlined } from '@ant-design/icons';
+﻿import { CloseOutlined } from '@ant-design/icons';
 import { Dropdown, Menu } from 'antd';
 import { EmptyFiller, TabPane, Tabs } from 'app/components';
 import useI18NPrefix from 'app/hooks/useI18NPrefix';
@@ -14,7 +14,7 @@ import {
   useLocation,
   useRouteMatch,
 } from 'react-router-dom';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { LEVEL_1 } from 'styles/StyleConstants';
 import { useVizSlice } from '../slice';
 import {

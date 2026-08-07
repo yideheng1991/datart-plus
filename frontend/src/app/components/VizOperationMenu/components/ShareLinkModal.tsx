@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -33,7 +33,7 @@ import { TIME_FORMATTER } from 'globalConstants';
 import moment from 'moment';
 import { FC, memo, useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { SPACE } from 'styles/StyleConstants';
 import { AuthenticationModeType, RowPermissionByType } from './slice/constants';
 import { ShareDetail } from './slice/type';

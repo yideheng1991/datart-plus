@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -19,7 +19,7 @@
 import { TIME_FORMATTER } from 'globalConstants';
 import moment from 'moment';
 import { memo, useContext, useEffect, useState } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { IFontDefault } from '../../../../../../types';
 import { WidgetContext } from '../../WidgetProvider/WidgetProvider';
 import { timerWidgetToolkit } from './timerConfig';

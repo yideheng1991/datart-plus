@@ -1,4 +1,4 @@
-import {
+﻿import {
   DeleteOutlined,
   FileOutlined,
   FolderFilled,
@@ -19,7 +19,7 @@ import { CommonFormTypes } from 'globalConstants';
 import { memo, useCallback, useContext, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouteMatch } from 'react-router';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { LEVEL_5, SPACE_TIMES, SPACE_XS } from 'styles/StyleConstants';
 import { getInsertedNodeIndex } from 'utils/utils';
 import { JobTypes } from '../constants';

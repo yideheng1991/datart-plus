@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -33,7 +33,7 @@ import {
   useRef,
   useState,
 } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { uuidv4 } from 'utils/utils';
 import ChartIFrameEventBroker from './ChartIFrameEventBroker';
 import ChartIFrameResourceLoader from './ChartIFrameResourceLoader';

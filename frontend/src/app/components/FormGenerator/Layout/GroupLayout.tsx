@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -20,7 +20,7 @@ import { Button, Collapse } from 'antd';
 import useStateModal, { StateModalSize } from 'app/hooks/useStateModal';
 import { ChartStyleConfig } from 'app/types/ChartConfig';
 import { FC, memo, useState } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { SPACE_MD } from 'styles/StyleConstants';
 import { BW } from '../Basic/components/BasicWrapper';
 import { FormGroupLayoutMode, FormItemComponentType } from '../constants';

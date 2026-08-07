@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -24,7 +24,7 @@ import { makeSelectBoardConfigById } from 'app/pages/DashBoardPage/pages/Board/s
 import { BoardState } from 'app/pages/DashBoardPage/pages/Board/slice/types';
 import React, { memo } from 'react';
 import { useSelector } from 'react-redux';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { LEVEL_50 } from 'styles/StyleConstants';
 
 export interface BoardPageItemProps {

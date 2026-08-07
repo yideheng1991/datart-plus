@@ -1,5 +1,3 @@
-import darkTheme from 'antd/dist/dark-theme';
-import lightTheme from 'antd/dist/default-theme';
 import { StorageKeys } from 'globalConstants';
 import { ThemeKeyType } from './slice/types';
 import { themes } from './themes';
@@ -47,16 +45,28 @@ export function getTokenVariableMapping(themeKey: string) {
 
 export function getVarsToBeModified(themeKey: string) {
   const tokenVariableMapping = getTokenVariableMapping(themeKey);
+  const currentTheme = themes[themeKey];
   return {
-    ...(themeKey === 'light' ? lightTheme : darkTheme),
     ...tokenVariableMapping,
+    // Additional less variables if needed
+    '@body-background': currentTheme.bodyBackground,
+    '@component-background': currentTheme.componentBackground,
+    '@heading-color': currentTheme.textColor,
+    '@text-color-secondary': currentTheme.textColorLight,
+    '@border-color-base': currentTheme.borderColorBase,
   };
 }
 
+/**
+ * Theme change handler for Vite environment.
+ * In Vite, Ant Design theme switching is handled via ConfigProvider's theme prop
+ * instead of less.modifyVars (which requires browser-side less compilation).
+ *
+ * This function is kept for backward compatibility. The actual theme switching
+ * is now handled by ConfigProvider in ThemeProvider component.
+ */
 export async function changeAntdTheme(themeKey: string) {
-  try {
-    await (window as any).less.modifyVars(getVarsToBeModified(themeKey));
-  } catch (error) {
-    console.log(error);
-  }
+  // Theme switching in Vite is handled by ConfigProvider's theme prop
+  // This function is a no-op in Vite environment
+  // The actual theme tokens are passed via ConfigProvider in ThemeProvider component
 }

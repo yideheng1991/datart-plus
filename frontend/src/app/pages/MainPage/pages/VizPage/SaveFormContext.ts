@@ -1,4 +1,4 @@
-import { CommonFormTypes } from 'globalConstants';
+﻿import { CommonFormTypes } from 'globalConstants';
 import { createContext, useCallback, useState } from 'react';
 import { BoardType } from '../../../DashBoardPage/pages/Board/slice/types';
 import { VizType } from './slice/types';

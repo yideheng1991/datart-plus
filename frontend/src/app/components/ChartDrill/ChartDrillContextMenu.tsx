@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -36,7 +36,7 @@ import { updateBy } from 'app/utils/mutation';
 import classnames from 'classnames';
 import { DATARTSEPERATOR } from 'globalConstants';
 import { FC, memo, useCallback, useContext, useMemo } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { FONT_WEIGHT_MEDIUM, SPACE_SM } from 'styles/StyleConstants';
 import { isEmpty } from 'utils/object';
 import { InteractionMouseEvent } from '../FormGenerator/constants';

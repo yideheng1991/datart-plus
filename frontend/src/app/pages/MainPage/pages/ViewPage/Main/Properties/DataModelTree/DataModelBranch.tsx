@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -27,7 +27,7 @@ import { IW } from 'app/components';
 import useI18NPrefix from 'app/hooks/useI18NPrefix';
 import { FC, memo, useState } from 'react';
 import { Draggable, Droppable } from 'react-beautiful-dnd';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import {
   BLUE,
   FONT_SIZE_BASE,

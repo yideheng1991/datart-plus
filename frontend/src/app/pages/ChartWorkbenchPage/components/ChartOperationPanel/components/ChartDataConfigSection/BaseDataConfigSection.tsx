@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -18,7 +18,7 @@
 
 import { ChartDataConfigSectionProps } from 'app/types/ChartDataConfigSection';
 import { FC, memo } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { SPACE } from 'styles/StyleConstants';
 import { ChartDraggableTargetContainer } from '../ChartDraggable';
 import { dataConfigSectionComparer } from './utils';

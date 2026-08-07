@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -17,7 +17,7 @@
  */
 import * as datav from '@jiaminghi/data-view-react';
 import { memo, useContext } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { WidgetContext } from '../../WidgetProvider/WidgetProvider';
 import { decorationToolkit } from './decorationConfig';
 

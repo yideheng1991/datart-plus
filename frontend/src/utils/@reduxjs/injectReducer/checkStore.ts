@@ -1,4 +1,4 @@
-import invariant from 'invariant';
+﻿import invariant from 'invariant';
 import conformsTo from 'lodash/conformsTo';
 import isFunction from 'lodash/isFunction';
 import isObject from 'lodash/isObject';

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -18,7 +18,7 @@
 
 import { BoardContext } from 'app/pages/DashBoardPage/components/BoardProvider/BoardProvider';
 import { useContext } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { LEVEL_5, SPACE, SPACE_XL } from 'styles/StyleConstants';
 import { BoardToolBarContext } from './context/BoardToolBarContext';
 import { ToolBar } from './ToolBar';

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -18,7 +18,7 @@
 import { Form, Radio } from 'antd';
 import { ControlOption } from 'app/pages/DashBoardPage/pages/BoardEditor/components/ControllerWidgetPanel/types';
 import React, { memo, useCallback, useMemo } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 
 export interface RadioControllerProps {
   radioButtonType?: any;

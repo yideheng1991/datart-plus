@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -29,7 +29,7 @@ import { Menu, Popconfirm } from 'antd';
 import { DownloadFileType } from 'app/constants';
 import useI18NPrefix from 'app/hooks/useI18NPrefix';
 import { FC, memo } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 
 const VizOperationMenu: FC<{
   onShareLinkClick?;

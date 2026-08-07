@@ -1,4 +1,4 @@
-import * as slice from '..';
+﻿import * as slice from '..';
 import { ThemeState } from '../types';
 
 describe('theme slice', () => {

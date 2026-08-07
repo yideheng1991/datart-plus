@@ -1,6 +1,6 @@
-import { Modal, ModalProps } from 'antd';
+﻿import { Modal, ModalProps } from 'antd';
 import React, { cloneElement, ReactElement, ReactNode } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import {
   FONT_SIZE_HEADING,
   FONT_SIZE_ICON_MD,

@@ -1,4 +1,4 @@
-import { CSSProperties, LegacyRef, PureComponent, ReactNode } from 'react';
+﻿import { CSSProperties, LegacyRef, PureComponent, ReactNode } from 'react';
 
 interface PaneProps {
   className: string;

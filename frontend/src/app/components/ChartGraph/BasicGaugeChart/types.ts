@@ -1,4 +1,4 @@
-import { FontStyle, LineStyle } from 'app/types/ChartConfig';
+﻿import { FontStyle, LineStyle } from 'app/types/ChartConfig';
 
 export type GaugeTitleStyle = {
   show: boolean;

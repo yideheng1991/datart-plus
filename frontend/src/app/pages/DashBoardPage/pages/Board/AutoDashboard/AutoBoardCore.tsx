@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -30,7 +30,7 @@ import { memo, useCallback, useContext, useMemo } from 'react';
 import RGL, { Layout, WidthProvider } from 'react-grid-layout';
 import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import StyledBackground from '../../../components/WidgetComponents/StyledBackground';
 import { WidgetOfAuto } from './WidgetOfAuto';
 

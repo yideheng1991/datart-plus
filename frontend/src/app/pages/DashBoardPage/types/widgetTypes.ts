@@ -1,4 +1,4 @@
-import {
+﻿import {
   ChartDataConfig,
   ChartI18NSectionConfig,
   ChartStyleConfig,

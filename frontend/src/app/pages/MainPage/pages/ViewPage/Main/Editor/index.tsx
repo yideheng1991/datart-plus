@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -17,7 +17,7 @@
  */
 
 import React, { memo } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { ViewType } from '../../slice/types';
 import { NlSqlBuilder } from '../NlSqlBuilder';
 import { SQLEditor } from './SQLEditor';

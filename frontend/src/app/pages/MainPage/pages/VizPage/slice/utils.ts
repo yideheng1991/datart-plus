@@ -1,4 +1,4 @@
-import { ChartDataSectionType, ControllerFacadeTypes } from 'app/constants';
+﻿import { ChartDataSectionType, ControllerFacadeTypes } from 'app/constants';
 import { ChartConfig } from 'app/types/ChartConfig';
 import { PendingChartDataRequestFilter } from 'app/types/ChartDataRequest';
 import { RUNTIME_FILTER_KEY } from 'globalConstants';

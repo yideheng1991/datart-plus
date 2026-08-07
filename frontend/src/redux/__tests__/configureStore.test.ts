@@ -1,4 +1,4 @@
-import { configureAppStore } from '../configureStore';
+﻿import { configureAppStore } from '../configureStore';
 
 describe('configureStore', () => {
   it('should return a store with injected enhancers', () => {

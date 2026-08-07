@@ -12,7 +12,9 @@ spring:
 
   web:
     resources:
-      static-locations: file:${datart.env.file-path}
+      static-locations:
+        - file:${user.dir}/static/
+        - file:${datart.env.file-path}
       cache:
         cachecontrol:
           cache-public: true

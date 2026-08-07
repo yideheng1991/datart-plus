@@ -1,4 +1,4 @@
-import { BorderStyle, FontStyle, LabelStyle } from '../../../types/ChartConfig';
+﻿import { BorderStyle, FontStyle, LabelStyle } from '../../../types/ChartConfig';
 
 export type GeoInfo = {
   map?: string;

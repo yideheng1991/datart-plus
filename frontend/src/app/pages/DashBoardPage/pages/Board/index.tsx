@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -21,7 +21,7 @@ import { FC, memo, useEffect, useMemo } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { useDispatch, useSelector } from 'react-redux';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { urlSearchTransfer } from 'utils/urlSearchTransfer';
 import { boardDrillManager } from '../../components/BoardDrillManager/BoardDrillManager';
 import { TitleHeader } from '../../components/BoardHeader/TitleHeader';

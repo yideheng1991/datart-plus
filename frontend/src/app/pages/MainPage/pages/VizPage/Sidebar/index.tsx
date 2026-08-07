@@ -1,4 +1,4 @@
-import {
+﻿import {
   FolderAddFilled,
   FundProjectionScreenOutlined,
   MenuUnfoldOutlined,
@@ -9,7 +9,7 @@ import classnames from 'classnames';
 import { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useRouteMatch } from 'react-router';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { LEVEL_5, SPACE_TIMES } from 'styles/StyleConstants';
 import { selectStoryboards, selectVizs } from '../slice/selectors';
 import { Folder } from '../slice/types';

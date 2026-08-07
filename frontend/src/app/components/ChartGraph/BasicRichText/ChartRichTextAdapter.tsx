@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -37,7 +37,7 @@ import {
 import ReactQuill, { Quill } from 'react-quill';
 import 'react-quill/dist/quill.bubble.css';
 import 'react-quill/dist/quill.core.css';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { BLUE } from 'styles/StyleConstants';
 import './RichTextPluginLoader';
 import { CustomColor, QuillPalette } from './RichTextPluginLoader/CustomColor';

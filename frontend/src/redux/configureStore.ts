@@ -1,4 +1,4 @@
-import { configureStore } from '@reduxjs/toolkit';
+﻿import { configureStore } from '@reduxjs/toolkit';
 import injectReducerEnhancer from 'utils/@reduxjs/injectReducer/enhancer';
 import rejectedErrorHandlerMiddleware from '../utils/@reduxjs/rejectedErrorHandlerMiddleware';
 import { createReducer } from './reducers';

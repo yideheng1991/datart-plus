@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -34,7 +34,7 @@ import {
   useImperativeHandle,
   useState,
 } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { SPACE_TIMES, SPACE_XS } from 'styles/StyleConstants';
 import {
   isEmpty,

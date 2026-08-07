@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -17,7 +17,7 @@
  */
 import { StoryPage } from 'app/pages/StoryBoardPage/slice/types';
 import React, { useMemo } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { BoardPageItem } from './BoardPageItem';
 
 const StoryPageItem: React.FC<{

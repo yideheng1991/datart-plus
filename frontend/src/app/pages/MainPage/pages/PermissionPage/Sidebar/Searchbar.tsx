@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -18,7 +18,7 @@
 
 import { SearchOutlined } from '@ant-design/icons';
 import { Col, Input, Row } from 'antd';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { SPACE, SPACE_MD, SPACE_UNIT } from 'styles/StyleConstants';
 
 interface SearchbarProps {

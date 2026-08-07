@@ -1,8 +1,8 @@
-import { LoadingOutlined } from '@ant-design/icons';
+﻿import { LoadingOutlined } from '@ant-design/icons';
 import { Empty, Tree as AntTree, TreeProps as AntTreeProps } from 'antd';
 import classnames from 'classnames';
 import { MutableRefObject } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import {
   FONT_SIZE_BODY,
   FONT_SIZE_TITLE,

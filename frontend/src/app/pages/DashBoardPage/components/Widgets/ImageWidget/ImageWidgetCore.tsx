@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -15,7 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 
 export const ImageWidgetCore: React.FC<{}> = () => {
   return <Wrapper></Wrapper>;

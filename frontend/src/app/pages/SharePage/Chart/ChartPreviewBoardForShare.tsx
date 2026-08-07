@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -40,7 +40,7 @@ import {
 import { getChartDrillOption } from 'app/utils/internalChartHelper';
 import { FC, memo, useCallback, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { isEmptyArray } from 'utils/object';
 import ChartDrillContext from '../../../contexts/ChartDrillContext';
 import ControllerPanel from '../../MainPage/pages/VizPage/ChartPreview/components/ControllerPanel';

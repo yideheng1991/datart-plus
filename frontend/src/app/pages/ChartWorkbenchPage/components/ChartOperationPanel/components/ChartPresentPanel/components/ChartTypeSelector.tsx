@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -27,7 +27,7 @@ import { IW } from 'app/components';
 import useI18NPrefix from 'app/hooks/useI18NPrefix';
 import classnames from 'classnames';
 import { FC, memo, useCallback } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { FONT_SIZE_HEADING } from 'styles/StyleConstants';
 
 export enum ChartPresentType {

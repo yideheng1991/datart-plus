@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -21,7 +21,7 @@ import { LoadingMask } from 'app/components';
 import useI18NPrefix from 'app/hooks/useI18NPrefix';
 import produce from 'immer';
 import { Key, memo, useCallback, useMemo } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { SPACE_TIMES } from 'styles/StyleConstants';
 import { DefaultValue } from '../DefaultValue';
 import { RowPermissionSubject, Variable } from '../slice/types';

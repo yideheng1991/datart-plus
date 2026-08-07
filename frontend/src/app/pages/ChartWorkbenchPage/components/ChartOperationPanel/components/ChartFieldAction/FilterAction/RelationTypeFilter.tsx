@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -25,7 +25,7 @@ import ChartFilterCondition, {
 import { ChartDataSectionField } from 'app/types/ChartConfig';
 import { getColumnRenderName } from 'app/utils/chartHelper';
 import { FC, useState } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 
 const RelationTypeFilter: FC<{
   condition: ChartFilterCondition;

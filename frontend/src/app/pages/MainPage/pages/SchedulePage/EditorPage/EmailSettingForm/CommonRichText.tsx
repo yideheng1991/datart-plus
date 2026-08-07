@@ -1,10 +1,10 @@
-import { prefixI18N } from 'app/hooks/useI18NPrefix';
+﻿import { prefixI18N } from 'app/hooks/useI18NPrefix';
 import Quill from 'quill';
 import { ImageDrop } from 'quill-image-drop-module';
 import { FC } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 Quill.register('modules/imageDrop', ImageDrop);
 
 export const Formats = [

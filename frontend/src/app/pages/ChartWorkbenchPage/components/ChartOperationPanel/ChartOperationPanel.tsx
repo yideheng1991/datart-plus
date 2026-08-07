@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -23,7 +23,7 @@ import 'flexlayout-react/style/light.css';
 import { FC, memo, useContext, useState } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import ChartDatasetContext from '../../contexts/ChartDatasetContext';
 import ChartDataViewContext from '../../contexts/ChartDataViewContext';
 import layoutConfig, { LayoutComponentType } from './ChartOperationPanelLayout';

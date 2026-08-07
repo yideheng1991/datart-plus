@@ -1,4 +1,4 @@
-export const Formats = [
+﻿export const Formats = [
   'header',
   'bold',
   'italic',

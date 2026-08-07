@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -19,7 +19,7 @@ import * as AntDesignIcons from '@ant-design/icons';
 import { Empty, Input, Modal, Pagination, Tabs } from 'antd';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 
 const { TabPane } = Tabs;
 

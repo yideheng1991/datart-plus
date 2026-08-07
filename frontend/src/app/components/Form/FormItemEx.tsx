@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -18,7 +18,7 @@
 
 import { Form, FormItemProps } from 'antd';
 import { FC, memo } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 
 const FormItemEx: FC<FormItemProps> = memo(({ children, ...rest }) => {
   return <StyledFromItemEx {...rest}>{children}</StyledFromItemEx>;

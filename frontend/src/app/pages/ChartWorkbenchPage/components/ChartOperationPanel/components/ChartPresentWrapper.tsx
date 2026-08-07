@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -23,7 +23,7 @@ import { ChartConfig, SelectedItem } from 'app/types/ChartConfig';
 import ChartDataSetDTO from 'app/types/ChartDataSet';
 import ChartDataView from 'app/types/ChartDataView';
 import { FC, memo, useMemo } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { SPACE_MD } from 'styles/StyleConstants';
 import ChartGraphPanel from './ChartGraphPanel';
 import ChartPresentPanel from './ChartPresentPanel';

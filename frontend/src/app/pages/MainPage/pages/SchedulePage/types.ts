@@ -1,4 +1,4 @@
-import { Moment } from 'moment';
+﻿import { Moment } from 'moment';
 import { FileTypes, JobTypes, TimeModes } from './constants';
 import { VizContentsItem } from './slice/types';
 

@@ -1,4 +1,4 @@
-import React from 'react';
+﻿import React from 'react';
 import { Redirect, RedirectProps, Route, RouteProps } from 'react-router-dom';
 import { Authorized } from './Authorized';
 

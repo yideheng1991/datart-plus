@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -24,7 +24,7 @@ import ChartManager from 'app/models/ChartManager';
 import { IChart } from 'app/types/Chart';
 import classnames from 'classnames';
 import { FC, memo, useCallback } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import {
   BORDER_RADIUS,
   FONT_SIZE_ICON_MD,

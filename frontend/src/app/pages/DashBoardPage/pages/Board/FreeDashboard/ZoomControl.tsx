@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -19,7 +19,7 @@ import { MinusSquareOutlined, PlusSquareOutlined } from '@ant-design/icons';
 import { Button, Slider, Space, Tooltip } from 'antd';
 import useI18NPrefix from 'app/hooks/useI18NPrefix';
 import React, { useMemo } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 
 export interface ZoomControlProps {
   sliderValue: number;

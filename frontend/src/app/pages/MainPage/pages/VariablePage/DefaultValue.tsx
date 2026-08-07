@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -31,7 +31,7 @@ import useI18NPrefix from 'app/hooks/useI18NPrefix';
 import { TIME_FORMATTER } from 'globalConstants';
 import moment from 'moment';
 import { memo, useCallback, useEffect, useState } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { SPACE, SPACE_TIMES } from 'styles/StyleConstants';
 import { VariableValueTypes } from './constants';
 

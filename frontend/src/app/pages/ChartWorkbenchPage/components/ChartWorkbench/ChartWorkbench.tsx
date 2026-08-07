@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -27,7 +27,7 @@ import ChartDataView from 'app/types/ChartDataView';
 import { IChartDrillOption } from 'app/types/ChartDrillOption';
 import { FC, memo } from 'react';
 import { useSelector } from 'react-redux';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import ChartDrillContext from '../../../../contexts/ChartDrillContext';
 import { dateFormatSelector, languageSelector } from '../../slice/selectors';
 import ChartHeaderPanel from '../ChartHeaderPanel';

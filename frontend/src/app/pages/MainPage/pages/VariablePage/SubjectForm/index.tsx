@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -21,7 +21,7 @@ import useI18NPrefix from 'app/hooks/useI18NPrefix';
 import moment from 'moment';
 import { Key, memo, useCallback, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { SPACE_XS } from 'styles/StyleConstants';
 import { uuidv4 } from 'utils/utils';
 import {

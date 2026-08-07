@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -20,7 +20,7 @@ import { PickerType } from 'app/pages/DashBoardPage/pages/BoardEditor/components
 import { formatDateByPickType } from 'app/pages/DashBoardPage/pages/BoardEditor/components/ControllerWidgetPanel/utils';
 import moment from 'moment';
 import React, { memo, useMemo } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 const { RangePicker } = DatePicker;
 
 export interface TimeControllerProps {

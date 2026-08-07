@@ -1,4 +1,4 @@
-import { View } from '../../types/View';
+﻿import { View } from '../../types/View';
 import { APP_VERSION_BETA_4 } from '../constants';
 import MigrationEvent from '../MigrationEvent';
 import MigrationEventDispatcher from '../MigrationEventDispatcher';

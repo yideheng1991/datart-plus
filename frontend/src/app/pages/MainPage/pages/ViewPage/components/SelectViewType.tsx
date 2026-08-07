@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -23,7 +23,7 @@ import {
 } from '@ant-design/icons';
 import useI18NPrefix from 'app/hooks/useI18NPrefix';
 import { memo } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import {
   BORDER_RADIUS,
   FONT_SIZE_HEADING,

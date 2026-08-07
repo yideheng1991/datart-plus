@@ -1,4 +1,4 @@
-import { Base } from './base';
+﻿import { Base } from './base';
 import { Form } from './overwritten/form';
 import { GlobalOverlays } from './overwritten/globalOverlays';
 import { Hardcoded } from './overwritten/hardcoded';

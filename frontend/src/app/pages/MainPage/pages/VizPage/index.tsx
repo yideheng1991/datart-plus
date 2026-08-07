@@ -1,4 +1,4 @@
-import { Split } from 'app/components';
+﻿import { Split } from 'app/components';
 import useI18NPrefix from 'app/hooks/useI18NPrefix';
 import { useSplitSizes } from 'app/hooks/useSplitSizes';
 import { useBoardSlice } from 'app/pages/DashBoardPage/pages/Board/slice';
@@ -6,7 +6,7 @@ import { useEditBoardSlice } from 'app/pages/DashBoardPage/pages/BoardEditor/sli
 import { useStoryBoardSlice } from 'app/pages/StoryBoardPage/slice';
 import { dispatchResize } from 'app/utils/dispatchResize';
 import React, { useCallback, useState } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { Main } from './Main';
 import { SaveForm } from './SaveForm';
 import { SaveFormContext, useSaveFormContext } from './SaveFormContext';

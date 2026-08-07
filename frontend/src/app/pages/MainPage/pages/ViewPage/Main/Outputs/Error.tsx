@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -20,7 +20,7 @@ import { InfoCircleOutlined } from '@ant-design/icons';
 import useI18NPrefix from 'app/hooks/useI18NPrefix';
 import React, { memo } from 'react';
 import { useSelector } from 'react-redux';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import {
   LINE_HEIGHT_BODY,
   LINE_HEIGHT_HEADING,

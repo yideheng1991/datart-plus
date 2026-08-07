@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -32,7 +32,7 @@ import {
 import ChartDataView from 'app/types/ChartDataView';
 import { fetchChartDataSet } from 'app/utils/fetch';
 import { FC, memo, useState } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { SPACE_XS } from 'styles/StyleConstants';
 import { errorHandle } from 'utils/utils';
 

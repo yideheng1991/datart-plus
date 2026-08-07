@@ -1,5 +1,5 @@
-import { Children, Component, CSSProperties, ReactNode } from 'react';
-import styled from 'styled-components/macro';
+﻿import { Children, Component, CSSProperties, ReactNode } from 'react';
+import styled from 'styled-components';
 import { Pane } from './Pane';
 import { Resizer, RESIZER_DEFAULT_CLASSNAME } from './Resizer';
 

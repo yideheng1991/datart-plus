@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -48,7 +48,7 @@ import React, {
   useState,
 } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { SPACE_XS } from 'styles/StyleConstants';
 import { WidgetActionContext } from '../../../../components/ActionProvider/WidgetActionProvider';
 import { editBoardStackActions, editDashBoardInfoActions } from '../../slice';

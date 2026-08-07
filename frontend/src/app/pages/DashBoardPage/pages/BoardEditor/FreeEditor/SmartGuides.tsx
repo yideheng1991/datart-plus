@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -18,7 +18,7 @@
 import { Widget } from 'app/pages/DashBoardPage/types/widgetTypes';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { widgetMove, widgetMoveEnd } from '../slice/events';
 import { selectAllWidgetMap } from '../slice/selectors';
 

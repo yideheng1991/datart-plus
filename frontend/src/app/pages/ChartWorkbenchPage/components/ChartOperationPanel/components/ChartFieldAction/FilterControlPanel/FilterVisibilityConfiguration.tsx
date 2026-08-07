@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -22,7 +22,7 @@ import useI18NPrefix, { I18NComponentProps } from 'app/hooks/useI18NPrefix';
 import { ChartDataSectionField, FilterVisibility } from 'app/types/ChartConfig';
 import { FilterSqlOperator } from 'globalConstants';
 import { FC, memo, useState } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 
 const FilterVisibilityConfiguration: FC<
   {

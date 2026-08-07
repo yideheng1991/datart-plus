@@ -1,4 +1,4 @@
-import { PlusOutlined } from '@ant-design/icons';
+﻿import { PlusOutlined } from '@ant-design/icons';
 import { Dropdown, Menu, Tooltip } from 'antd';
 import { ToolbarButton } from 'app/components';
 import React, { ReactElement } from 'react';

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -69,7 +69,7 @@ import {
 } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useHistory } from 'react-router';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import {
   ORANGE,
   SPACE,

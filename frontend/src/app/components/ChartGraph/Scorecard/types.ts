@@ -1,4 +1,4 @@
-import { FontStyle } from '../../../types/ChartConfig';
+﻿import { FontStyle } from '../../../types/ChartConfig';
 
 interface FontConfig {
   color: string;

@@ -1,4 +1,4 @@
-import { AnyAction, Reducer } from '@reduxjs/toolkit';
+﻿import { AnyAction, Reducer } from '@reduxjs/toolkit';
 import { RootState } from 'types';
 
 type RequiredRootState = Required<RootState>;

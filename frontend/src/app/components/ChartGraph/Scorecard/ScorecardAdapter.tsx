@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -17,7 +17,7 @@
  */
 
 import { FC, memo } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { AggregateBoxProp, ScorecardBoxProp, ScorecardConfig } from './types';
 
 const ScorecardAdapter: FC<ScorecardConfig> = memo(

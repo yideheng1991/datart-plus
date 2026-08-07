@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -21,7 +21,7 @@ import React, { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import { useDispatch, useSelector } from 'react-redux';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { LEVEL_50 } from 'styles/StyleConstants';
 import { BoardInitProvider } from '../../DashBoardPage/components/BoardProvider/BoardInitProvider';
 import { FullScreenPanel } from '../../DashBoardPage/components/FullScreenPanel/FullScreenPanel';

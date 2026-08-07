@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -20,7 +20,7 @@ import { Button, Input, Select, Table } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import ChartDataView from 'app/types/ChartDataView';
 import { FC } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import {
   InteractionAction,
   InteractionCategory,

@@ -26,14 +26,19 @@ import { Inspector } from 'react-dev-inspector';
 import ReactDOM from 'react-dom';
 import { HelmetProvider } from 'react-helmet-async';
 import { Provider } from 'react-redux';
-import { configureAppStore } from 'redux/configureStore';
+import { configureAppStore } from '@redux-store/configureStore';
 import { ThemeProvider } from 'styles/theme/ThemeProvider';
 import { Debugger } from 'utils/debugger';
+import { setupMonacoEnvironment } from 'utils/monacoConfig';
 import './locales/i18n';
 
 export const generateEntryPoint = EntryPointComponent => {
   const IS_DEVELOPMENT = process.env.NODE_ENV === 'development';
   const MOUNT_NODE = document.getElementById('root') as HTMLElement;
+
+  // Setup Monaco environment for Vite
+  setupMonacoEnvironment();
+
   const store = configureAppStore();
   Debugger.instance.setEnable(IS_DEVELOPMENT);
 
@@ -54,8 +59,9 @@ export const generateEntryPoint = EntryPointComponent => {
   );
 
   // Hot reLoadable translation json files
-  if (module.hot) {
-    module.hot.accept(['./locales/i18n'], () => {
+  // Vite HMR
+  if (import.meta.hot) {
+    import.meta.hot.accept('./locales/i18n', () => {
       // No need to render the App again because i18next works with the hooks
     });
   }

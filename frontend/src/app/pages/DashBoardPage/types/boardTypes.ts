@@ -1,4 +1,4 @@
-import {
+﻿import {
   ChartI18NSectionConfig,
   ChartStyleConfig,
 } from 'app/types/ChartConfig';

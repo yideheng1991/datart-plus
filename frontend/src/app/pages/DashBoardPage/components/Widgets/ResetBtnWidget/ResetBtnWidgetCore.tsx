@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -18,7 +18,7 @@
 
 import { darken, getLuminance, lighten } from 'polished';
 import React, { useContext } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { WidgetActionContext } from '../../ActionProvider/WidgetActionProvider';
 import {
   getWidgetBaseStyle,

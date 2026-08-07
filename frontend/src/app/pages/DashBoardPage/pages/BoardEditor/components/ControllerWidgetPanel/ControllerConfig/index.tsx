@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -25,7 +25,7 @@ import {
 import { Widget } from 'app/pages/DashBoardPage/types/widgetTypes';
 import ChartDataView from 'app/types/ChartDataView';
 import React, { memo, useMemo } from 'react';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import ControllerVisibility from './ControllerVisibility';
 import { RadioStyleForm } from './OtherSetter/RadioStyle/RadioStyleForm';
 import { SliderMarks } from './OtherSetter/SliderStyle/SliderMarks';

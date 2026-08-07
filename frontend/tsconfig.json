@@ -16,8 +16,31 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "baseUrl": "./src",
+    "baseUrl": ".",
+    "paths": {
+      "@app/*": ["src/app/*"],
+      "@styles/*": ["src/styles/*"],
+      "@utils/*": ["src/utils/*"],
+      "@locales/*": ["src/locales/*"],
+      "@redux-store/*": ["src/redux/*"],
+      "app/*": ["src/app/*"],
+      "components/*": ["src/app/components/*"],
+      "pages/*": ["src/app/pages/*"],
+      "hooks/*": ["src/app/hooks/*"],
+      "slices/*": ["src/app/slice/*"],
+      "locales/*": ["src/locales/*"],
+      "redux/*": ["src/redux/*"],
+      "styles/*": ["src/styles/*"],
+      "utils/*": ["src/utils/*"],
+      "core/*": ["src/app/models/*"],
+      "migration/*": ["src/app/migration/*"],
+      "types/*": ["src/app/types/*"],
+      "types": ["src/types.ts"],
+      "entryPointFactory": ["src/entryPointFactory"],
+      "globalConstants": ["src/globalConstants"]
+    },
     "downlevelIteration": true,
   },
-  "include": ["src"]
+  "include": ["src", "vite.config.ts"],
+  "references": [{ "path": "./tsconfig.node.json" }]
 }

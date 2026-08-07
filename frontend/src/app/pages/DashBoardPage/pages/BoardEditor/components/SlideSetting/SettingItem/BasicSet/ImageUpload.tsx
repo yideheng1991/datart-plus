@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Datart
  *
  * Copyright 2021
@@ -21,7 +21,7 @@ import { BoardContext } from 'app/pages/DashBoardPage/components/BoardProvider/B
 import { convertImageUrl } from 'app/pages/DashBoardPage/utils';
 import { memo, useCallback, useContext, useMemo } from 'react';
 import { useDispatch } from 'react-redux';
-import styled from 'styled-components/macro';
+import styled from 'styled-components';
 import { SPACE_MD } from 'styles/StyleConstants';
 import { uploadBoardImage } from '../../../../slice/thunk';
 
