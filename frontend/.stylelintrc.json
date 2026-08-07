@@ -6,7 +6,8 @@
   ],
   "rules": {
     "function-no-unknown": null,
-    "font-family-no-missing-generic-family-keyword": null
+    "font-family-no-missing-generic-family-keyword": null,
+    "no-extra-semicolons": null
   },
   "overrides": [
     {
