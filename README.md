@@ -31,10 +31,15 @@ datart 由原 davinci 主创团队（跑象科技 / running-elephant）出品。
 | ✨ 新增功能 | 大屏媒体组件 | • 新增 **13 种大屏边框组件**<br>• 新增 **11 种装饰元素**<br>• 新增 **Icon 图标组件**（支持样式与颜色配置） |
 | ✨ 新增功能 | 自由布局编辑器（重构） | • **多选组件**：支持批量复制、粘贴、撤销/重做<br>• **对齐工具栏**：一键左/右/顶/底对齐，水平/垂直居中<br>• **智能参考线**：拖拽时显示边缘与中心对齐参考线<br>• **方向键交互优化**：<br>　- 选中组件：方向键微调位置<br>　- 未选中组件：方向键滚动画布<br>• **透明度设置**：支持自由布局 / 自动布局的画布及组件背景透明度调整<br>• **颜色增强**：新增颜色取色器 + 最近使用颜色记录 |
 | ✨ 新增功能 | 数据分析 | • 聚合方式新增 **中位数（Median）**、**四分位数（Quartile）** |
-| ✨ 新增功能 | 图表插件 | • 新增 **雷达图图表插件**，支持多维数据对比分析<br>• 新增 **箱线图（Boxplot）**，支持分布统计与异常值分析|
+| ✨ 新增功能 | 图表插件 | • 新增 **雷达图图表插件**，支持多维数据对比分析，支持跳转与查看数据交互<br>• 新增 **箱线图（Boxplot）**，支持分布统计与异常值分析 |
+| ✨ 新增功能 | NL2SQL 智能查询 | • 新增对接 AI 大模型，实现自然语言 SQL 查询<br>• 新增默认 Prompt 模板配置<br>• Schema 提示词压缩优化，降低 Token 消耗 |
+| 🔧 技术升级 | 前端构建工具 | • 前端构建工具从 **Craco 迁移至 Vite 7**<br>• 开发服务器秒级启动，HMR 热更新<br>• Task 构建使用 esbuild + Babel，性能提升 **30x+** |
+| 🔧 技术升级 | API 文档 | • Swagger 从 Springfox v2 迁移至 **Springdoc OpenAPI 3**<br>• 生产环境自动禁用 Swagger |
 | 🐛 Bug 修复 | 筛选与时间 | • 修复图表筛选条件「自定义时间」默认值错误问题（原默认 +2，已修正为当前正确时间） |
 | 🐛 Bug 修复 | SQL 生成 | • 修复日期粒度字段排序时 `columnKey` 与 `functionColumns` 不一致导致的 SQL 报错问题 |
 | 🐛 Bug 修复 | 数据源兼容 | • 修复 H2 方言翻译 MySQL `IF` 与 `DATEDIFF` 函数时的语法兼容性问题 |
+| 🐛 Bug 修复 | 图表渲染 | • 修复图表事件监听器解绑引发的内存泄漏<br>• 修复替换 View 字段时原字段配置丢失问题 |
+| 🐛 Bug 修复 | 大屏组件 | • 修复 TabWidget 选项卡间距、溢出、宽度约束和标题同步问题 |
 
 ---
 
@@ -46,10 +51,25 @@ datart 由原 davinci 主创团队（跑象科技 / running-elephant）出品。
 如果你有以下需求，这个版本会比原生 datart 更合适：
 
 - 需要**更高效的大屏编辑体验**
-- 希望使用**箱线图、雷达图**等统计分析图表
+- 希望未来有**箱线图、雷达图**等更多的统计分析图表支持
 - 需要 **AntV S2 级别的高级表格能力**(单独插件)
+- 需要 **AI 自然语言查询（NL2SQL）** 能力
+- 需要在现代前端工具链（**Vite 7**）上运行和开发
 - 在企业内部系统中高频使用 datart
 - 需要**持续维护、可落地、可扩展**的可视化平台
+
+### 技术栈
+
+| 层面 | 技术 |
+|------|------|
+| 前端框架 | React 17 + TypeScript 4.5 |
+| 构建工具 | **Vite 7**（已从 Craco 迁移） |
+| UI 组件库 | Ant Design 4.16 |
+| 图表引擎 | ECharts 5.3 + AntV S2 1.19 |
+| 后端框架 | Spring Boot 2.4 + Java 8 |
+| API 文档 | **Springdoc OpenAPI 3**（已从 Springfox 迁移） |
+| 数据库 | MySQL 5.7+ / H2 |
+| 前端开发环境 | Node.js >= 22 |
 
 ---
 
@@ -61,9 +81,6 @@ datart 由原 davinci 主创团队（跑象科技 / running-elephant）出品。
 | 插件体系 | 兼容原生 Source / Chart / Visualization 插件机制 |
 | 数据模型 | 与官方版本保持一致 |
 | 维护状态 | 原项目自 2023 年 9 月起更新较少，本仓库独立维护并持续增强 |
-
-📘 官方仓库：  
-https://gitee.com/running-elephant/datart
 
 ---
 
@@ -78,16 +95,10 @@ http://datart-demo.dhyi.top
 ---
 
 ## ⚡ 快速开始
+- **本地开发**：参见 [DEPLOYMENT_VITE.md](./DEPLOYMENT_VITE.md)（Vite 版开发指南）
+- **生产部署**：参见 [Deployment 文档](https://datart-docs.dhyi.top/datart-docs/docs/)
+- **用户手册**：参见 [第一个可视化作品](https://datart-docs.dhyi.top/datart-docs/docs/first-visualization.html)
 
-参见文档：  
-https://datart-docs.dhyi.top/datart-docs/docs/first-visualization.html
-
----
-
-## 📦 部署指南
-
-- 新手上路：参见 [Deployment](./Deployment.md)
-- 详细文档：https://datart-docs.dhyi.top/datart-docs/docs/
 
 ---
 

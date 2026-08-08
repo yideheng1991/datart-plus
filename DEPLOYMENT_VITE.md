@@ -140,9 +140,8 @@ mvn clean package -Dmaven.test.skip=true
 
 ### 4.3 部署
 
+- **生产部署**：参见 [Deployment 文档](https://datart-docs.dhyi.top/datart-docs/docs/)
 
-- 新手上路：参见 [Deployment](./Deployment.md)
-- 详细文档：https://datart-docs.dhyi.top/datart-docs/docs/
 
 
 
