@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Datart
  *
  * Copyright 2021
@@ -119,7 +119,6 @@ export const TabWidgetCore: React.FC<{}> = memo(() => {
       <Tabs
         onTabClick={editing ? onTabClick : undefined}
         size="small"
-        tabBarGutter={1}
         tabPosition={position as any}
         activeKey={editing ? String(activeKey) : undefined}
         tabBarStyle={{ fontSize: '16px' }}
@@ -178,28 +177,30 @@ const TabsBoxWrap = styled.div<{ tabsAlign: string }>`
     height: 100%;
   }
 
-  .ant-tabs-nav {
+  & .ant-tabs-nav {
     margin: 0;
   }
 
-  .ant-tabs-tab {
+  & .ant-tabs-tab {
     padding: 0 !important;
-    margin-right: 30px;
+    margin-right: 30px !important;
   }
-  & .ant-tabs.ant-tabs-card.ant-tabs-card > .ant-tabs-nav .ant-tabs-tab {
-    margin: 0 10px;
+
+  & .ant-tabs.ant-tabs-card > .ant-tabs-nav .ant-tabs-tab {
+    margin: 0 10px !important;
   }
+
   & .TabPane {
     width: 100%;
     height: 100%;
   }
+
   & .ant-tabs-tab-remove {
     background-color: ${PRIMARY};
   }
 
   & .ant-tabs > .ant-tabs-nav .ant-tabs-nav-add {
     padding: 0;
-    /* color: ${PRIMARY}; */
     margin: 0 20px;
     background: none;
     border: none;

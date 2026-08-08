@@ -1,8 +1,9 @@
 {
   "compilerOptions": {
     "noImplicitAny": false,
-    "target": "es5",
+    "target": "ESNext",
     "lib": ["dom", "dom.iterable", "esnext"],
+    "types": ["node"],
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
