@@ -6,11 +6,9 @@
 
 | 组件 | 版本要求 | 当前版本 |
 |------|---------|---------|
-| Node.js | >= 18（推荐 22.x） | v22.22.0 |
+| Node.js | >= 22 | v22.22.0 |
 | JDK | 1.8 | 1.8 |
 | Maven | >= 3.6 | - |
-| MySQL | >= 5.7 | - |
-| npm | >= 6.4.1 | - |
 
 ## 二、本地开发模式
 
@@ -18,39 +16,31 @@
 
 ### 2.1 配置数据库
 
-编辑 `config/datart.conf`，填写数据库连接信息：
+编辑 `server/src/main/resources/application-demo.yml`，修改数据库连接信息：
 
-```properties
-datasource.ip=127.0.0.1
-datasource.port=3306
-datasource.database=datart
-datasource.username=root
-datasource.password=123456
+```yaml
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://127.0.0.1:3306/datart?&allowMultiQueries=true&characterEncoding=utf-8
+    username: root
+    password: 123456
 ```
+
+默认使用 MySQL，也可切换为内置 H2 数据库（取消注释 `h2` 配置并注释掉 `mysql` 配置）。
 
 ### 2.2 启动后端
 
-**方式一：IDE 启动**
+**IDE 启动**
 
 在 IntelliJ IDEA 中直接运行主类 `datart.DatartServerApplication`（位于 `server/src/main/java/datart/DatartServerApplication.java`）。
 
 VM 参数添加：
 ```
--Dspring.profiles.active=config
+-Dspring.profiles.active=demo
 -Dfile.encoding=UTF-8
 ```
-
-**方式二：命令行启动**
-
-```bash
-# 在项目根目录执行 Maven 编译
-mvn clean compile -DskipTests
-
-# 启动后端服务（监听 8080 端口）
-java -server -Dspring.profiles.active=config -Dfile.encoding=UTF-8 -cp "server/target/classes;server/target/lib/*" datart.DatartServerApplication
-```
-
-启动成功后，后端服务运行在 `http://localhost:8080`。
 
 ### 2.3 启动前端
 
@@ -77,11 +67,20 @@ npm run dev
 
 ### 3.1 前端环境变量
 
-前端通过 Vite 的环境变量系统管理配置。在 `frontend/` 目录下创建 `.env` 文件：
+前端通过 Vite 的环境变量系统管理配置：
+
+| 文件 | 用途 |
+|------|------|
+| `frontend/.env` | 通用环境变量 |
+| `frontend/.env.development` | 开发环境（`npm run dev`） |
+| `frontend/.env.production` | 生产环境（`npm run build`） |
 
 ```bash
 # 生产部署时的基础路径（对应后端的 context-path）
 VITE_PUBLIC_URL=/
+
+# 是否生成 sourcemap（生产环境建议 false）
+GENERATE_SOURCEMAP=false
 ```
 
 ### 3.2 前端开发代理配置
@@ -106,20 +105,45 @@ server: {
 
 如后端端口非 8080，需同步修改此配置。
 
-## 四、常见问题
+## 四、生产构建与部署
 
-### Q: 前端启动后页面空白？
-检查浏览器控制台是否有错误。确认后端服务已启动，Vite 代理配置正确。
+### 4.1 手动构建前端
 
-### Q: Logo 不显示？
-确认 `vite.config.ts` 中 svgr 插件配置为 `include: '**/*.svg?svgr'`，普通 SVG 导入应返回 URL 而非组件。
+```bash
+cd frontend
 
-### Q: 构建时提示 Node 版本不兼容？
-确保 Node.js >= 18。当前项目使用 Vite 4.5.x，推荐使用 Node 22.x。
+# 安装依赖
+npm run bootstrap
 
-### Q: 后端启动报数据库连接失败？
-检查 `config/datart.conf` 中的数据库配置是否正确，确认 MySQL 服务已启动且 `datart` 数据库已创建。
+# 生产构建（输出到 frontend/build/）
+npm run build:all
+```
 
-### Q: 端口被占用？
-- 前端：Vite 会自动递增端口（3000 → 3001 → 3002 ...）
-- 后端：修改 `config/datart.conf` 中的 `server.port`
+`build:all` 包含两步：
+- `build:task` — 使用 esbuild + Babel 构建 task 脚本（输出到 `build/task/index.js`）
+- `build` — 使用 Vite 构建前端应用（输出到 `build/`）
+
+### 4.2 Maven 一体化构建
+
+Maven 构建时会自动执行前端构建：
+
+```bash
+cd datart
+mvn clean package -Dmaven.test.skip=true
+```
+
+构建流程：
+1. `initialize` — `npm run bootstrap` 安装前端依赖
+2. `generate-resources` — `npm run build:all` 构建前端
+3. `compile` — 将 `frontend/build/` 复制到 `static/`
+4. `package` — 打包为 `datart-server-1.0.0-rc.x-install.zip`
+
+### 4.3 部署
+
+
+- 新手上路：参见 [Deployment](./Deployment.md)
+- 详细文档：https://datart-docs.dhyi.top/datart-docs/docs/
+
+
+
+
