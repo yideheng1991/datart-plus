@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Datart
  *
  * Copyright 2021
@@ -22,6 +22,7 @@ export const FlexStyle: CSSProperties = {
   display: 'flex',
   flex: '1',
   minHeight: '0',
+  minWidth: '0',
 };
 export const ZIndexStyle: CSSProperties = {
   zIndex: LEVEL_10,

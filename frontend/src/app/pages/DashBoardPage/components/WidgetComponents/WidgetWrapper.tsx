@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Datart
  *
  * Copyright 2021
@@ -55,6 +55,7 @@ const Wrapper = styled.div`
   position: relative;
   display: flex;
   flex: 1;
+  min-width: 0;
   min-height: 0;
 
   &:hover .widget-tool-dropdown {
@@ -74,5 +75,6 @@ const ContentLayer = styled.div`
   z-index: 1;
   display: flex;
   flex: 1;
+  min-width: 0;
   min-height: 0;
 `;

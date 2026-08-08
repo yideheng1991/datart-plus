@@ -18,11 +18,17 @@
 import { Tabs } from 'antd';
 import { TabWidgetContent } from 'app/pages/DashBoardPage/pages/Board/slice/types';
 import { memo, useCallback, useContext, useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { PRIMARY } from 'styles/StyleConstants';
 import { uuidv4 } from 'utils/utils';
+import { selectBoardWidgetMapById } from '../../../pages/Board/slice/selector';
+import { BoardState } from '../../../pages/Board/slice/types';
 import { editBoardStackActions } from '../../../pages/BoardEditor/slice';
+import {
+  selectAllWidgetMap,
+} from '../../../pages/BoardEditor/slice/selectors';
+import { HistoryEditBoard } from '../../../pages/BoardEditor/slice/types';
 import { WidgetActionContext } from '../../ActionProvider/WidgetActionProvider';
 import { BoardContext } from '../../BoardProvider/BoardProvider';
 import { DropHolder } from '../../WidgetComponents/DropHolder';
@@ -49,6 +55,14 @@ export const TabWidgetCore: React.FC<{}> = memo(() => {
   } = useContext(BoardContext);
   const { itemMap } = widget.config.content as TabWidgetContent;
   const tabsCons = Object.values(itemMap).sort((a, b) => a.index - b.index);
+  const editWidgetMap = useSelector(
+    (state: { editBoard: HistoryEditBoard }) => selectAllWidgetMap(state),
+  );
+  const readWidgetMap = useSelector(
+    (state: { board: BoardState }) =>
+      selectBoardWidgetMapById(state, boardId),
+  );
+  const widgetMap = boardEditing ? editWidgetMap : readWidgetMap;
   const [activeKey, SetActiveKey] = useState<string | number>(
     tabsCons[0]?.index || 0,
   );
@@ -119,6 +133,7 @@ export const TabWidgetCore: React.FC<{}> = memo(() => {
       <Tabs
         onTabClick={editing ? onTabClick : undefined}
         size="small"
+        tabBarGutter={16}
         tabPosition={position as any}
         activeKey={editing ? String(activeKey) : undefined}
         tabBarStyle={{ fontSize: '16px' }}
@@ -126,9 +141,11 @@ export const TabWidgetCore: React.FC<{}> = memo(() => {
         onEdit={editing ? tabEdit : undefined}
         destroyInactiveTabPane
       >
-        {tabsCons.map(tab => (
+        {tabsCons.map(tab => {
+          const childName = widgetMap?.[tab.childWidgetId]?.config?.name;
+          return (
           <TabPane
-            tab={tab.name || 'tab'}
+            tab={childName || tab.name || 'tab'}
             key={tab.index}
             className="TabPane"
             forceRender
@@ -149,7 +166,8 @@ export const TabWidgetCore: React.FC<{}> = memo(() => {
               )
             )}
           </TabPane>
-        ))}
+          );
+        })}
       </Tabs>
     </TabsBoxWrap>
   );
@@ -160,15 +178,19 @@ const MapWrapper = styled.div`
   display: flex;
   flex: 1;
   width: 100%;
+  min-width: 0;
   height: 100%;
+  overflow: hidden;
 `;
 const TabsBoxWrap = styled.div<{ tabsAlign: string }>`
   width: 100%;
+  min-width: 0;
   height: 100%;
 
   & .ant-tabs {
     width: 100%;
     height: 100%;
+    overflow: hidden;
     background: none;
   }
 
@@ -183,16 +205,12 @@ const TabsBoxWrap = styled.div<{ tabsAlign: string }>`
 
   & .ant-tabs-tab {
     padding: 0 !important;
-    margin-right: 30px !important;
-  }
-
-  & .ant-tabs.ant-tabs-card > .ant-tabs-nav .ant-tabs-tab {
-    margin: 0 10px !important;
   }
 
   & .TabPane {
     width: 100%;
     height: 100%;
+    overflow: hidden;
   }
 
   & .ant-tabs-tab-remove {
@@ -207,7 +225,12 @@ const TabsBoxWrap = styled.div<{ tabsAlign: string }>`
   }
 
   & .ant-tabs .ant-tabs-nav-wrap {
-    justify-content: ${p => p.tabsAlign};
+    justify-content: ${p =>
+      p.tabsAlign === 'center'
+        ? 'center'
+        : p.tabsAlign === 'end'
+          ? 'flex-end'
+          : 'flex-start'};
 
     & > .ant-tabs-nav-list {
       flex: none;
