@@ -30,7 +30,7 @@ import datart.server.base.dto.SubjectPermissions;
 import datart.server.base.dto.ViewPermission;
 import datart.server.base.params.*;
 import datart.server.service.RoleService;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -49,7 +49,7 @@ public class RoleController extends BaseController {
     }
 
 
-    @ApiOperation(value = "check role name")
+    @Operation(summary = "check role name")
     @PostMapping(value = "/check/name")
     public ResponseData<Boolean> checkRoleName(@Validated @RequestBody CheckNameParam param) {
         Role role = new Role();
@@ -60,14 +60,14 @@ public class RoleController extends BaseController {
     }
 
 
-    @ApiOperation(value = "create role")
+    @Operation(summary = "create role")
     @PostMapping()
     public ResponseData<Role> createRole(@Validated @RequestBody RoleCreateParam createParam) {
         return ResponseData.success(roleService.create(createParam));
     }
 
 
-    @ApiOperation(value = "update a role")
+    @Operation(summary = "update a role")
     @PutMapping(value = "/{roleId}")
     public ResponseData<Boolean> updateRole(@PathVariable String roleId,
                                             @Validated @RequestBody RoleUpdateParam roleUpdateParam) {
@@ -76,7 +76,7 @@ public class RoleController extends BaseController {
         return ResponseData.success(success);
     }
 
-    @ApiOperation(value = "delete a role")
+    @Operation(summary = "delete a role")
     @DeleteMapping("/{roleId}")
     public ResponseData<Boolean> deleteRole(@PathVariable String roleId) {
         checkBlank(roleId, "roleId");
@@ -84,7 +84,7 @@ public class RoleController extends BaseController {
         return ResponseData.success(success);
     }
 
-    @ApiOperation(value = "Update users for role")
+    @Operation(summary = "Update users for role")
     @PutMapping("/{roleId}/users")
     public ResponseData<Boolean> updateUsersForRole(@PathVariable String roleId,
                                                     @RequestBody Set<String> userIds) {
@@ -95,7 +95,7 @@ public class RoleController extends BaseController {
     }
 
 
-    @ApiOperation(value = "Update roles for user")
+    @Operation(summary = "Update roles for user")
     @PutMapping("/{userId}/roles")
     public ResponseData<Boolean> updateRolesForUser(@PathVariable String userId,
                                                     @RequestParam String orgId,
@@ -106,7 +106,7 @@ public class RoleController extends BaseController {
         return ResponseData.success(success);
     }
 
-    @ApiOperation(value = "Get role users")
+    @Operation(summary = "Get role users")
     @GetMapping("/{roleId}/users")
     public ResponseData<List<UserBaseInfo>> listRoleUsers(@PathVariable String roleId) {
         checkBlank(roleId, "roleId");
@@ -115,7 +115,7 @@ public class RoleController extends BaseController {
     }
 
 
-    @ApiOperation(value = "get role/user resource permissions")
+    @Operation(summary = "get role/user resource permissions")
     @GetMapping(value = "/permission/subject")
     public ResponseData<SubjectPermissions> getSubjectPermissions(@RequestParam String orgId,
                                                                   @RequestParam SubjectType subjectType,
@@ -124,7 +124,7 @@ public class RoleController extends BaseController {
 
     }
 
-    @ApiOperation(value = "get resource permissions")
+    @Operation(summary = "get resource permissions")
     @GetMapping(value = "/permission/resource")
     public ResponseData<ResourcePermissions> getResourcePermissions(@RequestParam String orgId,
                                                                     @RequestParam ResourceType resourceType,
@@ -133,39 +133,39 @@ public class RoleController extends BaseController {
 
     }
 
-    @ApiOperation(value = "grant org owner to user")
+    @Operation(summary = "grant org owner to user")
     @PostMapping(value = "/permission/grant/org_owner")
     public ResponseData<Boolean> grantOrgOwner(@RequestParam String orgId,
                                                @RequestParam String userId) {
         return ResponseData.success(roleService.grantOrgOwner(orgId, userId, true));
     }
 
-    @ApiOperation(value = "revoke org owner from user")
+    @Operation(summary = "revoke org owner from user")
     @DeleteMapping(value = "/permission/revoke/org_owner")
     public ResponseData<Boolean> revokeOrgOwner(@RequestParam String orgId,
                                                 @RequestParam String userId) {
         return ResponseData.success(roleService.revokeOrgOwner(orgId, userId));
     }
 
-    @ApiOperation(value = "Grant permission to role")
+    @Operation(summary = "Grant permission to role")
     @PostMapping(value = "/permission/grant")
     public ResponseData<List<PermissionInfo>> grantPermission(@RequestBody GrantPermissionParam grantPermissionParam) {
         return ResponseData.success(roleService.grantPermission(grantPermissionParam));
     }
 
-    @ApiOperation(value = "Grant permission to role")
+    @Operation(summary = "Grant permission to role")
     @PostMapping(value = "/view_permission/grant")
     public ResponseData<Boolean> grantViewPermission(@RequestBody ViewPermissionParam viewPermissionParam) {
         return ResponseData.success(roleService.grantViewPermission(viewPermissionParam));
     }
 
-    @ApiOperation(value = "list view permissions")
+    @Operation(summary = "list view permissions")
     @GetMapping(value = "/view_permission/view/{viewId}")
     public ResponseData<List<ViewPermission>> listViewPermission(@PathVariable String viewId) {
         return ResponseData.success(roleService.listViewPermission(viewId));
     }
 
-    @ApiOperation(value = "list view permissions for subject")
+    @Operation(summary = "list view permissions for subject")
     @GetMapping(value = "/view_permission/subject/{subjectId}")
     public ResponseData<List<ViewPermission>> listRoleViewPermission(@PathVariable String subjectId,
                                                                      @RequestParam String orgId,

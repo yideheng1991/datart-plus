@@ -79,6 +79,13 @@ server:
     keyStoreType: PKCS12
     keyAlias: tomcat
 
+# 生产环境禁用 Swagger
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false
+
 datart:
   migration:
     enable: true # 是否开启数据库自动升级

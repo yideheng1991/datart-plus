@@ -33,15 +33,15 @@ import datart.server.base.params.OrgCreateParam;
 import datart.server.base.params.OrgUpdateParam;
 import datart.server.base.dto.ResponseData;
 import datart.server.service.OrgService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Set;
 
-@Api
+@Tag(name = "Org")
 @RestController
 @RequestMapping(value = "/orgs")
 public class OrgController extends BaseController {
@@ -53,20 +53,20 @@ public class OrgController extends BaseController {
     }
 
 
-    @ApiOperation(value = "get organization detail")
+    @Operation(summary = "get organization detail")
     @GetMapping("/{orgId}")
     public ResponseData<OrganizationBaseInfo> getOrganizationDetail(@PathVariable String orgId) {
         checkBlank(orgId, "orgId");
         return ResponseData.success(orgService.getOrgDetail(orgId));
     }
 
-    @ApiOperation(value = "List user organizations")
+    @Operation(summary = "List user organizations")
     @GetMapping
     public ResponseData<List<OrganizationBaseInfo>> listOrganizations() {
         return ResponseData.success(orgService.listOrganizations());
     }
 
-    @ApiOperation(value = "create organization")
+    @Operation(summary = "create organization")
     @PostMapping
     public ResponseData<Organization> createOrganization(@Validated @RequestBody OrgCreateParam createParam) {
         if (Application.getCurrMode().equals(TenantManagementMode.TEAM)) {
@@ -76,7 +76,7 @@ public class OrgController extends BaseController {
     }
 
 
-    @ApiOperation(value = "update a organization")
+    @Operation(summary = "update a organization")
     @PutMapping(value = "/{orgId}")
     public ResponseData<Boolean> updateOrganization(@PathVariable String orgId,
                                                     @Validated @RequestBody OrgUpdateParam orgUpdateParam) {
@@ -84,7 +84,7 @@ public class OrgController extends BaseController {
     }
 
 
-    @ApiOperation(value = "get organization members")
+    @Operation(summary = "get organization members")
     @GetMapping(value = "/{orgId}/members")
     public ResponseData<List<UserBaseInfo>> listOrgMembers(@PathVariable String orgId) {
         checkBlank(orgId, "orgId");
@@ -92,7 +92,7 @@ public class OrgController extends BaseController {
     }
 
 
-    @ApiOperation(value = "get organization roles")
+    @Operation(summary = "get organization roles")
     @GetMapping(value = "/{orgId}/roles")
     public ResponseData<List<RoleBaseInfo>> listOrgRoles(@PathVariable String orgId) {
         checkBlank(orgId, "orgId");
@@ -100,7 +100,7 @@ public class OrgController extends BaseController {
     }
 
 
-    @ApiOperation(value = "add  members to organization")
+    @Operation(summary = "add  members to organization")
     @PostMapping(value = "/{orgId}/invite")
     public ResponseData<InviteMemberResponse> inviteMembers(@PathVariable String orgId,
                                                             @RequestBody Set<String> emails,
@@ -108,7 +108,7 @@ public class OrgController extends BaseController {
         return ResponseData.success(orgService.addMembers(orgId, emails, sendMail));
     }
 
-    @ApiOperation(value = "Confirm the invitation")
+    @Operation(summary = "Confirm the invitation")
     @GetMapping(value = "/invite/confirm")
     public ResponseData<Boolean> confirmInvite(@RequestParam String token) {
         checkBlank(token, "token");
@@ -116,7 +116,7 @@ public class OrgController extends BaseController {
     }
 
 
-    @ApiOperation(value = "Delete a organization member")
+    @Operation(summary = "Delete a organization member")
     @DeleteMapping(value = "/{orgId}/members/{memberId}")
     public ResponseData<Boolean> deleteOrgMember(@PathVariable String orgId,
                                                  @PathVariable String memberId) {
@@ -125,7 +125,7 @@ public class OrgController extends BaseController {
         return ResponseData.success(orgService.removeUser(orgId, memberId));
     }
 
-    @ApiOperation(value = "list user roles")
+    @Operation(summary = "list user roles")
     @GetMapping(value = "/{orgId}/members/{memberId}/roles")
     public ResponseData<List<RoleBaseInfo>> getMemberRoles(@PathVariable String orgId,
                                                            @PathVariable String memberId) {
@@ -135,14 +135,14 @@ public class OrgController extends BaseController {
     }
 
 
-    @ApiOperation(value = "delete a organization")
+    @Operation(summary = "delete a organization")
     @DeleteMapping("/{orgId}")
     public ResponseData<Boolean> deleteOrganization(@PathVariable String orgId) {
         checkBlank(orgId, "orgId");
         return ResponseData.success(orgService.deleteOrganization(orgId));
     }
 
-    @ApiOperation(value = "Check organization name")
+    @Operation(summary = "Check organization name")
     @PostMapping("/check/name")
     public ResponseData<Boolean> checkOrgName(@Validated @RequestBody CheckNameParam param) {
         Organization organization = new Organization();

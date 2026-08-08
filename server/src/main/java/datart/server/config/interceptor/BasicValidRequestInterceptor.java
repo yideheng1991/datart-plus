@@ -65,7 +65,7 @@ public class BasicValidRequestInterceptor implements HandlerInterceptor {
                 || requestURI.startsWith("/custom-chart-plugins")
                 || requestURI.startsWith("/monaco-editor")
                 || requestURI.startsWith("/antd")
-                || requestURI.startsWith("/v2/")
+                || requestURI.startsWith("/v3/")
                 || requestURI.startsWith("/share")
                 || requestURI.startsWith(staticPath);
     }

@@ -20,15 +20,15 @@ package datart.server.controller;
 import datart.core.base.consts.FileOwner;
 import datart.server.base.dto.ResponseData;
 import datart.server.service.FileService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 
 
-@Api
+@Tag(name = "File")
 @RestController
 @RequestMapping(value = "/files")
 public class FileController extends BaseController {
@@ -39,7 +39,7 @@ public class FileController extends BaseController {
         this.fileService = fileService;
     }
 
-    @ApiOperation(value = "upload viz background image")
+    @Operation(summary = "upload viz background image")
     @PostMapping(value = "/viz/image")
     public ResponseData<String> uploadVizImage(@RequestParam FileOwner ownerType,
                                                @RequestParam String ownerId,
@@ -48,7 +48,7 @@ public class FileController extends BaseController {
         return ResponseData.success(fileService.uploadFile(ownerType, ownerId, file, fileName));
     }
 
-    @ApiOperation(value = "upload org avatar")
+    @Operation(summary = "upload org avatar")
     @PostMapping(value = "/org/avatar")
     public ResponseData<String> uploadOrgAvatar(@RequestParam String orgId,
                                                 @RequestParam(required = false) String fileName,
@@ -56,13 +56,13 @@ public class FileController extends BaseController {
         return ResponseData.success(fileService.uploadFile(FileOwner.ORG_AVATAR, orgId, file, fileName));
     }
 
-    @ApiOperation(value = "delete org avatar")
+    @Operation(summary = "delete org avatar")
     @DeleteMapping(value = "/org/avatar/{orgId}")
     public ResponseData<Boolean> deleteOrgAvatar(@PathVariable String orgId) {
         return ResponseData.success(fileService.deleteFiles(FileOwner.ORG_AVATAR, orgId));
     }
 
-    @ApiOperation(value = "upload user avatar")
+    @Operation(summary = "upload user avatar")
     @PostMapping(value = "/user/avatar")
     public ResponseData<String> uploadUserAvatar(@RequestParam String userId,
                                                  @RequestParam(required = false) String fileName,
@@ -70,13 +70,13 @@ public class FileController extends BaseController {
         return ResponseData.success(fileService.uploadFile(FileOwner.USER_AVATAR, userId, file, fileName));
     }
 
-    @ApiOperation(value = "delete user avatar")
+    @Operation(summary = "delete user avatar")
     @DeleteMapping(value = "/user/avatar/{userId}")
     public ResponseData<Boolean> deleteUserAvatar(@PathVariable String userId) {
         return ResponseData.success(fileService.deleteFiles(FileOwner.USER_AVATAR, userId));
     }
 
-    @ApiOperation(value = "upload user avatar")
+    @Operation(summary = "upload user avatar")
     @PostMapping(value = "/datasource")
     public ResponseData<String> uploadDatasourceFile(@RequestParam String sourceId,
                                                      @RequestParam("file") MultipartFile file) throws IOException {

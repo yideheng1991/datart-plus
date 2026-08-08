@@ -26,7 +26,7 @@ import datart.server.base.params.ViewBaseUpdateParam;
 import datart.server.base.params.ViewCreateParam;
 import datart.server.base.params.ViewUpdateParam;
 import datart.server.service.ViewService;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,33 +42,33 @@ public class ViewController extends BaseController {
         this.viewService = viewService;
     }
 
-    @ApiOperation(value = "check view name is unique")
+    @Operation(summary = "check view name is unique")
     @PostMapping("/check/name")
     public ResponseData<Boolean> checkViewName(@Validated @RequestBody CheckNameParam param) {
         return ResponseData.success(viewService.checkUnique(param.getOrgId(), param.getParentId(), param.getName()));
     }
 
-    @ApiOperation(value = "get org views")
+    @Operation(summary = "get org views")
     @GetMapping
     public ResponseData<List<View>> listViews(@RequestParam String orgId) {
         checkBlank(orgId, "orgId");
         return ResponseData.success(viewService.getViews(orgId));
     }
 
-    @ApiOperation(value = "get view detail")
+    @Operation(summary = "get view detail")
     @GetMapping("/{viewId}")
     public ResponseData<ViewDetailDTO> getViewDetail(@PathVariable String viewId) {
         checkBlank(viewId, "viewId");
         return ResponseData.success(viewService.getViewDetail(viewId));
     }
 
-    @ApiOperation(value = "create view")
+    @Operation(summary = "create view")
     @PostMapping()
     public ResponseData<View> createView(@Validated @RequestBody ViewCreateParam createParam) {
         return ResponseData.success(viewService.create(createParam));
     }
 
-    @ApiOperation(value = "update a view")
+    @Operation(summary = "update a view")
     @PutMapping(value = "/{viewId}")
     public ResponseData<View> updateView(@PathVariable String viewId,
                                          @Validated @RequestBody ViewUpdateParam updateParam) {
@@ -77,7 +77,7 @@ public class ViewController extends BaseController {
         return ResponseData.success(viewService.updateView(updateParam));
     }
 
-    @ApiOperation(value = "update a view base info")
+    @Operation(summary = "update a view base info")
     @PutMapping(value = "/{viewId}/base")
     public ResponseData<Boolean> updateViewBaseInfo(@PathVariable String viewId,
                                                     @Validated @RequestBody ViewBaseUpdateParam updateParam) {
@@ -85,7 +85,7 @@ public class ViewController extends BaseController {
         return ResponseData.success(viewService.updateBase(updateParam));
     }
 
-    @ApiOperation(value = "delete a view")
+    @Operation(summary = "delete a view")
     @DeleteMapping("/{viewId}")
     public ResponseData<Boolean> deleteView(@PathVariable String viewId,
                                             @RequestParam boolean archive) {
@@ -94,13 +94,13 @@ public class ViewController extends BaseController {
 
     }
 
-    @ApiOperation(value = "list archived source")
+    @Operation(summary = "list archived source")
     @GetMapping(value = "/archived")
     public ResponseData<List<View>> listArchived(@RequestParam String orgId) {
         return ResponseData.success(viewService.listArchived(orgId));
     }
 
-    @ApiOperation(value = "unarchive a source")
+    @Operation(summary = "unarchive a source")
     @PutMapping(value = "/unarchive/{viewId}")
     public ResponseData<Boolean> unarchive(@PathVariable String viewId,
                                            @RequestParam String name,

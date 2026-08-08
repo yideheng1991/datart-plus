@@ -23,8 +23,8 @@ import datart.core.entity.Download;
 import datart.server.base.dto.ResponseData;
 import datart.server.base.params.DownloadCreateParam;
 import datart.server.service.DownloadService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 import org.apache.tomcat.util.http.fileupload.util.Streams;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -38,7 +38,7 @@ import java.net.URLEncoder;
 import java.util.List;
 
 
-@Api
+@Tag(name = "Download")
 @RestController
 @RequestMapping(value = "/download")
 public class DownloadController extends BaseController {
@@ -49,20 +49,20 @@ public class DownloadController extends BaseController {
         this.downloadService = downloadService;
     }
 
-    @ApiOperation(value = "get download tasks")
+    @Operation(summary = "get download tasks")
     @GetMapping(value = "/tasks")
     public ResponseData<List<Download>> listDownloadTasks() {
         ResponseData.ResponseDataBuilder<List<Download>> builder = ResponseData.builder();
         return ResponseData.success(downloadService.listDownloadTasks());
     }
 
-    @ApiOperation(value = "submit a new download task")
+    @Operation(summary = "submit a new download task")
     @PostMapping(value = "/submit/task")
     public ResponseData<Download> submitDownloadTask(@RequestBody @Validated DownloadCreateParam createParam) {
         return ResponseData.success(downloadService.submitDownloadTask(createParam));
     }
 
-    @ApiOperation(value = "get download file")
+    @Operation(summary = "get download file")
     @GetMapping(value = "/files/{id}")
     public void downloadFile(@PathVariable String id,
                              HttpServletResponse response) throws IOException {

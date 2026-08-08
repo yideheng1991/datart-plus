@@ -23,7 +23,7 @@ import datart.server.base.dto.ResponseData;
 import datart.server.base.dto.SystemInfo;
 import datart.server.base.params.SetupParams;
 import datart.server.service.SysService;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,14 +41,14 @@ public class SysController extends BaseController {
     }
 
     @SkipLogin
-    @ApiOperation(value = "get system info")
+    @Operation(summary = "get system info")
     @GetMapping("/info")
     public ResponseData<SystemInfo> getSysInfo() {
         return ResponseData.success(sysService.getSysInfo());
     }
 
     @SkipLogin
-    @ApiOperation(value = "initialized user info")
+    @Operation(summary = "initialized user info")
     @PostMapping("/setup")
     public ResponseData<Boolean> setup(@Validated @RequestBody SetupParams setupParams) throws MessagingException, UnsupportedEncodingException {
         return ResponseData.success(sysService.setup(setupParams));

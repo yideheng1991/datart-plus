@@ -22,15 +22,15 @@ import datart.server.base.dto.NlSqlGenerateResult;
 import datart.server.base.dto.ResponseData;
 import datart.server.base.params.NlSqlGenerateParam;
 import datart.server.service.NlSqlService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Api
+@Tag(name = "NlSql")
 @RestController
 @RequestMapping("/views/nl-sql")
 public class NlSqlController extends BaseController {
@@ -41,7 +41,7 @@ public class NlSqlController extends BaseController {
         this.nlSqlService = nlSqlService;
     }
 
-    @ApiOperation(value = "generate SQL from natural language")
+    @Operation(summary = "generate SQL from natural language")
     @PostMapping("/generate")
     public ResponseData<NlSqlGenerateResult> generate(
             @Validated @RequestBody NlSqlGenerateParam param) {

@@ -22,8 +22,8 @@ import datart.server.base.dto.LlmConfigDTO;
 import datart.server.base.dto.ResponseData;
 import datart.server.base.params.LlmConfigParam;
 import datart.server.service.LlmConfigService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,7 +37,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@Api
+@Tag(name = "LlmConfig")
 @RestController
 @RequestMapping("/llm/configs")
 public class LlmConfigController extends BaseController {
@@ -48,21 +48,21 @@ public class LlmConfigController extends BaseController {
         this.llmConfigService = llmConfigService;
     }
 
-    @ApiOperation(value = "list LLM configurations")
+    @Operation(summary = "list LLM configurations")
     @GetMapping
     public ResponseData<List<LlmConfigDTO>> list(@RequestParam String orgId) {
         checkBlank(orgId, "orgId");
         return ResponseData.success(llmConfigService.list(orgId));
     }
 
-    @ApiOperation(value = "create an LLM configuration")
+    @Operation(summary = "create an LLM configuration")
     @PostMapping
     public ResponseData<LlmConfigDTO> create(
             @Validated @RequestBody LlmConfigParam param) {
         return ResponseData.success(llmConfigService.create(param));
     }
 
-    @ApiOperation(value = "update an LLM configuration")
+    @Operation(summary = "update an LLM configuration")
     @PutMapping("/{id}")
     public ResponseData<LlmConfigDTO> update(
             @PathVariable String id,
@@ -71,21 +71,21 @@ public class LlmConfigController extends BaseController {
         return ResponseData.success(llmConfigService.update(id, param));
     }
 
-    @ApiOperation(value = "delete an LLM configuration")
+    @Operation(summary = "delete an LLM configuration")
     @DeleteMapping("/{id}")
     public ResponseData<Boolean> delete(@PathVariable String id) {
         checkBlank(id, "id");
         return ResponseData.success(llmConfigService.delete(id));
     }
 
-    @ApiOperation(value = "activate an LLM configuration")
+    @Operation(summary = "activate an LLM configuration")
     @PostMapping("/{id}/activate")
     public ResponseData<Boolean> activate(@PathVariable String id) {
         checkBlank(id, "id");
         return ResponseData.success(llmConfigService.activate(id));
     }
 
-    @ApiOperation(value = "test an LLM configuration")
+    @Operation(summary = "test an LLM configuration")
     @PostMapping("/{id}/test")
     public ResponseData<Boolean> testConnection(@PathVariable String id) {
         checkBlank(id, "id");

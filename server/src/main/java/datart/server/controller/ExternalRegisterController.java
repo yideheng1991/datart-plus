@@ -23,8 +23,8 @@ import datart.core.base.consts.Const;
 import datart.server.base.dto.ResponseData;
 import datart.server.base.params.UserLoginParam;
 import datart.server.service.ExternalRegisterService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.MediaType;
@@ -36,7 +36,7 @@ import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
 
-@Api
+@Tag(name = "ExternalRegister")
 @Slf4j
 @RestController
 @RequestMapping(value = "/external/register")
@@ -48,7 +48,7 @@ public class ExternalRegisterController extends BaseController {
         this.externalRegisterService = externalRegisterService;
     }
 
-    @ApiOperation(value = "External Login")
+    @Operation(summary = "External Login")
     @SkipLogin
     @PostMapping(value = "ldap", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseData<Object> ldapLogin(UserLoginParam loginParam, HttpServletResponse response) throws MessagingException, UnsupportedEncodingException {

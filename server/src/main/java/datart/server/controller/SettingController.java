@@ -26,15 +26,15 @@ import datart.server.base.params.UserSettingsCreateParam;
 import datart.server.base.params.UserSettingsUpdateParam;
 import datart.server.service.OrgSettingService;
 import datart.server.service.UserSettingService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@Api(value = SettingController.PER_PATH)
+@Tag(name = SettingController.PER_PATH)
 @Slf4j
 @RestController
 @RequestMapping(value = SettingController.PER_PATH)
@@ -51,50 +51,50 @@ public class SettingController extends BaseController {
         this.userSettingService = userSettingService;
     }
 
-    @ApiOperation(value = "list user settings")
+    @Operation(summary = "list user settings")
     @GetMapping(value = "/user")
     public ResponseData<List<UserSettings>> listUserSettings() {
         return ResponseData.success(userSettingService.listUserSettings());
     }
 
-    @ApiOperation(value = "create a user setting")
+    @Operation(summary = "create a user setting")
     @PostMapping(value = "/user")
     public ResponseData<UserSettings> createUserSetting(@Validated @RequestBody UserSettingsCreateParam createParam) {
         return ResponseData.success(userSettingService.create(createParam));
     }
 
-    @ApiOperation(value = "update a user setting")
+    @Operation(summary = "update a user setting")
     @PutMapping(value = "/user/{id}")
     public ResponseData<Boolean> updateUserSetting(@PathVariable String id, @Validated @RequestBody UserSettingsUpdateParam updateParam) {
         return ResponseData.success(userSettingService.update(updateParam));
     }
 
-    @ApiOperation(value = "delete a user setting")
+    @Operation(summary = "delete a user setting")
     @DeleteMapping(value = "/user/{id}")
     public ResponseData<Boolean> deleteUserSetting(@PathVariable String id) {
         return ResponseData.success(userSettingService.delete(id));
     }
 
-    @ApiOperation(value = "list org settings")
+    @Operation(summary = "list org settings")
     @GetMapping(value = "/org/{orgId}")
     public ResponseData<List<OrgSettings>> listOrgSettings(@PathVariable String orgId) {
         checkBlank(orgId, "orgId");
         return ResponseData.success(orgSettingService.listOrgSettings(orgId));
     }
 
-    @ApiOperation(value = "create a org setting")
+    @Operation(summary = "create a org setting")
     @PostMapping(value = "/org")
     public ResponseData<OrgSettings> createOrgSetting(@Validated @RequestBody OrgSettingsCreateParam createParam) {
         return ResponseData.success(orgSettingService.create(createParam));
     }
 
-    @ApiOperation(value = "update a org setting")
+    @Operation(summary = "update a org setting")
     @PutMapping(value = "/org/{id}")
     public ResponseData<Boolean> updateOrgSetting(@PathVariable String id, @Validated @RequestBody OrgSettingsUpdateParam updateParam) {
         return ResponseData.success(orgSettingService.update(updateParam));
     }
 
-    @ApiOperation(value = "delete a org setting")
+    @Operation(summary = "delete a org setting")
     @DeleteMapping(value = "/org/{id}")
     public ResponseData<Boolean> deleteOrgSetting(@PathVariable String id) {
         checkBlank(id, "id");

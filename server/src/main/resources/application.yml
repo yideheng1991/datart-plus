@@ -83,3 +83,12 @@ server:
   compression:
     enabled: true
     mime-types: application/javascript,application/json,application/xml,text/html,text/xml,text/plain,text/css,image/*
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    urls:
+      - url: /v3/api-docs/datart
+        name: datart API

@@ -32,8 +32,8 @@ import datart.server.base.dto.ResponseData;
 import datart.server.base.dto.UserProfile;
 import datart.server.base.params.*;
 import datart.server.service.UserService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -44,7 +44,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 
-@Api
+@Tag(name = "User")
 @Slf4j
 @RestController
 @RequestMapping(value = "/users")
@@ -57,7 +57,7 @@ public class UserController extends BaseController {
     }
 
     @SkipLogin
-    @ApiOperation(value = "User registration")
+    @Operation(summary = "User registration")
     @PostMapping("/register")
     public ResponseData<Boolean> register(@Validated @RequestBody UserRegisterParam user) throws MessagingException, UnsupportedEncodingException {
         if (!Application.canRegister()) {
@@ -66,20 +66,20 @@ public class UserController extends BaseController {
         return ResponseData.success(userService.register(user));
     }
 
-    @ApiOperation(value = "Search users by keyword")
+    @Operation(summary = "Search users by keyword")
     @GetMapping("/search")
     public ResponseData<List<UserBaseInfo>> listUsersByKeyword(@RequestParam("keyword") String keyword) {
         return ResponseData.success(userService.listUsersByKeyword(keyword));
     }
 
-    @ApiOperation(value = "get user detail")
+    @Operation(summary = "get user detail")
     @GetMapping
     public ResponseData<UserProfile> getUserProfile() {
         return ResponseData.success(userService.getUserProfile());
     }
 
     @SkipLogin
-    @ApiOperation(value = "Activate the user")
+    @Operation(summary = "Activate the user")
     @GetMapping(value = "/active")
     public ResponseData<String> activate(@RequestParam("token") String activeToken) {
         checkBlank(activeToken, "activeToken");
@@ -87,27 +87,27 @@ public class UserController extends BaseController {
     }
 
 
-    @ApiOperation(value = "send email")
+    @Operation(summary = "send email")
     @PostMapping(value = "/sendmail")
     @SkipLogin
     public ResponseData<Boolean> sendEmail(String usernameOrEmail) throws UnsupportedEncodingException, MessagingException {
         return ResponseData.success(userService.sendActiveMail(usernameOrEmail));
     }
 
-    @ApiOperation(value = "update user info")
+    @Operation(summary = "update user info")
     @PutMapping
     public ResponseData<Boolean> updateUser(@Validated @RequestBody UserUpdateParam userUpdateParam) {
         return ResponseData.success(userService.update(userUpdateParam));
     }
 
-    @ApiOperation(value = "change user password")
+    @Operation(summary = "change user password")
     @PutMapping("/change/password")
     public ResponseData<Boolean> changePassword(@Validated @RequestBody ChangeUserPasswordParam userPassword) {
         return ResponseData.success(userService.changeUserPassword(userPassword));
     }
 
 
-    @ApiOperation(value = "forget password")
+    @Operation(summary = "forget password")
     @PutMapping("/reset/password")
     @SkipLogin
     public ResponseData<Boolean> resetPassword(@Validated @RequestBody UserResetPasswordParam passwordParam) {
@@ -115,7 +115,7 @@ public class UserController extends BaseController {
     }
 
     @SkipLogin
-    @ApiOperation(value = "User Login")
+    @Operation(summary = "User Login")
     @PostMapping(value = "/login")
     public ResponseData<UserBaseInfo> login(@RequestBody UserLoginParam loginParam,
                                             HttpServletResponse response) {
@@ -128,7 +128,7 @@ public class UserController extends BaseController {
 
     }
 
-    @ApiOperation(value = "User Login")
+    @Operation(summary = "User Login")
     @PostMapping(value = "/forget/password")
     @SkipLogin
     public ResponseData<String> forgetPassword(@RequestParam(required = false) UserIdentityType type,
@@ -136,7 +136,7 @@ public class UserController extends BaseController {
         return ResponseData.success(userService.forgetPassword(type, principal));
     }
 
-    @ApiOperation(value = "add User to organization")
+    @Operation(summary = "add User to organization")
     @PostMapping("/{orgId}/addUser")
     public ResponseData<User> addUser(@PathVariable String orgId, @Validated @RequestBody UserAddParam userAddParam) throws MessagingException, UnsupportedEncodingException {
         if (!Application.getCurrMode().equals(TenantManagementMode.TEAM)) {
@@ -145,7 +145,7 @@ public class UserController extends BaseController {
         return ResponseData.success(userService.addUserToOrg(userAddParam, orgId));
     }
 
-    @ApiOperation(value = "add User to organization")
+    @Operation(summary = "add User to organization")
     @GetMapping("/{orgId}/getUser/{userId}")
     public ResponseData<UserUpdateByIdParam> selectUserByIdFromOrg(@PathVariable String orgId, @PathVariable String userId) throws MessagingException, UnsupportedEncodingException {
         if (!Application.getCurrMode().equals(TenantManagementMode.TEAM)) {
@@ -154,7 +154,7 @@ public class UserController extends BaseController {
         return ResponseData.success(userService.selectUserById(userId, orgId));
     }
 
-    @ApiOperation(value = "update user from organization")
+    @Operation(summary = "update user from organization")
     @PutMapping(value = "/{orgId}/updateUser")
     public ResponseData<Boolean> updateUserFromOrg(@PathVariable String orgId, @Validated @RequestBody UserUpdateByIdParam userUpdateParam) {
         if (!Application.getCurrMode().equals(TenantManagementMode.TEAM)) {
@@ -163,7 +163,7 @@ public class UserController extends BaseController {
         return ResponseData.success(userService.updateUserFromOrg(userUpdateParam, orgId));
     }
 
-    @ApiOperation(value = "User Delete from organization")
+    @Operation(summary = "User Delete from organization")
     @DeleteMapping(value = "/{orgId}/deleteUser")
     public ResponseData<Boolean> deleteUserFromOrg(@PathVariable String orgId, @RequestParam String userId) {
         if (!Application.getCurrMode().equals(TenantManagementMode.TEAM)) {

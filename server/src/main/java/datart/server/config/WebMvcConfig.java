@@ -108,14 +108,28 @@ public class WebMvcConfig implements WebMvcConfigurer {
     }
 
     @Override
-    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-        FastJsonHttpMessageConverter fastConverter = new FastJsonHttpMessageConverter();
+    public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
         FastJsonConfig fastJsonConfig = new FastJsonConfig();
         fastJsonConfig.setSerializerFeatures(SerializerFeature.QuoteFieldNames,
                 SerializerFeature.WriteEnumUsingToString,
                 SerializerFeature.WriteMapNullValue,
                 SerializerFeature.WriteDateUseDateFormat,
                 SerializerFeature.DisableCircularReferenceDetect);
+
+        // Custom FastJson converter that lets Jackson/String/ByteArray handle springdoc responses
+        FastJsonHttpMessageConverter fastConverter = new FastJsonHttpMessageConverter() {
+            @Override
+            protected boolean supports(Class<?> clazz) {
+                if (clazz == String.class || clazz == byte[].class) {
+                    return false;
+                }
+                String name = clazz.getName();
+                if (name.startsWith("org.springdoc") || name.startsWith("io.swagger")) {
+                    return false;
+                }
+                return super.supports(clazz);
+            }
+        };
         fastConverter.setFastJsonConfig(fastJsonConfig);
         converters.add(0, fastConverter);
     }

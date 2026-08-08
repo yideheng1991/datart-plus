@@ -24,7 +24,7 @@ import datart.server.base.dto.ResponseData;
 import datart.server.base.dto.ScheduleBaseInfo;
 import datart.server.base.params.*;
 import datart.server.service.ScheduleService;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
 import org.quartz.SchedulerException;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -41,7 +41,7 @@ public class ScheduleController extends BaseController {
         this.scheduleService = scheduleService;
     }
 
-    @ApiOperation(value = "check schedule name")
+    @Operation(summary = "check schedule name")
     @PostMapping(value = "/check/name")
     public ResponseData<Boolean> checkName(@Validated @RequestBody CheckNameParam param) {
         Schedule schedule = new Schedule();
@@ -50,25 +50,25 @@ public class ScheduleController extends BaseController {
         return ResponseData.success(scheduleService.checkUnique(schedule));
     }
 
-    @ApiOperation(value = "list schedules")
+    @Operation(summary = "list schedules")
     @GetMapping
     public ResponseData<List<ScheduleBaseInfo>> listSchedules(String orgId) {
         return ResponseData.success(scheduleService.listSchedules(orgId));
     }
 
-    @ApiOperation(value = "list archived schedules")
+    @Operation(summary = "list archived schedules")
     @GetMapping("/archived")
     public ResponseData<List<ScheduleBaseInfo>> listArchivedSchedules(String orgId) {
         return ResponseData.success(scheduleService.listArchivedSchedules(orgId));
     }
 
-    @ApiOperation(value = "create a schedule")
+    @Operation(summary = "create a schedule")
     @PostMapping
     public ResponseData<Schedule> createSchedule(@Validated @RequestBody ScheduleCreateParam createParam) {
         return ResponseData.success(scheduleService.create(createParam));
     }
 
-    @ApiOperation(value = "get a schedule")
+    @Operation(summary = "get a schedule")
     @GetMapping(value = "/{scheduleId}")
     public ResponseData<Schedule> getSchedule(@PathVariable String scheduleId) {
         checkBlank(scheduleId, "scheduleId");
@@ -76,14 +76,14 @@ public class ScheduleController extends BaseController {
     }
 
 
-    @ApiOperation(value = "update a schedule")
+    @Operation(summary = "update a schedule")
     @PutMapping(value = "/{scheduleId}")
     public ResponseData<Boolean> updateSchedule(@PathVariable String scheduleId, @Validated @RequestBody ScheduleUpdateParam updateParam) {
         updateParam.setId(scheduleId);
         return ResponseData.success(scheduleService.update(updateParam));
     }
 
-    @ApiOperation(value = "update a schedule base info")
+    @Operation(summary = "update a schedule base info")
     @PutMapping(value = "/{scheduleId}/base")
     public ResponseData<Boolean> updateScheduleBaseInfo(@PathVariable String scheduleId,
                                                         @Validated @RequestBody ScheduleBaseUpdateParam updateParam) {
@@ -91,34 +91,34 @@ public class ScheduleController extends BaseController {
         return ResponseData.success(scheduleService.updateBase(updateParam));
     }
 
-    @ApiOperation(value = "delete a schedule")
+    @Operation(summary = "delete a schedule")
     @DeleteMapping(value = "/{scheduleId}")
     public ResponseData<Boolean> deleteSchedule(@PathVariable String scheduleId, @RequestParam boolean archive) {
         return ResponseData.success(scheduleService.delete(scheduleId, archive, true));
     }
 
-    @ApiOperation(value = "execute a schedule")
+    @Operation(summary = "execute a schedule")
     @PostMapping(value = "/execute/{scheduleId}")
     public ResponseData<Boolean> execute(@PathVariable String scheduleId) {
         checkBlank(scheduleId, "scheduleId");
         return ResponseData.success(scheduleService.execute(scheduleId));
     }
 
-    @ApiOperation(value = "start a schedule")
+    @Operation(summary = "start a schedule")
     @PutMapping(value = "/start/{scheduleId}")
     public ResponseData<Boolean> start(@PathVariable String scheduleId) throws SchedulerException {
         checkBlank(scheduleId, "scheduleId");
         return ResponseData.success(scheduleService.start(scheduleId));
     }
 
-    @ApiOperation(value = "stop a schedule")
+    @Operation(summary = "stop a schedule")
     @PutMapping(value = "/stop/{scheduleId}")
     public ResponseData<Boolean> stop(@PathVariable String scheduleId) throws SchedulerException {
         checkBlank(scheduleId, "scheduleId");
         return ResponseData.success(scheduleService.stop(scheduleId));
     }
 
-    @ApiOperation(value = "get schedule logs")
+    @Operation(summary = "get schedule logs")
     @GetMapping(value = "/logs/{scheduleId}")
     public ResponseData<List<ScheduleLog>> getScheduleLogs(@PathVariable String scheduleId,
                                                            @RequestParam int count) {
@@ -126,7 +126,7 @@ public class ScheduleController extends BaseController {
         return ResponseData.success(scheduleService.getScheduleLogs(scheduleId, count));
     }
 
-    @ApiOperation(value = "unarchive schedule")
+    @Operation(summary = "unarchive schedule")
     @PutMapping(value = "/unarchive/{scheduleId}")
     public ResponseData<Boolean> unarchiveSchedule(@PathVariable String scheduleId,
                                                    @RequestParam String name,

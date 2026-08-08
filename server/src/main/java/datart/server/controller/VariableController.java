@@ -27,8 +27,8 @@ import datart.server.base.params.VariableCreateParam;
 import datart.server.base.params.VariableRelUpdateParam;
 import datart.server.base.params.VariableUpdateParam;
 import datart.server.service.VariableService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -37,7 +37,7 @@ import java.util.List;
 import java.util.Set;
 
 
-@Api
+@Tag(name = "Variable")
 @Slf4j
 @RestController
 @RequestMapping(value = "/variables")
@@ -49,49 +49,49 @@ public class VariableController extends BaseController {
         this.variableService = variableService;
     }
 
-    @ApiOperation(value = "check variable name")
+    @Operation(summary = "check variable name")
     @PostMapping(value = "/check/name")
     public ResponseData<Boolean> checkName(@Validated @RequestBody CheckNameParam param) {
         return ResponseData.success(variableService.checkUnique(param.getOrgId(), null, param.getName()));
     }
 
-    @ApiOperation(value = "list org variables")
+    @Operation(summary = "list org variables")
     @GetMapping(value = "/org")
     public ResponseData<List<Variable>> listOrgVariables(@RequestParam String orgId) {
         return ResponseData.success(variableService.listOrgVariables(orgId));
     }
 
-    @ApiOperation(value = "list view variables")
+    @Operation(summary = "list view variables")
     @GetMapping(value = "/view")
     public ResponseData<List<Variable>> listViewVariables(@RequestParam String viewId) {
         return ResponseData.success(variableService.listByView(viewId));
     }
 
-    @ApiOperation(value = "create a variable")
+    @Operation(summary = "create a variable")
     @PostMapping()
     public ResponseData<Variable> create(@RequestBody VariableCreateParam createParam) {
         return ResponseData.success(variableService.create(createParam));
     }
 
-    @ApiOperation(value = "delete variables")
+    @Operation(summary = "delete variables")
     @DeleteMapping()
     public ResponseData<Boolean> deleteVariables(@RequestParam Set<String> variables) {
         return ResponseData.success(variableService.deleteByIds(variables));
     }
 
-    @ApiOperation(value = "update variables")
+    @Operation(summary = "update variables")
     @PutMapping()
     public ResponseData<Boolean> updateVariables(@RequestBody List<VariableUpdateParam> updateParams) {
         return ResponseData.success(variableService.batchUpdate(updateParams));
     }
 
-    @ApiOperation(value = "update variables rels")
+    @Operation(summary = "update variables rels")
     @PutMapping(value = "/rel")
     public ResponseData<Boolean> updateVariableRel(@RequestBody VariableRelUpdateParam updateParam) {
         return ResponseData.success(variableService.updateRels(updateParam));
     }
 
-    @ApiOperation(value = "list subject variable values")
+    @Operation(summary = "list subject variable values")
     @GetMapping(value = "/subject/value")
     public ResponseData<List<RelVariableSubject>> getSubjectVariableValues(@RequestParam String orgId,
                                                                            @RequestParam SubjectType subjectType,
@@ -99,7 +99,7 @@ public class VariableController extends BaseController {
         return ResponseData.success(variableService.listSubjectValues(subjectType, subjectId, orgId));
     }
 
-    @ApiOperation(value = "list variable values")
+    @Operation(summary = "list variable values")
     @GetMapping(value = "/value")
     public ResponseData<List<RelVariableSubject>> getSubjectVariableValues(@RequestParam String variableId) {
         return ResponseData.success(variableService.listVariableValues(variableId));

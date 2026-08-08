@@ -27,7 +27,7 @@ import datart.server.base.dto.ResponseData;
 import datart.server.base.dto.ShareInfo;
 import datart.server.base.params.*;
 import datart.server.service.ShareService;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
 import org.apache.tomcat.util.http.fileupload.util.Streams;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -52,13 +52,13 @@ public class ShareController extends BaseController {
         this.shareService = shareService;
     }
 
-    @ApiOperation(value = "create a share")
+    @Operation(summary = "create a share")
     @PostMapping
     public ResponseData<ShareToken> create(@Validated @RequestBody ShareCreateParam createParam) {
         return ResponseData.success(shareService.createShare(createParam));
     }
 
-    @ApiOperation(value = "update a share")
+    @Operation(summary = "update a share")
     @PutMapping(value = "{shareId}")
     public ResponseData<ShareInfo> update(
             @PathVariable String shareId,
@@ -67,20 +67,20 @@ public class ShareController extends BaseController {
         return ResponseData.success(shareService.updateShare(updateParam));
     }
 
-    @ApiOperation(value = "delete a share")
+    @Operation(summary = "delete a share")
     @DeleteMapping(value = "{shareId}")
     public ResponseData<Boolean> delete(@PathVariable String shareId) {
         return ResponseData.success(shareService.delete(shareId, false));
     }
 
-    @ApiOperation(value = "list share")
+    @Operation(summary = "list share")
     @GetMapping(value = "{vizId}")
     public ResponseData<List<ShareInfo>> list(@PathVariable String vizId) {
         return ResponseData.success(shareService.listShare(vizId));
     }
 
 
-    @ApiOperation(value = "get viz detail")
+    @Operation(summary = "get viz detail")
     @PostMapping("{shareId}/viz")
     @SkipLogin
     public ResponseData<ShareVizDetail> vizDetail(@PathVariable String shareId,
@@ -90,7 +90,7 @@ public class ShareController extends BaseController {
     }
 
 
-    @ApiOperation(value = "support std functions")
+    @Operation(summary = "support std functions")
     @PostMapping("/function/support/{sourceId}")
     @SkipLogin
     public ResponseData<Set<StdSqlOperator>> supportFunctions(@PathVariable String sourceId,
@@ -98,7 +98,7 @@ public class ShareController extends BaseController {
         return ResponseData.success(shareService.supportedStdFunctions(executeToken, sourceId));
     }
 
-    @ApiOperation(value = "execute with share token")
+    @Operation(summary = "execute with share token")
     @PostMapping("/execute")
     @SkipLogin
     public ResponseData<Dataframe> execute(@RequestParam String executeToken,
@@ -106,7 +106,7 @@ public class ShareController extends BaseController {
         return ResponseData.success(shareService.execute(ShareToken.create(executeToken), executeParam));
     }
 
-    @ApiOperation(value = "create a download task")
+    @Operation(summary = "create a download task")
     @PostMapping("/download")
     @SkipLogin
     public ResponseData<Download> createDownload(@RequestParam(required = false) String password,
@@ -115,7 +115,7 @@ public class ShareController extends BaseController {
         return ResponseData.success(shareService.createDownload(clientId, downloadCreateParam));
     }
 
-    @ApiOperation(value = "get download task")
+    @Operation(summary = "get download task")
     @GetMapping("/download/task")
     @SkipLogin
     public ResponseData<List<Download>> downloadList(@RequestParam String shareToken,
@@ -123,7 +123,7 @@ public class ShareController extends BaseController {
         return ResponseData.success(shareService.listDownloadTask(ShareToken.create(shareToken), clientId));
     }
 
-    @ApiOperation(value = "download file")
+    @Operation(summary = "download file")
     @GetMapping("/download")
     @SkipLogin
     public void downloadFile(@RequestParam String shareToken,

@@ -3,8 +3,8 @@ package datart.server.controller;
 import datart.core.base.annotations.SkipLogin;
 import datart.server.base.dto.ResponseData;
 import datart.server.service.UserService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -21,7 +21,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-@Api
+@Tag(name = "ThirdPartyAuth")
 @Slf4j
 @RestController
 @RequestMapping(value = "/tpa")
@@ -35,7 +35,7 @@ public class ThirdPartyAuthController extends BaseController {
 
     private ClientRegistrationRepository clientRegistrationRepository;
 
-    @ApiOperation(value = "Get Oauth2 clents")
+    @Operation(summary = "Get Oauth2 clents")
     @GetMapping(value = "getOauth2Clients", consumes = MediaType.ALL_VALUE, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @SkipLogin
     public ResponseData<List<HashMap<String, String>>> getOauth2Clients(HttpServletRequest request) {
