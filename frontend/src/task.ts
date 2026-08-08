@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Datart
  *
  * Copyright 2021
@@ -16,9 +16,9 @@
  * limitations under the License.
  */
 
-// organize-imports-ignore  polyfill/stable must in the first
-import 'react-app-polyfill/stable';
-import 'core-js/features/string/replace-all';
+// organize-imports-ignore
+// NOTE: polyfill 已移除，由构建脚本 (build-task.js) 注入最小化 polyfill
+// 运行环境是 Java Nashorn (Java 8+)，不需要 react-app-polyfill/core-js 等浏览器级 polyfill
 import { migrateWidgets } from 'app/migration/BoardConfig/migrateWidgets';
 import { ChartDataRequestBuilder } from 'app/models/ChartDataRequestBuilder';
 import {
