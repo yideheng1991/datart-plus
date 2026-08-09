@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Datart
  *
  * Copyright 2021
@@ -39,7 +39,7 @@ import {
 const initBorderWidgetTpl = () => {
   return {
     label: 'borderWidget.borderGroup',
-    key: 'borderGroup',
+    key: 'borderWidgetGroup',
     comType: ChartStyleSectionComponentType.GROUP,
     rows: [
       {
@@ -286,7 +286,7 @@ export const widgetToolkit: BorderWidgetToolKit = {
     const [type, firstColor, secondColor, title, titleWidth, titleFont] =
       getJsonConfigs(
         props,
-        ['borderGroup'],
+        ['borderWidgeGroup'],
         [
           'type',
           'firstColor',
