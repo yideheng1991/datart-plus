@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Datart
  *
  * Copyright 2021
@@ -23,7 +23,7 @@ import useStateModal, { StateModalSize } from 'app/hooks/useStateModal';
 import { ChartStyleConfig } from 'app/types/ChartConfig';
 import { FC, memo } from 'react';
 import styled from 'styled-components';
-import { SPACE_TIMES } from 'styles/StyleConstants';
+import { BORDER_RADIUS, SPACE_SM, SPACE_TIMES, SPACE_XS } from 'styles/StyleConstants';
 import { CollectionLayout } from '../Layout';
 import { ItemLayoutProps } from '../types';
 import { itemLayoutComparer } from '../utils';
@@ -105,13 +105,52 @@ const CheckboxModal: FC<ItemLayoutProps<ChartStyleConfig>> = memo(
 export default CheckboxModal;
 
 const StyledCheckboxModal = styled(Button)`
-  display: flex;
-  align-items: center;
-  width: 100%;
-  height: ${SPACE_TIMES(20)};
+  && {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    min-height: ${SPACE_TIMES(20)};
+    padding: ${SPACE_SM} ${SPACE_TIMES(5)};
+    margin-bottom: ${SPACE_TIMES(0)};
+    overflow: hidden;
+    background-color: ${p => p.theme.componentBackground};
+    border: 1px solid ${p => p.theme.borderColorSplit};
+    border-radius: ${BORDER_RADIUS};
+    box-shadow: none;
 
-  & > button {
-    margin-right: ${SPACE_TIMES(4)};
-    color: ${p => p.theme.textColor};
+    & > .ant-checkbox-wrapper {
+      flex-shrink: 0;
+      margin-right: ${SPACE_TIMES(3)};
+    }
+
+    & > button {
+      flex: 1;
+      min-width: 0;
+      padding: 0;
+      margin-right: ${SPACE_TIMES(3)};
+      overflow: hidden;
+      color: ${p => p.theme.textColor};
+      text-align: left;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      &:hover {
+        color: ${p => p.theme.primary};
+      }
+    }
+
+    & > span:last-of-type,
+    & > *:last-child:not(.ant-modal-root):not(.ant-tooltip) {
+      display: inline-flex;
+      flex-shrink: 0;
+      align-items: center;
+      margin-left: auto;
+    }
+
+    &:hover {
+      background-color: ${p => p.theme.emphasisBackground};
+      border-color: ${p => p.theme.borderColorEmphasis};
+    }
   }
 `;

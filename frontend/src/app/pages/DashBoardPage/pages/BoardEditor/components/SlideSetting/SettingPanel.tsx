@@ -1,4 +1,4 @@
-﻿import { ReactElement } from 'react';
+import { ReactElement } from 'react';
 import styled from 'styled-components';
 import { SPACE_LG, SPACE_MD } from 'styles/StyleConstants';
 import { stopPPG } from 'utils/utils';
@@ -30,7 +30,6 @@ const Wrapper = styled.div`
     flex: 1;
     flex-direction: column;
     min-height: 0;
-    overflow-y: auto;
   }
 `;
 
