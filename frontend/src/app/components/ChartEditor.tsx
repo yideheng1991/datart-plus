@@ -144,6 +144,7 @@ export const ChartEditor: FC<ChartEditorProps> = ({
     showSaveForm: saveFormContextValue.showSaveForm,
   });
   const tg = useI18NPrefix('global');
+  const tChart = useI18NPrefix();
 
   const expensiveQuery = useMemo(() => {
     try {
@@ -429,7 +430,7 @@ export const ChartEditor: FC<ChartEditorProps> = ({
 
     const dataChart: DataChart = {
       id: dataChartId,
-      name: backendChart?.name || '',
+      name: backendChart?.name || tChart(chart?.meta?.name || '') || '',
       viewId: dataview?.id || '',
       orgId: orgId,
       config: dataChartConfig,
