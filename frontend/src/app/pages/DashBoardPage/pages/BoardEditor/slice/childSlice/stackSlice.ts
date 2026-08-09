@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Datart
  *
  * Copyright 2021
@@ -572,6 +572,61 @@ export const editBoardStackSlice = createSlice({
         state.widgetRecord[id].config.content = mediaWidgetContent;
       }
     },
+
+    /* 批量样式更新 — 基于 key 更新，兼容不同 schema 结构 */
+    batchUpdateWidgetStyle(
+      state,
+      action: PayloadAction<{
+        widgetIds: string[];
+        updates: Array<{
+          key: string; // 配置项的唯一标识
+          value: any;
+        }>;
+      }>,
+    ) {
+      const { widgetIds, updates } = action.payload;
+
+      widgetIds.forEach(widgetId => {
+        const widget = state.widgetRecord[widgetId];
+        if (!widget?.config?.customConfig?.props) return;
+
+        const newProps = applyStyleUpdatesByKey(
+          widget.config.customConfig.props,
+          updates,
+        );
+
+        widget.config.customConfig.props = newProps;
+      });
+    },
   },
   extraReducers: builder => {},
 });
+
+/**
+ * 基于 key 批量更新样式配置（递归遍历，immutable）
+ * 只修改匹配 key 的项，不存在的项保持不变
+ */
+function applyStyleUpdatesByKey(
+  props: ChartStyleConfig[],
+  updates: Array<{ key: string; value: any }>,
+): ChartStyleConfig[] {
+  const updateMap = new Map(updates.map(u => [u.key, u.value]));
+
+  return props.map(config => {
+    if (config.comType === 'group' && config.rows) {
+      return {
+        ...config,
+        rows: applyStyleUpdatesByKey(config.rows, updates),
+      };
+    }
+
+    if (updateMap.has(config.key)) {
+      return {
+        ...config,
+        value: updateMap.get(config.key),
+      };
+    }
+
+    return config;
+  });
+}

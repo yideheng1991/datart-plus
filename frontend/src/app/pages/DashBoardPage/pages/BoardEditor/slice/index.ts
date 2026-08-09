@@ -1,4 +1,4 @@
-﻿import { combineReducers, PayloadAction } from '@reduxjs/toolkit';
+import { combineReducers, PayloadAction } from '@reduxjs/toolkit';
 import { ChartEditorProps } from 'app/components/ChartEditor';
 import { BOARD_UNDO } from 'app/pages/DashBoardPage/constants';
 import {
@@ -360,6 +360,7 @@ const filterActions = [
   editBoardStackActions.toggleLockWidget,
   editBoardStackActions.updateBoardConfigByKey,
   editBoardStackActions.updateWidgetStyleConfigByPath,
+  editBoardStackActions.batchUpdateWidgetStyle,
   editBoardStackActions.changeFreeWidgetRect,
   editBoardStackActions.batchUpdateWidgetsRect,
   editBoardStackActions.dropWidgetLayer,

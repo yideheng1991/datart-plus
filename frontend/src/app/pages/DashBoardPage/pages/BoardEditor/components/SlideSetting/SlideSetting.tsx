@@ -16,24 +16,38 @@
  * limitations under the License.
  */
 import { WidgetWrapProvider } from 'app/pages/DashBoardPage/components/WidgetProvider/WidgetWrapProvider';
+import { Widget } from 'app/pages/DashBoardPage/types/widgetTypes';
 import { FC, memo, useContext, useMemo } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { BoardContext } from '../../../../components/BoardProvider/BoardProvider';
-import { selectSelectedIds } from '../../slice/selectors';
+import { selectAllWidgetMap, selectSelectedIds } from '../../slice/selectors';
 import { BoardConfigPanel } from './BoardConfigPanel';
+import { MultiStylePanel } from './MultiStylePanel';
 import WidgetSetting from './WidgetSetting';
 
 export const SlideSetting: FC<{}> = memo(() => {
   const { boardId } = useContext(BoardContext);
   const selectedIds = useSelector(selectSelectedIds);
-  const { type, selectedIdArr } = useMemo(() => {
+  const allWidgetMap = useSelector(selectAllWidgetMap) as Record<string, Widget>;
+  const { type, selectedIdArr, multiWidgets } = useMemo(() => {
     const selectedIdArr = selectedIds ? selectedIds.split(',') : [];
-    const type = selectedIdArr.length === 1 ? 'widget' : 'board';
-    return { type, selectedIdArr };
-  }, [selectedIds]);
+    const type =
+      selectedIdArr.length === 0
+        ? 'board'
+        : selectedIdArr.length === 1
+        ? 'widget'
+        : 'multi';
+    const multiWidgets =
+      type === 'multi'
+        ? selectedIdArr
+            .map(id => allWidgetMap[id])
+            .filter(Boolean)
+        : [];
+    return { type, selectedIdArr, multiWidgets };
+  }, [selectedIds, allWidgetMap]);
   return (
-    <Wrapper>
+    <Wrapper onClick={e => e.stopPropagation()}>
       {type === 'board' && <BoardConfigPanel />}
       {type === 'widget' && (
         <WidgetWrapProvider
@@ -44,6 +58,7 @@ export const SlideSetting: FC<{}> = memo(() => {
           <WidgetSetting boardId={boardId} />
         </WidgetWrapProvider>
       )}
+      {type === 'multi' && <MultiStylePanel selectedWidgets={multiWidgets} />}
     </Wrapper>
   );
 });

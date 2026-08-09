@@ -993,6 +993,7 @@
         "button": "按钮"
       },
       "setting": {
+        "select": "请选择 ...",
         "interaction": "交互",
         "setting": "设置",
         "board": "面板",
@@ -1042,6 +1043,8 @@
         "delPagesTip": "确认删除所有选中的故事页",
         "delPageTip": "确认删除此故事页？",
         "enterHere": "请输入",
+        "batchStyle": "批量样式",
+        "selected": "已选中",
         "storyName": "名称",
         "storyDescription": "描述",
         "format": "格式",

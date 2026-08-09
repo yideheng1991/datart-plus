@@ -27,6 +27,7 @@ import { updateBy } from 'app/utils/mutation';
 import { FC, memo, useContext, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
+import { SPACE_LG } from 'styles/StyleConstants';
 import { editBoardStackActions } from '../../slice';
 import { showRectAction } from '../../slice/actions/actions';
 import { selectSortAllWidgets } from '../../slice/selectors';
@@ -160,6 +161,10 @@ export const WidgetSetting: FC<{ boardId?: string }> = memo(({ boardId }) => {
 export default WidgetSetting;
 
 const StyledWidgetSetting = styled(Tabs)`
+  .ant-tabs-nav {
+    padding: 0 ${SPACE_LG};
+  }
+
   .ant-tabs-content-holder {
     overflow: auto;
   }

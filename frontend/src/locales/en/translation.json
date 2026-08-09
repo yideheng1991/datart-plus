@@ -995,6 +995,7 @@
         "button": "Button"
       },
       "setting": {
+        "select": "Select ...",
         "interaction": "Interaction",
         "setting": "Setting",
         "board": "Board",
@@ -1044,6 +1045,8 @@
         "delPagesTip": "Confirm to delete all selected story pages?",
         "delPageTip": "Confirm to delete this story page?",
         "enterHere": "Enter here",
+        "batchStyle": "Batch Style",
+        "selected": "Selected",
         "storyName": "Name",
         "storyDescription": "Description",
         "format": "Format",
