@@ -28,7 +28,7 @@ describe('ChartIFrameContainer Test', () => {
       <ChartIFrameContainer
         dataset={[]}
         chart={{ useIFrame: true }}
-        config={{}}
+        config={{ datas: [{ rows: [{}] }] }}
       />,
     );
     expect(container.querySelector('iframe')).not.toBeNull();
@@ -39,7 +39,7 @@ describe('ChartIFrameContainer Test', () => {
       <ChartIFrameContainer
         dataset={[]}
         chart={{ useIFrame: false }}
-        config={{}}
+        config={{ datas: [{ rows: [{}] }] }}
       />,
     );
     expect(container.querySelector('iframe')).toBeNull();

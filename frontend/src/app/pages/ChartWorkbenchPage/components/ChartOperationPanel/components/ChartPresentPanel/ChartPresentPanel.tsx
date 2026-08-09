@@ -91,8 +91,17 @@ const ChartPresentPanel: FC<{
       });
     });
 
+    const hasAnyConfiguredField = (config?: ChartConfig): boolean => {
+      return Boolean(
+        config?.datas?.some(section => (section?.rows?.length ?? 0) > 0),
+      );
+    };
+
     const renderGraph = (containerId, chart?: IChart, chartConfig?, style?) => {
-      if (!chart?.isMatchRequirement(chartConfig)) {
+      if (
+        !chart?.isMatchRequirement(chartConfig) ||
+        !hasAnyConfiguredField(chartConfig)
+      ) {
         return <Chart404Graph chart={chart} chartConfig={chartConfig} />;
       }
       chartConfig = setRuntimeDateLevelFieldsInChartConfig(chartConfig);

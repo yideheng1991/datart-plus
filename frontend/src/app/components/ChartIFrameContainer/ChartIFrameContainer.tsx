@@ -29,8 +29,15 @@ import { setRuntimeDateLevelFieldsInChartConfig } from 'app/utils/chartHelper';
 import { FC, memo } from 'react';
 import styled, { StyleSheetManager } from 'styled-components';
 import { LEVEL_1000 } from 'styles/StyleConstants';
+import Chart404Graph from 'app/pages/ChartWorkbenchPage/components/ChartOperationPanel/components/ChartPresentPanel/components/Chart404Graph';
 import { isEmpty } from 'utils/object';
 import ChartIFrameLifecycleAdapter from './ChartIFrameLifecycleAdapter';
+
+const hasAnyConfiguredField = (config?: ChartConfig): boolean => {
+  return Boolean(
+    config?.datas?.some(section => (section?.rows?.length ?? 0) > 0),
+  );
+};
 
 const ChartIFrameContainer: FC<{
   dataset: any;
@@ -61,6 +68,10 @@ const ChartIFrameContainer: FC<{
   };
 
   const render = () => {
+    if (!hasAnyConfiguredField(config)) {
+      return <Chart404Graph chart={props.chart} chartConfig={config} />;
+    }
+
     if (!props?.chart?.useIFrame) {
       return (
         <div

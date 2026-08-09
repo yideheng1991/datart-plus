@@ -22,7 +22,8 @@ import { ChartConfig } from 'app/types/ChartConfig';
 import { reachLowerBoundCount } from 'app/utils/internalChartHelper';
 import { FC, memo } from 'react';
 import styled from 'styled-components';
-import { BORDER_RADIUS, SPACE_TIMES } from 'styles/StyleConstants';
+import { BORDER_RADIUS, SPACE_TIMES, SPACE_UNIT } from 'styles/StyleConstants';
+import ChartIcon from '../../ChartGraphIcon/ChartIcon';
 
 const Chart404Graph: FC<{
   chart?: IChart;
@@ -49,7 +50,11 @@ const Chart404Graph: FC<{
   return (
     <StyledChart404Graph>
       <StyledChartIcon>
-        <i className={chart?.meta?.icon} />
+        <ChartIcon
+          iconStr={chart?.meta?.icon}
+          isMatchRequirement={false}
+          size={SPACE_UNIT * 60}
+        />
       </StyledChartIcon>
       {renderChartLimitation()}
     </StyledChart404Graph>
@@ -65,15 +70,10 @@ const StyledChart404Graph = styled.div`
   justify-content: center;
   height: 100%;
   color: ${p => p.theme.normal};
-  opacity: 0.3;
+  opacity: 0.6;
 `;
 
 const StyledChartIcon = styled.div`
   margin-bottom: ${SPACE_TIMES(10)};
   border-radius: ${BORDER_RADIUS};
-
-  > i {
-    font-size: ${SPACE_TIMES(60)};
-    line-height: ${SPACE_TIMES(60)};
-  }
 `;

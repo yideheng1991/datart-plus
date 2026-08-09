@@ -30,6 +30,7 @@ import {
   FONT_SIZE_ICON_MD,
   SPACE_TIMES,
 } from 'styles/StyleConstants';
+import ChartIcon from './ChartGraphIcon/ChartIcon';
 
 const ChartGraphIcon: FC<{
   chart?: IChart;
@@ -49,22 +50,6 @@ const ChartGraphIcon: FC<{
     },
     [onChartChange],
   );
-
-  const renderIcon = ({
-    ...args
-  }: {
-    iconStr;
-    isMatchRequirement;
-    isActive;
-  }) => {
-    if (/^<svg/.test(args?.iconStr) || /^<\?xml/.test(args?.iconStr)) {
-      return <SVGImageRender {...args} />;
-    }
-    if (/svg\+xml;base64/.test(args?.iconStr)) {
-      return <Base64ImageRender {...args} />;
-    }
-    return <SVGFontIconRender {...args} />;
-  };
 
   const renderChartRequirements = requirements => {
     const lintMessages = requirements?.flatMap((requirement, index) => {
@@ -114,49 +99,17 @@ const ChartGraphIcon: FC<{
         })}
         onClick={handleChartChange(chart?.meta?.id)}
       >
-        {renderIcon({
-          iconStr: chart?.meta?.icon,
-          isMatchRequirement,
-          isActive,
-        })}
+        <ChartIcon
+          iconStr={chart?.meta?.icon}
+          isMatchRequirement={isMatchRequirement}
+          isActive={isActive}
+        />
       </StyledChartIconWrapper>
     </Tooltip>
   );
 });
 
 export default ChartGraphIcon;
-
-const SVGFontIconRender = ({ iconStr, isMatchRequirement }) => {
-  return (
-    <StyledSVGFontIcon
-      isMatchRequirement={isMatchRequirement}
-      className={`iconfont icon-${!iconStr ? 'chart' : iconStr}`}
-    />
-  );
-};
-
-const SVGImageRender = ({ iconStr, isMatchRequirement, isActive }) => {
-  const encodedStr = window.encodeURIComponent(iconStr);
-  return (
-    <StyledInlineSVGIcon
-      alt="svg icon"
-      style={{ height: FONT_SIZE_ICON_MD, width: FONT_SIZE_ICON_MD }}
-      src={`data:image/svg+xml;utf8,${encodedStr}`}
-      isMatchRequirement={isMatchRequirement}
-    />
-  );
-};
-
-const Base64ImageRender = ({ iconStr, isMatchRequirement, isActive }) => {
-  return (
-    <StyledBase64Icon
-      alt="svg icon"
-      style={{ height: FONT_SIZE_ICON_MD, width: FONT_SIZE_ICON_MD }}
-      src={iconStr}
-      isMatchRequirement={isMatchRequirement}
-    />
-  );
-};
 
 const StyledChartIconWrapper = styled(IW)`
   margin: ${SPACE_TIMES(0.5)};
@@ -168,20 +121,4 @@ const StyledChartIconWrapper = styled(IW)`
     color: ${p => p.theme.componentBackground};
     background-color: ${p => p.theme.primary};
   }
-`;
-
-const StyledInlineSVGIcon = styled.img<{ isMatchRequirement?: boolean }>`
-  opacity: ${p => (p.isMatchRequirement ? 1 : 0.4)};
-`;
-
-const StyledSVGFontIcon = styled.i<{ isMatchRequirement?: boolean }>`
-  opacity: ${p => (p.isMatchRequirement ? 1 : 0.4)};
-`;
-
-const StyledBase64Icon = styled.i<{
-  isMatchRequirement?: boolean;
-  alt: any;
-  src: any;
-}>`
-  opacity: ${p => (p.isMatchRequirement ? 1 : 0.4)};
 `;
