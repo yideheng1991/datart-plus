@@ -68,18 +68,26 @@ export const TreeSelectController: React.FC<TreeControllerFormProps> = memo(
         multiple
         bordered={false}
         treeData={treeData}
-        dropdownStyle={{ height: '300px', overflowY: 'auto' }}
         dropdownRender={() => {
           return (
-            <Tree
-              checkedKeys={value}
-              onCheck={handleonChange}
-              checkable
-              titleRender={node => {
-                return node.title || node.key;
+            <div
+              style={{ height: '300px', overflowY: 'auto' }}
+              onMouseDown={e => {
+                if (e.target === e.currentTarget) {
+                  e.stopPropagation();
+                }
               }}
-              treeData={treeData}
-            />
+            >
+              <Tree
+                checkedKeys={value}
+                onCheck={handleonChange}
+                checkable
+                titleRender={node => {
+                  return node.title || node.key;
+                }}
+                treeData={treeData}
+              />
+            </div>
           );
         }}
       />
