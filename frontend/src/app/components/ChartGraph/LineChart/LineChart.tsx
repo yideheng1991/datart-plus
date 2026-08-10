@@ -16,6 +16,7 @@
  * limitations under the License.
  */
 
+import { ChartCategory } from 'app/types/ChartMetadata';
 import BasicLineChart from '../BasicLineChart';
 
 class LineChart extends BasicLineChart {
@@ -24,6 +25,7 @@ class LineChart extends BasicLineChart {
       id: 'line-chart',
       name: 'viz.palette.graph.names.lineChart',
       icon: 'fsux_zhexiantu',
+      category: ChartCategory.Line,
     });
   }
 }

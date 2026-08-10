@@ -54,6 +54,8 @@ class BasicRadarChart extends Chart {
       props?.id || 'radar',
       props?.name || 'viz.palette.graph.names.radarChart',
       props?.icon || 'radar',
+      props?.requirements,
+      props?.category,
     );
     this.meta.requirements = props?.requirements || [
       {

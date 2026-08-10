@@ -63,6 +63,8 @@ class BasicPieChart extends Chart {
       props?.id || 'pie',
       props?.name || 'viz.palette.graph.names.pieChart',
       props?.icon || 'chartpie',
+      props?.requirements,
+      props?.category,
     );
     this.meta.requirements = props?.requirements || [
       { group: [0, 1], aggregate: [1, 999] },

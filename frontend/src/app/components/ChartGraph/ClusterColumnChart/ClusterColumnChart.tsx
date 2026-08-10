@@ -16,6 +16,7 @@
  * limitations under the License.
  */
 
+import { ChartCategory } from 'app/types/ChartMetadata';
 import BasicBarChart from '../BasicBarChart';
 import Config from './config';
 
@@ -29,6 +30,7 @@ class ClusterColumnChart extends BasicBarChart {
       id: 'cluster-column-chart',
       name: 'viz.palette.graph.names.clusterColumnChart',
       icon: 'fsux_tubiao_zhuzhuangtu1',
+      category: ChartCategory.Bar,
     });
   }
 }

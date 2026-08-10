@@ -19,6 +19,7 @@
 import { ChartInteractionEvent, DataViewFieldType } from 'app/constants';
 import { ChartSelectionManager } from 'app/models/ChartSelectionManager';
 import ReactChart from 'app/models/ReactChart';
+import { ChartCategory } from 'app/types/ChartMetadata';
 import { PageInfo } from 'app/pages/MainPage/pages/ViewPage/slice/types';
 import {
   ChartConfig,
@@ -93,6 +94,7 @@ class BasicTableChart extends ReactChart {
       id: props?.id || 'react-table',
       name: props?.name || 'Table',
       icon: props?.icon || 'table',
+      category: props?.category || ChartCategory.Table,
     });
 
     this.meta.requirements = props?.requirements || [

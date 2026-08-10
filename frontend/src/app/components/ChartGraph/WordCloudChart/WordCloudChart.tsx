@@ -25,6 +25,7 @@ import {
   ChartStyleConfig,
   SelectedItem,
 } from 'app/types/ChartConfig';
+import { ChartCategory } from 'app/types/ChartMetadata';
 import ChartDataSetDTO, { IChartDataSet } from 'app/types/ChartDataSet';
 import { BrokerContext, BrokerOption } from 'app/types/ChartLifecycleBroker';
 import {
@@ -51,6 +52,8 @@ class WordCloudChart extends Chart {
       props?.id || 'word-cloud',
       props?.name || 'viz.palette.graph.names.wordCloudChart',
       props?.icon || 'fsux_tubiao_ciyun',
+      props?.requirements,
+      props?.category || ChartCategory.WordCloud,
     );
     this.meta.requirements = props?.requirements || [
       {

@@ -16,6 +16,7 @@
  * limitations under the License.
  */
 
+import { ChartCategory } from 'app/types/ChartMetadata';
 import BasicPieChart from '../BasicPieChart';
 
 class DoughnutChart extends BasicPieChart {
@@ -29,6 +30,7 @@ class DoughnutChart extends BasicPieChart {
       id: 'doughnut-chart',
       name: 'viz.palette.graph.names.doughnutChart',
       icon: 'fsux_tubiao_bingtu',
+      category: ChartCategory.Pie,
     });
   }
 }

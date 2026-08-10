@@ -19,6 +19,7 @@
 import { ChartDataSectionType, ChartInteractionEvent } from 'app/constants';
 import ReactChart from 'app/models/ReactChart';
 import { ChartConfig, ChartDataSectionField } from 'app/types/ChartConfig';
+import { ChartCategory } from 'app/types/ChartMetadata';
 import ChartDataSetDTO, { IChartDataSet } from 'app/types/ChartDataSet';
 import { BrokerContext, BrokerOption } from 'app/types/ChartLifecycleBroker';
 import {
@@ -47,6 +48,7 @@ class BasicRichText extends ReactChart {
       id: props?.id || 'react-rich-text',
       name: props?.name || 'viz.palette.graph.names.richText',
       icon: props?.icon || 'rich-text',
+      category: props?.category || ChartCategory.RichText,
     });
     this.meta.requirements = props?.requirements || [
       {

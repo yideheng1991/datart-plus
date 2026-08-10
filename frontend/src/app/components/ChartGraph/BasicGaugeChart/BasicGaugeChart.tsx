@@ -60,6 +60,8 @@ class BasicGaugeChart extends Chart {
       props?.id || 'gauge',
       props?.name || 'viz.palette.graph.names.gaugeChart',
       props?.icon || 'gauge',
+      props?.requirements,
+      props?.category,
     );
     this.meta.requirements = props?.requirements || [
       {

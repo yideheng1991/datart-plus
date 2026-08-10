@@ -50,6 +50,7 @@ import {
 import { init } from 'echarts';
 import Chart from '../../../models/Chart';
 import { ChartSelectionManager } from '../../../models/ChartSelectionManager';
+import { ChartCategory } from '../../../types/ChartMetadata';
 import Config from './config';
 import { DoubleYChartXAxis, DoubleYChartYAxis, Series } from './types';
 import { getYAxisIntervalConfig } from './utils';
@@ -60,7 +61,7 @@ class BasicDoubleYChart extends Chart {
   selectionManager?: ChartSelectionManager;
 
   constructor() {
-    super('double-y', 'chartName', 'fsux_tubiao_shuangzhoutu');
+    super('double-y', 'chartName', 'fsux_tubiao_shuangzhoutu', undefined, ChartCategory.Line);
     this.meta.requirements = [
       {
         group: 1,

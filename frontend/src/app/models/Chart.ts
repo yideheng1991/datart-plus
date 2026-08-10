@@ -25,7 +25,7 @@ import {
 import { ChartConfig, ChartDataConfig } from 'app/types/ChartConfig';
 import ChartDataSetDTO from 'app/types/ChartDataSet';
 import { BrokerContext, BrokerOption } from 'app/types/ChartLifecycleBroker';
-import ChartMetadata from 'app/types/ChartMetadata';
+import ChartMetadata, { ChartCategory } from 'app/types/ChartMetadata';
 import { isInRange } from 'app/utils/internalChartHelper';
 
 class Chart implements IChart, IChartLifecycle {
@@ -49,11 +49,18 @@ class Chart implements IChart, IChartLifecycle {
     return this._state;
   }
 
-  constructor(id: string, name: string, icon?: string, requirements?: []) {
+  constructor(
+    id: string,
+    name: string,
+    icon?: string,
+    requirements?: [],
+    category?: ChartCategory,
+  ) {
     this.meta = {
       id,
       name,
       icon: icon,
+      category,
       requirements,
     };
     this.state = 'init';

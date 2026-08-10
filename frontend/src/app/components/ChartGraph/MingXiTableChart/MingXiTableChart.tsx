@@ -16,6 +16,7 @@
  * limitations under the License.
  */
 
+import { ChartCategory } from 'app/types/ChartMetadata';
 import BasicTableChart from '../BasicTableChart';
 import Config from './config';
 
@@ -27,6 +28,7 @@ class MingXiTableChart extends BasicTableChart {
       id: 'mingxi-table',
       name: 'viz.palette.graph.names.table',
       icon: 'mingxibiao',
+      category: ChartCategory.Table,
     });
   }
 }

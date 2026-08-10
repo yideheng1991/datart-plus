@@ -42,6 +42,7 @@ import {
   ChartStyleConfig,
   SelectedItem,
 } from 'app/types/ChartConfig';
+import { ChartCategory } from 'app/types/ChartMetadata';
 import ChartDataSetDTO, { IChartDataSet } from 'app/types/ChartDataSet';
 import { BrokerContext, BrokerOption } from 'app/types/ChartLifecycleBroker';
 import {
@@ -83,6 +84,7 @@ class PivotSheetChart extends ReactChart {
       id: 'piovt-sheet', // TODO(Stephen): should fix typo pivot
       name: 'viz.palette.graph.names.pivotSheet',
       icon: PivotSheetChart.icon,
+      category: ChartCategory.Table,
     });
     this.meta.requirements = [{}];
   }

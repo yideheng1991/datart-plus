@@ -16,6 +16,7 @@
  * limitations under the License.
  */
 
+import { ChartCategory } from 'app/types/ChartMetadata';
 import BasicOutlineMapChart from '../BasicOutlineMapChart';
 import Config from './config';
 
@@ -28,6 +29,7 @@ class NormalOutlineMapChart extends BasicOutlineMapChart {
       id: 'normal-outline-map-chart',
       name: 'viz.palette.graph.names.normalOutlineMap',
       icon: 'ditu',
+      category: ChartCategory.Map,
     });
   }
 }

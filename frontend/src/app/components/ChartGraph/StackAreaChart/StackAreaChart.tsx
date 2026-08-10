@@ -16,6 +16,7 @@
  * limitations under the License.
  */
 
+import { ChartCategory } from 'app/types/ChartMetadata';
 import BasicLineChart from '../BasicLineChart';
 
 class StackAreaChart extends BasicLineChart {
@@ -27,6 +28,7 @@ class StackAreaChart extends BasicLineChart {
       id: 'stack-area-chart',
       name: 'viz.palette.graph.names.stackAreaChart',
       icon: 'area-chart',
+      category: ChartCategory.Line,
     });
   }
 }

@@ -16,6 +16,7 @@
  * limitations under the License.
  */
 
+import { ChartCategory } from 'app/types/ChartMetadata';
 import BasicBarChart from '../BasicBarChart';
 import Config from './config';
 
@@ -31,6 +32,7 @@ class StackColumnChart extends BasicBarChart {
       id: 'stack-column-chart',
       name: 'viz.palette.graph.names.stackColumnChart',
       icon: 'fsux_tubiao_duijizhuzhuangtu',
+      category: ChartCategory.Bar,
     });
   }
 }

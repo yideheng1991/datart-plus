@@ -18,6 +18,22 @@
 
 import { ChartDataSectionType } from 'app/constants';
 
+export enum ChartCategory {
+  Table = 'table',
+  Bar = 'bar',
+  Line = 'line',
+  Pie = 'pie',
+  Scatter = 'scatter',
+  Map = 'map',
+  Gauge = 'gauge',
+  Funnel = 'funnel',
+  Radar = 'radar',
+  WordCloud = 'wordCloud',
+  Scorecard = 'scorecard',
+  RichText = 'richText',
+  Custom = 'custom',
+}
+
 export type ChartRequirement = {
   [key in Lowercase<keyof PartialSqlAssemblyType>]?: number[] | number;
 };
@@ -26,6 +42,7 @@ export type ChartMetadata = {
   id: string;
   name: string;
   icon?: string;
+  category?: ChartCategory;
   requirements?: ChartRequirement[];
 };
 

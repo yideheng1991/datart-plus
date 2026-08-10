@@ -16,6 +16,7 @@
  * limitations under the License.
  */
 
+import { ChartCategory } from 'app/types/ChartMetadata';
 import BasicBarChart from '../BasicBarChart';
 import Config from './config';
 
@@ -31,6 +32,7 @@ class PercentageStackBarChart extends BasicBarChart {
       id: 'percentage-stack-bar-chart',
       name: 'viz.palette.graph.names.percentageStackBarChart',
       icon: 'fsux_tubiao_baifenbiduijitiaoxingtu',
+      category: ChartCategory.Bar,
     });
   }
 }

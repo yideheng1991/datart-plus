@@ -71,6 +71,7 @@ class PluginChartLoader {
       customPlugin.meta.name,
       customPlugin.meta.icon,
       customPlugin.meta.requirements,
+      customPlugin.meta.category,
     );
     return Object.assign(chart, Omit(customPlugin, ['meta']));
   }

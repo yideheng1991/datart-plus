@@ -55,7 +55,10 @@ import { init } from 'echarts';
 import { transparentize } from 'polished';
 import { UniqArray } from 'utils/object';
 import Chart from '../../../models/Chart';
-import { ChartRequirement } from '../../../types/ChartMetadata';
+import {
+  ChartCategory,
+  ChartRequirement,
+} from '../../../types/ChartMetadata';
 import Config from './config';
 import { BarBorderStyle, BarSeriesImpl, Series } from './types';
 
@@ -80,11 +83,14 @@ class BasicBarChart extends Chart implements IChartLifecycle {
     name: string;
     icon: string;
     requirements?: ChartRequirement[];
+    category?: ChartCategory;
   }) {
     super(
       props?.id || 'bar',
       props?.name || 'viz.palette.graph.names.barChart',
       props?.icon || 'chart-bar',
+      props?.requirements,
+      props?.category,
     );
     this.meta.requirements = props?.requirements || [
       {

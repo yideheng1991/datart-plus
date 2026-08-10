@@ -16,6 +16,7 @@
  * limitations under the License.
  */
 
+import { ChartCategory } from 'app/types/ChartMetadata';
 import BasicOutlineMapChart from '../BasicOutlineMapChart';
 import Config from './config';
 
@@ -28,6 +29,7 @@ class ScatterOutlineMapChart extends BasicOutlineMapChart {
       id: 'scatter-outline-map-chart',
       name: 'viz.palette.graph.names.scatterOutlineMap',
       icon: 'a-3Dqipaoditu',
+      category: ChartCategory.Map,
       requirements: [
         {
           group: 1,

@@ -27,6 +27,8 @@ export default class ReactChart extends Chart {
       props?.id || 'react-table',
       props?.name || '表格',
       props?.icon || 'table',
+      props?.requirements,
+      props?.category,
     );
     this._adapter = new ReactLifecycleAdapter(wrapper);
   }

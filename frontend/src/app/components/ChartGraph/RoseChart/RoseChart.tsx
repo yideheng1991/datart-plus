@@ -16,6 +16,7 @@
  * limitations under the License.
  */
 
+import { ChartCategory } from 'app/types/ChartMetadata';
 import BasicPieChart from '../BasicPieChart';
 
 class RoseChart extends BasicPieChart {
@@ -29,6 +30,7 @@ class RoseChart extends BasicPieChart {
       id: 'rose-chart',
       name: 'viz.palette.graph.names.roseChart',
       icon: 'fsux_tubiao_nandingmeiguitu',
+      category: ChartCategory.Pie,
     });
   }
 }

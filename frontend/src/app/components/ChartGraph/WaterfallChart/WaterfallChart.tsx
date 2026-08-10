@@ -30,6 +30,7 @@ import {
   XAxisColumns,
   YAxis,
 } from 'app/types/ChartConfig';
+import { ChartCategory } from 'app/types/ChartMetadata';
 import ChartDataSetDTO, { IChartDataSet } from 'app/types/ChartDataSet';
 import { BrokerContext, BrokerOption } from 'app/types/ChartLifecycleBroker';
 import {
@@ -69,6 +70,8 @@ class WaterfallChart extends Chart {
       props?.id || 'waterfall-chart',
       props?.name || 'viz.palette.graph.names.waterfallChart',
       props?.icon || 'waterfall',
+      props?.requirements,
+      props?.category || ChartCategory.Bar,
     );
     this.meta.requirements = props?.requirements || [
       {

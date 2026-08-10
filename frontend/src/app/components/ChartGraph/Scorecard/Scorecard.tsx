@@ -26,6 +26,7 @@ import {
   ChartStyleConfig,
   FontStyle,
 } from 'app/types/ChartConfig';
+import { ChartCategory } from 'app/types/ChartMetadata';
 import ChartDataSetDTO, { IChartDataSet } from 'app/types/ChartDataSet';
 import { BrokerContext, BrokerOption } from 'app/types/ChartLifecycleBroker';
 import {
@@ -54,6 +55,7 @@ class Scorecard extends ReactChart {
       id: props?.id || 'react-scorecard',
       name: props?.name || 'viz.palette.graph.names.scoreChart',
       icon: props?.icon || 'fanpaiqi',
+      category: props?.category || ChartCategory.Scorecard,
     });
     this.meta.requirements = props?.requirements || [
       {

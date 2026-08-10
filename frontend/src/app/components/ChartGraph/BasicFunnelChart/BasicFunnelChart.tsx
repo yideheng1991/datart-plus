@@ -20,6 +20,7 @@ import { ChartDataSectionType } from 'app/constants';
 import Chart from 'app/models/Chart';
 import { ChartDrillOption } from 'app/models/ChartDrillOption';
 import { ChartSelectionManager } from 'app/models/ChartSelectionManager';
+import { ChartCategory } from 'app/types/ChartMetadata';
 import {
   ChartConfig,
   ChartDataSectionField,
@@ -61,6 +62,8 @@ class BasicFunnelChart extends Chart {
       'funnel-chart',
       'viz.palette.graph.names.funnelChart',
       'fsux_tubiao_loudoutu',
+      undefined,
+      ChartCategory.Funnel,
     );
     this.meta.requirements = [
       {

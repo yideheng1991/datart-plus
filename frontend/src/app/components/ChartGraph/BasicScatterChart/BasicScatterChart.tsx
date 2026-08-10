@@ -29,6 +29,7 @@ import {
   SelectedItem,
   YAxis,
 } from 'app/types/ChartConfig';
+import { ChartCategory } from 'app/types/ChartMetadata';
 import ChartDataSetDTO, { IChartDataSet } from 'app/types/ChartDataSet';
 import { BrokerContext, BrokerOption } from 'app/types/ChartLifecycleBroker';
 import {
@@ -56,7 +57,13 @@ class BasicScatterChart extends Chart {
   selectionManager?: ChartSelectionManager;
 
   constructor() {
-    super('scatter', 'viz.palette.graph.names.scatterChart', 'sandiantu');
+    super(
+      'scatter',
+      'viz.palette.graph.names.scatterChart',
+      'sandiantu',
+      undefined,
+      ChartCategory.Scatter,
+    );
     this.meta.requirements = [
       {
         group: [0, 999],
