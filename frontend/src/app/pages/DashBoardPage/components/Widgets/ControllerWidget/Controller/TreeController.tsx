@@ -50,8 +50,8 @@ export const TreeSelectController: React.FC<TreeControllerFormProps> = memo(
   ({ treeData, onChange, value }) => {
     const t = useI18NPrefix(`viz.common.enum.controllerPlaceHolders`);
     const handleonChange = useCallback(
-      checkedObj => {
-        onChange(checkedObj?.checked);
+      checkedKeys => {
+        onChange(Array.isArray(checkedKeys) ? checkedKeys : checkedKeys?.checked);
       },
       [onChange],
     );
@@ -75,7 +75,6 @@ export const TreeSelectController: React.FC<TreeControllerFormProps> = memo(
               checkedKeys={value}
               onCheck={handleonChange}
               checkable
-              checkStrictly
               titleRender={node => {
                 return node.title || node.key;
               }}
