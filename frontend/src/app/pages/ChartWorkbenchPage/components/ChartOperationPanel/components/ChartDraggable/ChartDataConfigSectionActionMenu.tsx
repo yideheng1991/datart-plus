@@ -39,12 +39,14 @@ const ChartDataConfigSectionActionMenu: FC<
     type: string;
     metas?: ChartDataViewMeta[];
     onOpenModal;
+    onCloseMenu?: () => void;
     availableSourceFunctions?: string[];
   } & ChartDataConfigSectionProps
 > = ({
   uid,
   type,
   onOpenModal,
+  onCloseMenu,
   ancestors,
   config,
   availableSourceFunctions,
@@ -184,7 +186,10 @@ const ChartDataConfigSectionActionMenu: FC<
       {getModalActions(config?.actions, type, category).map(actionName => (
         <Menu.Item
           key={actionName}
-          onClick={() => onOpenModal(uid)(actionName)}
+          onClick={() => {
+            onCloseMenu?.();
+            onOpenModal(uid)(actionName);
+          }}
         >
           {t(actionName)}
         </Menu.Item>

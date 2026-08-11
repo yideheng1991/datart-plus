@@ -32,7 +32,7 @@ import { SortActionType } from 'app/constants';
 import ChartDataViewContext from 'app/pages/ChartWorkbenchPage/contexts/ChartDataViewContext';
 import { getColumnRenderName } from 'app/utils/chartHelper';
 import classnames from 'classnames';
-import { FC, memo, useContext, useMemo } from 'react';
+import { FC, memo, useContext, useMemo, useState } from 'react';
 import styled, { keyframes } from 'styled-components';
 import { ERROR, WARNING, WHITE } from 'styles/StyleConstants';
 import {
@@ -64,6 +64,8 @@ const ChartDraggableElementField: FC<{
     handleOpenActionModal,
   }) => {
     const { dataView } = useContext(ChartDataViewContext);
+
+    const [menuVisible, setMenuVisible] = useState(false);
 
     const canReplaceViewFields = useMemo(() => {
       const {
@@ -121,6 +123,7 @@ const ChartDraggableElementField: FC<{
           metas={dataView?.meta}
           onConfigChanged={onConfigChanged}
           onOpenModal={handleOpenActionModal}
+          onCloseMenu={() => setMenuVisible(false)}
         />
       );
     };
@@ -164,6 +167,8 @@ const ChartDraggableElementField: FC<{
         overlay={renderActionExtensionMenu()}
         overlayClassName="datart-data-section-dropdown"
         trigger={['click']}
+        visible={menuVisible}
+        onVisibleChange={visible => setMenuVisible(visible)}
       >
         <StyledWrapper className={classnames({ replace: showReplaceMenu })}>
           {config?.actions && <DownOutlined style={{ marginRight: '10px' }} />}
