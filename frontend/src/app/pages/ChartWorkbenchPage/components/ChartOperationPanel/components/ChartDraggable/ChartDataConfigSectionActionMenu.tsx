@@ -17,7 +17,6 @@
  */
 
 import { Menu } from 'antd';
-import SubMenu from 'antd/lib/menu/SubMenu';
 import {
   ChartDataSectionFieldActionType,
   ChartDataViewFieldCategory,
@@ -195,9 +194,9 @@ const ChartDataConfigSectionActionMenu: FC<
         </Menu.Item>
       ))}
       {getSubMenuActions(config?.actions, type, category).map(actionName => (
-        <SubMenu key={actionName} title={t(actionName)}>
+        <Menu.SubMenu key={actionName} title={t(actionName)}>
           {getSubMenuActionComponent(actionName, uid)}
-        </SubMenu>
+        </Menu.SubMenu>
       ))}
     </Menu>
   );

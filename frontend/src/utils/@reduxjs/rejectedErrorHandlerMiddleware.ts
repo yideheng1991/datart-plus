@@ -17,7 +17,7 @@
  */
 
 import { createListenerMiddleware, isRejected } from '@reduxjs/toolkit';
-import message from 'antd/lib/message';
+import { message } from 'antd';
 
 const rejectedErrorHandlerMiddleware = createListenerMiddleware();
 

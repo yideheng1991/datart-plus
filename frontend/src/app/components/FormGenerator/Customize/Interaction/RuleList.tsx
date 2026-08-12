@@ -17,7 +17,7 @@
  */
 
 import { Button, Input, Select, Table } from 'antd';
-import { ColumnsType } from 'antd/lib/table';
+import type { TableColumnsType } from 'antd';
 import ChartDataView from 'app/types/ChartDataView';
 import { FC } from 'react';
 import styled from 'styled-components';
@@ -42,7 +42,7 @@ const RuleList: FC<
 > = ({ rules, vizs, dataview, onRuleChange, onDeleteRule, translate: t }) => {
   const tableColumnStyle = { width: '150px' };
 
-  const columns: ColumnsType<InteractionRule> = [
+  const columns: TableColumnsType<InteractionRule> = [
     {
       title: t('drillThrough.rule.header.name'),
       dataIndex: 'name',

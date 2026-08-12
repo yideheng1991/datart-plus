@@ -17,7 +17,7 @@
  */
 
 import { Button, Col, Popconfirm, Row, Space, Table, Tag } from 'antd';
-import { ColumnsType } from 'antd/lib/table';
+import type { TableColumnsType } from 'antd';
 import {
   ChartStyleConfig,
   ChartStyleSelectorItem,
@@ -86,7 +86,7 @@ const ScorecardConditionalStyle: FC<ItemLayoutProps<ChartStyleConfig>> = memo(
       });
     };
 
-    const tableColumnsSettings: ColumnsType<ScorecardConditionalStyleFormValues> =
+    const tableColumnsSettings: TableColumnsType<ScorecardConditionalStyleFormValues> =
       [
         {
           title: t('viz.palette.data.metrics', true),

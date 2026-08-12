@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 import { Button, Col, Popconfirm, Row, Space, Table, Tag } from 'antd';
-import { ColumnsType } from 'antd/lib/table';
+import type { TableColumnsType } from 'antd';
 import { ChartStyleConfig } from 'app/types/ChartConfig';
 import { FC, memo, useState } from 'react';
 import styled from 'styled-components';
@@ -62,7 +62,7 @@ const ConditionalStyle: FC<ItemLayoutProps<ChartStyleConfig>> = memo(
       });
     };
 
-    const tableColumnsSettings: ColumnsType<ConditionalStyleFormValues> = [
+    const tableColumnsSettings: TableColumnsType<ConditionalStyleFormValues> = [
       {
         title: t('conditionalStyleTable.header.range.title'),
         dataIndex: 'range',

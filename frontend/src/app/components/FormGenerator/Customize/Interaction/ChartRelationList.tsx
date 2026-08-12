@@ -17,7 +17,7 @@
  */
 
 import { Button, Radio, Select, Table } from 'antd';
-import { ColumnsType } from 'antd/lib/table';
+import type { TableColumnsType } from 'antd';
 import useMount from 'app/hooks/useMount';
 import { handleDateLevelsName } from 'app/pages/ChartWorkbenchPage/components/ChartOperationPanel/utils';
 import { Variable } from 'app/pages/MainPage/pages/VariablePage/slice/types';
@@ -118,7 +118,7 @@ const ChartRelationList: FC<
     return relation?.type === InteractionRelationType.Field;
   };
 
-  const columns: ColumnsType<CustomizeRelation> = [
+  const columns: TableColumnsType<CustomizeRelation> = [
     {
       title: t('drillThrough.rule.relation.type'),
       dataIndex: 'type',

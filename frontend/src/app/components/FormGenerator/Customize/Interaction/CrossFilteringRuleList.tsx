@@ -17,7 +17,7 @@
  */
 
 import { Button, Dropdown, Select, Space, Table } from 'antd';
-import { ColumnsType } from 'antd/lib/table';
+import type { TableColumnsType } from 'antd';
 import { selectViewMap } from 'app/pages/DashBoardPage/pages/Board/slice/selector';
 import { Widget } from 'app/pages/DashBoardPage/types/widgetTypes';
 import ChartDataView from 'app/types/ChartDataView';
@@ -69,7 +69,7 @@ const CrossFilteringRuleList: FC<
     () => currentRules?.filter(r => r.enable)?.map(r => r.id),
     [currentRules],
   );
-  const columns: ColumnsType<CrossFilteringInteractionRule> = useMemo(
+  const columns: TableColumnsType<CrossFilteringInteractionRule> = useMemo(
     () => [
       {
         title: t('crossFiltering.rule.header.relId'),

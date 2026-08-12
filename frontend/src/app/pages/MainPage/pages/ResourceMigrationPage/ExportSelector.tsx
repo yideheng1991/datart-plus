@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 import { Button, Card, message, TreeSelect } from 'antd';
-import { DataNode } from 'antd/lib/tree';
+import type { TreeDataNode } from 'antd';
 import useI18NPrefix from 'app/hooks/useI18NPrefix';
 import { FC, memo, useState } from 'react';
 import { useDispatch } from 'react-redux';

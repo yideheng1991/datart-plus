@@ -27,7 +27,7 @@ import {
   SortAscendingOutlined,
   SortDescendingOutlined,
 } from '@ant-design/icons';
-import Dropdown from 'antd/lib/dropdown';
+import { Dropdown } from 'antd';
 import { SortActionType } from 'app/constants';
 import ChartDataViewContext from 'app/pages/ChartWorkbenchPage/contexts/ChartDataViewContext';
 import { getColumnRenderName } from 'app/utils/chartHelper';
