@@ -122,6 +122,8 @@ export const getInitBoardInfo = (obj: {
     linkFilter: [],
 
     deviceType: DeviceType.Desktop,
+    widgetConfigDrawerOpen: false,
+    selectedWidgetIdForConfig: undefined,
     needFetchItems: [],
     hasFetchItems: [],
     boardWidthHeight: [0, 0],

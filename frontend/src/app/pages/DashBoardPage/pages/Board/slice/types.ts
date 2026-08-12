@@ -410,6 +410,9 @@ export interface BoardInfo {
   controllerPanel: WidgetControllerPanelParams; //
   linkFilter: BoardLinkFilter[];
   chartEditorProps?: ChartEditorProps;
+  // 原位配置模式：右侧配置抽屉
+  widgetConfigDrawerOpen?: boolean;
+  selectedWidgetIdForConfig?: string;
   needFetchItems: string[];
   hasFetchItems: string[];
   boardWidthHeight: [number, number];

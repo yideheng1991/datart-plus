@@ -27,6 +27,7 @@ import {
   editWidgetInfoActions,
 } from '../../pages/BoardEditor/slice';
 import { selectShowBlockMask } from '../../pages/BoardEditor/slice/selectors';
+import { getEditChartWidgetDataAsync } from '../../pages/BoardEditor/slice/thunk';
 import { Widget } from '../../types/widgetTypes';
 import { WidgetActionContext } from '../ActionProvider/WidgetActionProvider';
 
@@ -64,6 +65,15 @@ export const BlockMaskLayer: React.FC<BlockMaskLayerProps> = memo(
           id: widget.id,
         }),
       );
+      // 双击图表 widget：调出原位配置面板并加载数据
+      if (widget.config.type === 'chart') {
+        dispatch(
+          editDashBoardInfoActions.openWidgetConfigDrawer({
+            widgetId: widget.id,
+          }),
+        );
+        dispatch(getEditChartWidgetDataAsync({ widgetId: widget.id }));
+      }
     }, [dispatch, widget.id, widget.config.type]);
     const hideBorder = useMemo(() => {
       if (widget.config.originalType === ORIGINAL_TYPE_MAP.group) {

@@ -173,6 +173,15 @@ export const selectBoardChartEditorProps = createSelector(
   [boardInfoState],
   boardInfo => boardInfo.chartEditorProps,
 );
+// 原位配置模式
+export const selectWidgetConfigDrawerOpen = createSelector(
+  [boardInfoState],
+  boardInfo => boardInfo.widgetConfigDrawerOpen,
+);
+export const selectWidgetConfigDrawerWidgetId = createSelector(
+  [boardInfoState],
+  boardInfo => boardInfo.selectedWidgetIdForConfig,
+);
 export const selectDashLayouts = createSelector(
   [boardInfoState],
   boardInfo => boardInfo.layouts,

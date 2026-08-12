@@ -965,6 +965,7 @@
         "dataChart": "数据图表",
         "importExistingDataCharts": "引入已有数据图表",
         "createDataChartInBoard": "新建数据图表",
+        "createDataChartInplace": "新建数据图表（新）",
         "searchValue": "搜索名称关键字",
         "media": "媒体组件",
         "image": "图片",
@@ -1004,7 +1005,9 @@
         "zoomOut": "放大视图",
         "widgetList": "组件列表",
         "group": "成组",
-        "unGroup": "取消成组"
+        "unGroup": "取消成组",
+        "collapse": "收起",
+        "expand": "展开"
       },
       "controlTypes": {
         "common": "常规",
@@ -1016,6 +1019,13 @@
         "select": "请选择 ...",
         "interaction": "交互",
         "setting": "设置",
+        "data": "数据",
+        "field": "字段",
+        "chartType": "图表类型",
+        "changeChart": "更换图表",
+        "collapse": "收起",
+        "expand": "展开",
+        "close": "关闭",
         "board": "面板",
         "widget": "组件",
         "widgetList": "组件列表",

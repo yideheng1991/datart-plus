@@ -967,6 +967,7 @@
         "dataChart": "DataChart",
         "importExistingDataCharts": "Import Existing DataCharts",
         "createDataChartInBoard": "Create DataChart In Board",
+        "createDataChartInplace": "New DataChart (New)",
         "searchValue": "Search keywords",
         "media": "Media",
         "image": "Image",
@@ -1006,7 +1007,9 @@
         "zoomOut": "Zoom In",
         "widgetList": "Widget List",
         "group": "Group",
-        "unGroup": "Ungroup"
+        "unGroup": "Ungroup",
+        "collapse": "Collapse",
+        "expand": "Expand"
       },
       "controlTypes": {
         "common": "Common",
@@ -1018,6 +1021,13 @@
         "select": "Select ...",
         "interaction": "Interaction",
         "setting": "Setting",
+        "data": "Data",
+        "field": "Field",
+        "chartType": "Chart Type",
+        "changeChart": "Change Chart",
+        "collapse": "Collapse",
+        "expand": "Expand",
+        "close": "Close",
         "board": "Board",
         "widget": "Widget",
         "widgetList": "Widget List",

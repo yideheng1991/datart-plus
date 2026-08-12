@@ -85,6 +85,19 @@ const editDashBoardInfoSlice = createSlice({
       state.chartEditorProps = action.payload;
     },
 
+    // 原位配置模式：选中 widget 后右侧滑出配置抽屉
+    openWidgetConfigDrawer(
+      state,
+      action: PayloadAction<{ widgetId: string }>,
+    ) {
+      state.widgetConfigDrawerOpen = true;
+      state.selectedWidgetIdForConfig = action.payload.widgetId;
+    },
+    closeWidgetConfigDrawer(state) {
+      state.widgetConfigDrawerOpen = false;
+      state.selectedWidgetIdForConfig = undefined;
+    },
+
     changeBoardLinkFilter(
       state,
       action: PayloadAction<{

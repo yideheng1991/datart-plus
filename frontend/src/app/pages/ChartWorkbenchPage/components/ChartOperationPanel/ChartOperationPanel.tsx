@@ -18,7 +18,7 @@
 
 import { IChart } from 'app/types/Chart';
 import { ChartConfig, SelectedItem } from 'app/types/ChartConfig';
-import FlexLayout, { Model } from 'flexlayout-react';
+import FlexLayout, { IJsonModel, Model } from 'flexlayout-react';
 import 'flexlayout-react/style/light.css';
 import { FC, memo, useContext, useState } from 'react';
 import { DndProvider } from 'react-dnd';
@@ -41,6 +41,7 @@ const ChartOperationPanel: FC<{
   onDataViewChange?: (clear?: boolean) => void;
   onCreateDownloadDataTask?: () => void;
   selectedItems?: SelectedItem[];
+  layout?: IJsonModel;
 }> = memo(
   ({
     chart,
@@ -52,11 +53,12 @@ const ChartOperationPanel: FC<{
     onDataViewChange,
     onCreateDownloadDataTask,
     selectedItems,
+    layout: layoutProp,
   }) => {
     const { dataset, onRefreshDataset } = useContext(ChartDatasetContext);
     const { dataView, expensiveQuery } = useContext(ChartDataViewContext);
     const [layout, setLayout] = useState<Model>(() =>
-      Model.fromJson(layoutConfig),
+      Model.fromJson(layoutProp || layoutConfig),
     );
 
     const layoutFactory = node => {

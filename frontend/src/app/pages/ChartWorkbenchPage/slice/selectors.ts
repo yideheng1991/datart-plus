@@ -25,9 +25,19 @@ import { initState } from '.';
 
 const workbenchSelector = (state: RootState) => state.workbench || initState;
 
+const boardViewMapSelector = (state: RootState) =>
+  (state.board && state.board.viewMap) || {};
+
+// 在仪表板（原位配置）场景下复用 workbench 数据源面板时，workbench 的 dataviews 为空，
+// 此时回退到仪表板已加载的 viewMap，使数据源（视图）下拉框有可选项。
 export const dataviewsSelector = createSelector(
-  workbenchSelector,
-  wb => wb.dataviews,
+  [workbenchSelector, boardViewMapSelector],
+  (wb, boardViewMap) => {
+    if (wb.dataviews && wb.dataviews.length) {
+      return wb.dataviews;
+    }
+    return Object.values(boardViewMap || {}) as ChartDataView[];
+  },
 );
 
 // TODO(Stephen): fix to use pure action creator

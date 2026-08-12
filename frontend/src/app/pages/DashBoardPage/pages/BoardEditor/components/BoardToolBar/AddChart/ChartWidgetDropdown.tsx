@@ -24,6 +24,7 @@ import React, { useCallback } from 'react';
 export const ChartWidgetDropdown: React.FC<{
   onSelect: () => void;
   onCreate: () => void;
+  onInplaceCreate?: () => void;
 }> = props => {
   const t = useI18NPrefix(`viz.board.action`);
   const onChartWidget = useCallback(
@@ -33,6 +34,9 @@ export const ChartWidgetDropdown: React.FC<{
       }
       if (key === 'create') {
         props.onCreate?.();
+      }
+      if (key === 'inplace') {
+        props.onInplaceCreate?.();
       }
     },
     [props],
@@ -55,6 +59,8 @@ export const ChartWidgetDropdown: React.FC<{
       {addChartTypes.map(({ name, icon, type }) => (
         <Menu.Item key={type}>{name}</Menu.Item>
       ))}
+      <Menu.Divider />
+      <Menu.Item key="inplace">{t('createDataChartInplace')}</Menu.Item>
     </Menu>
   );
   return (

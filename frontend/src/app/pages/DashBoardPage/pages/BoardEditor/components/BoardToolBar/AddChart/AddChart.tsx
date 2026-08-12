@@ -17,20 +17,34 @@
  */
 
 import ChartEditor from 'app/components/ChartEditor';
+import ChartManager from 'app/models/ChartManager';
 import {
   DataChart,
   WidgetContentChartType,
 } from 'app/pages/DashBoardPage/pages/Board/slice/types';
 import { selectVizs } from 'app/pages/MainPage/pages/VizPage/slice/selectors';
 import { selectOrgId } from 'app/pages/MainPage/slice/selectors';
+import { ORIGINAL_TYPE_MAP } from 'app/pages/DashBoardPage/constants';
+import widgetManager from 'app/pages/DashBoardPage/components/WidgetManager';
 import { BOARD_SELF_CHART_PREFIX } from 'globalConstants';
 import { useCallback, useContext, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import useI18NPrefix from 'app/hooks/useI18NPrefix';
 import { uuidv4 } from 'utils/utils';
-import { addDataChartWidgets, addWrapChartWidget } from '../../../slice/thunk';
+import {
+  addDataChartWidgets,
+  addWrapChartWidget,
+  addWidgetsToEditBoard,
+} from '../../../slice/thunk';
+import {
+  editDashBoardInfoActions,
+  editWidgetInfoActions,
+} from '../../../slice';
+import { boardActions } from '../../../../Board/slice';
 import ChartSelectModalModal from '../../ChartSelectModal';
 import { BoardToolBarContext } from '../context/BoardToolBarContext';
 import { ChartWidgetDropdown } from './ChartWidgetDropdown';
+import ChartSelectDrawer from './ChartSelectDrawer';
 
 export const AddChart = () => {
   const dispatch = useDispatch();
@@ -41,9 +55,11 @@ export const AddChart = () => {
     () => chartOptionsMock.filter(item => item.relType !== 'DASHBOARD'),
     [chartOptionsMock],
   );
+  const t = useI18NPrefix();
 
   const [dataChartVisible, setDataChartVisible] = useState<boolean>(false);
   const [widgetChartVisible, setWidgetChartVisible] = useState<boolean>(false);
+  const [inplaceVisible, setInplaceVisible] = useState<boolean>(false);
 
   const onSelectedDataCharts = useCallback(
     (chartIds: string[]) => {
@@ -74,9 +90,66 @@ export const AddChart = () => {
     },
     [boardId, boardType, dispatch],
   );
+
+  // 原位配置：选中图表类型 → 插入带默认模板（无数据源）的 widget → 自动选中并打开配置抽屉
+  const onInplaceCreate = useCallback(() => {
+    setInplaceVisible(true);
+  }, []);
+
+  const onSelectInplaceChart = useCallback(
+    (chartId: string) => {
+      setInplaceVisible(false);
+      const chart = ChartManager.instance().getById(chartId);
+      if (!chart) return;
+      const dataChartId = `${BOARD_SELF_CHART_PREFIX}${boardId}_${uuidv4()}`;
+      const dataChart: DataChart = {
+        id: dataChartId,
+        name: t(chart.meta.name, true),
+        description: '',
+        orgId,
+        type: 'widgetChart',
+        status: undefined,
+        viewId: '',
+        config: {
+          aggregation: true,
+          chartGraphId: chartId,
+          chartConfig: chart.config,
+          computedFields: [],
+        },
+      };
+      dispatch(
+        boardActions.setDataChartToMap({
+          dashboardId: boardId,
+          dataCharts: [dataChart],
+        }),
+      );
+      const widget = widgetManager
+        .toolkit(ORIGINAL_TYPE_MAP.ownedChart)
+        .create({
+          boardType,
+          datachartId: dataChartId,
+          relations: [],
+          name: t(chart.meta.name, true),
+          content: dataChart,
+          viewIds: [],
+        });
+      dispatch(addWidgetsToEditBoard([widget]));
+      // 选中并打开原位配置抽屉
+      dispatch(editWidgetInfoActions.openWidgetEditing({ id: widget.id }));
+      dispatch(
+        editDashBoardInfoActions.openWidgetConfigDrawer({ widgetId: widget.id }),
+      );
+    },
+    [boardId, boardType, orgId, dispatch],
+  );
+
   return (
     <>
-      <ChartWidgetDropdown onSelect={onShowCharts} onCreate={onCreateCharts} />
+      <ChartWidgetDropdown
+        onSelect={onShowCharts}
+        onCreate={onCreateCharts}
+        onInplaceCreate={onInplaceCreate}
+      />
 
       <ChartSelectModalModal
         dataCharts={chartOptions}
@@ -94,6 +167,11 @@ export const AddChart = () => {
           onSaveInWidget={saveChartToWidget}
         />
       )}
+      <ChartSelectDrawer
+        visible={inplaceVisible}
+        onSelectChart={onSelectInplaceChart}
+        onClose={() => setInplaceVisible(false)}
+      />
     </>
   );
 };
