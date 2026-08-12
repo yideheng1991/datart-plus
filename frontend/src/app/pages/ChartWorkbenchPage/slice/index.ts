@@ -226,7 +226,10 @@ const workbenchSlice = createSlice({
         state.currentDataView = {
           ...payload.view,
           variables: payload.queryVariables || [],
-          computedFields: chartConfigDTO?.computedFields,
+          computedFields: mergeChartAndViewComputedField(
+            payload.view?.computedFields || [],
+            chartConfigDTO?.computedFields || [],
+          ),
         };
         state.backendChart = payload;
         state.aggregation =

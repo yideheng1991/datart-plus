@@ -68,7 +68,7 @@ export const BlockMaskLayer: React.FC<BlockMaskLayerProps> = memo(
       // 双击图表 widget：调出原位配置面板并加载数据
       if (widget.config.type === 'chart') {
         dispatch(
-          editDashBoardInfoActions.openWidgetConfigDrawer({
+          editDashBoardInfoActions.openWidgetConfigPanel({
             widgetId: widget.id,
           }),
         );

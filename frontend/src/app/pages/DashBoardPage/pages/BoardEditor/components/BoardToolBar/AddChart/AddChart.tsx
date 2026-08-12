@@ -91,7 +91,7 @@ export const AddChart = () => {
     [boardId, boardType, dispatch],
   );
 
-  // 原位配置：选中图表类型 → 插入带默认模板（无数据源）的 widget → 自动选中并打开配置抽屉
+  // 原位配置：选中图表类型 → 插入带默认模板（无数据源）的 widget → 自动选中并打开配置面板
   const onInplaceCreate = useCallback(() => {
     setInplaceVisible(true);
   }, []);
@@ -134,10 +134,10 @@ export const AddChart = () => {
           viewIds: [],
         });
       dispatch(addWidgetsToEditBoard([widget]));
-      // 选中并打开原位配置抽屉
+      // 选中并打开原位配置面板
       dispatch(editWidgetInfoActions.openWidgetEditing({ id: widget.id }));
       dispatch(
-        editDashBoardInfoActions.openWidgetConfigDrawer({ widgetId: widget.id }),
+        editDashBoardInfoActions.openWidgetConfigPanel({ widgetId: widget.id }),
       );
     },
     [boardId, boardType, orgId, dispatch],

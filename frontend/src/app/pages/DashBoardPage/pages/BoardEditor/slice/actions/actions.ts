@@ -109,7 +109,23 @@ export const deleteWidgetsAction = (ids?: string[]) => (dispatch, getState) => {
     });
   }
 
+  // 如果当前 ChartConfigPanel 打开的 widget 正在被删除，先关闭配置面板
+  // 否则 ChartConfigPanel 会因为 widget 变为 undefined 而 early return，
+  // 导致 React hooks 数量变化 → "Rendered fewer hooks than expected" 白屏
+  const { selectedWidgetIdForConfig, widgetConfigPanelOpen } =
+    editBoard.boardInfo;
+  if (
+    widgetConfigPanelOpen &&
+    selectedWidgetIdForConfig &&
+    shouldDeleteIds.includes(selectedWidgetIdForConfig)
+  ) {
+    dispatch(editDashBoardInfoActions.closeWidgetConfigPanel());
+  }
+
   dispatch(editBoardStackActions.deleteWidgets(shouldDeleteIds));
+
+  // 删除后清除选中状态，让右侧面板回退到画布设置
+  dispatch(clearActiveWidgets());
 
   WidgetTypes.forEach(widgetType => {
     if (effectTypes.includes(widgetType)) {

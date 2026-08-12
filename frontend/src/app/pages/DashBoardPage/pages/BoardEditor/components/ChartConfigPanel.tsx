@@ -37,7 +37,10 @@ import { editBoardStackActions } from 'app/pages/DashBoardPage/pages/BoardEditor
 import { getEditChartWidgetDataAsync } from 'app/pages/DashBoardPage/pages/BoardEditor/slice/thunk';
 import { boardActions } from 'app/pages/DashBoardPage/pages/Board/slice';
 import { dispatchResize } from 'app/utils/dispatchResize';
-import { mergeChartAndViewComputedField } from 'app/utils/chartHelper';
+import { mergeToChartConfig } from 'app/utils/ChartDtoHelper';
+import { transferChartConfigs } from 'app/utils/internalChartHelper';
+import { clearRuntimeDateLevelFieldsInChartConfig } from 'app/utils/chartHelper';
+import { updateCollectionByAction } from 'app/utils/mutation';
 import { Widget } from 'app/pages/DashBoardPage/types/widgetTypes';
 import useI18NPrefix from 'app/hooks/useI18NPrefix';
 import { DataChart } from 'app/pages/DashBoardPage/pages/Board/slice/types';
@@ -45,6 +48,7 @@ import { FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { HistoryEditBoard } from '../slice/types';
 import { RootState } from 'types';
+import { migrateChartConfig } from 'app/migration';
 import ChartWorkbenchInplace from './ChartWorkbenchInplace';
 import ChartSelectDrawer from './BoardToolBar/AddChart/ChartSelectDrawer';
 
@@ -91,6 +95,16 @@ export const ChartConfigPanel: FC<{
     () => undefined,
   );
 
+  // 保存「最近一次有效完整配置」，作为切换图表时 transferChartConfigs 的数据迁移来源。
+  // 与旧版 workbench 中 shadowChartConfig 的区别：
+  // - 首次进入时为 null（此时用当前 dataChart.config.chartConfig 作为 source）
+  // - handleChartConfigChange 每次字段/样式改动后都会把 shadow 刷新为最新配置
+  //   （对应 workbench 的 updateShadowChartConfig(null) 语义）
+  // - onChartTypeChange 切换图表时【不会】覆盖/清空 shadow，
+  //   这样即使中间经过翻牌器等无 group/维度 section 的图表（会静默丢弃该字段），
+  //   再切回条形图等支持维度的图表时，shadow 仍保留含维度的完整配置，维度即可恢复。
+  const shadowChartConfigRef = useRef<any>(null);
+
   const openChangeChart = useCallback(
     () => setChangeChartVisible(true),
     [],
@@ -121,21 +135,11 @@ export const ChartConfigPanel: FC<{
     [widget, dispatch],
   );
 
-  // 把视图级计算字段合并进 datachart.config.computedFields。
-  // 原位创建的 datachart 未经过服务端 getDataChartsByServer 的合并，
-  // 其 config.computedFields 为空，导致请求计算字段时后端 400；
-  // 需把 currentDataView.computedFields（视图级）并入。
+  // 原位创建的 datachart 初始 config.computedFields 为空，
+  // 数据请求时 getDataChartRequestParams 会从 view.computedFields 补充视图计算字段，
+  // 此处不再需要合并 currentDataView.computedFields。
   const enrichComputedFields = useCallback(
-    (dc: DataChart): DataChart => ({
-      ...dc,
-      config: {
-        ...dc.config,
-        computedFields: mergeChartAndViewComputedField(
-          currentDataViewRef.current?.computedFields || [],
-          dc.config.computedFields || [],
-        ),
-      },
-    }),
+    (dc: DataChart): DataChart => dc,
     [],
   );
 
@@ -208,6 +212,11 @@ export const ChartConfigPanel: FC<{
         }),
       );
       syncWidgetContent(nextDataChart);
+      // 每次字段/样式改动后，把 shadow 刷新为最新配置，
+      // 对应 workbench 的 updateShadowChartConfig(null) 语义：
+      // 保证后续切换图表时，迁移源始终包含用户最新配置的维度/指标，
+      // 避免「柱状图→翻牌器→条形图」这类跨类型切换时维度被永久丢失。
+      shadowChartConfigRef.current = nextChartConfig;
       if (payload.needRefresh) {
         dispatch(getEditChartWidgetDataAsync({ widgetId }));
       }
@@ -220,13 +229,26 @@ export const ChartConfigPanel: FC<{
     (chartGraphId: string) => {
       if (!dataChart) return;
       const chart = ChartManager.instance().getById(chartGraphId);
+      // 用「最近一次有效完整配置」（shadow，随字段改动在 handleChartConfigChange
+      // 持续刷新）作为迁移源。此处【不要】用「切换前当前配置」覆盖 shadow、也【不要】清空：
+      // 翻牌器（Scorecard）等图表没有 group/维度 section，transferChartConfigs
+      // 遇到目标无对应 section 会静默丢弃该字段；若在此用当前配置覆盖 shadow，
+      // 「柱状图→翻牌器→条形图」这类跨类型切换会让维度在序列中永久丢失。
+      // 保留 shadow 为含完整 section 的上一次配置，即可保证切回条形图时维度恢复。
+      const sourceChartConfig =
+        shadowChartConfigRef.current || dataChart.config.chartConfig;
+      // 将旧的维度/指标等数据配置迁移到新图表模板中
+      const targetChartConfig = JSON.parse(JSON.stringify(chart?.config || {}));
+      const mergedChartConfig = clearRuntimeDateLevelFieldsInChartConfig(
+        transferChartConfigs(targetChartConfig, sourceChartConfig),
+      );
       const nextDataChart: DataChart = enrichComputedFields({
         ...dataChart,
         viewId: dataChart.viewId || currentDataViewRef.current?.id || '',
         config: {
           ...dataChart.config,
           chartGraphId,
-          chartConfig: chart?.config || dataChart.config.chartConfig,
+          chartConfig: mergedChartConfig,
         },
       });
       dispatch(
@@ -264,6 +286,17 @@ export const ChartConfigPanel: FC<{
     dataChart.config.chartGraphId,
   );
 
+  // 将 chart 模板的默认配置与 dataChart 中已保存的配置合并，
+  // 确保样式配置面板中各项控件的 value 从 default 字段正确填充。
+  // 这与 DataChartWidgetCore 中画布渲染时的处理逻辑一致。
+  const mergedChartConfig = useMemo(() => {
+    if (!chart?.config) return dataChart.config.chartConfig;
+    const target = JSON.parse(JSON.stringify(chart.config));
+    const source = JSON.parse(JSON.stringify(dataChart.config));
+    migrateChartConfig(source);
+    return mergeToChartConfig(target, source);
+  }, [chart?.config, dataChart.config]);
+
   // 收起态：渲染固定在右侧的竖条
   if (collapsed) {
     return (
@@ -281,7 +314,7 @@ export const ChartConfigPanel: FC<{
         <DataSection>
           <ChartWorkbenchInplace
             chart={chart}
-            chartConfig={dataChart.config.chartConfig}
+            chartConfig={mergedChartConfig}
             dataView={currentView}
             dataset={dataset}
             aggregation={dataChart.config.aggregation}
@@ -319,62 +352,30 @@ export const ChartConfigPanel: FC<{
 };
 
 // 局部 reducer：按 action 类型更新 chartConfig 的 datas/styles/settings/interactions
+// 直接复用 workbench 中已验证的 updateCollectionByAction，保持行为一致。
 function produceChartConfig(
   chartConfig: any,
   type: string,
   payload: ChartConfigPayloadType,
 ): any {
-  const next = JSON.parse(JSON.stringify(chartConfig || {}));
-  switch (type) {
-    case ChartConfigReducerActionType.DATA:
-      next.datas = updateConfigByAncestors(
-        next.datas,
-        payload.ancestors,
-        payload.value,
-      );
-      break;
-    case ChartConfigReducerActionType.STYLE:
-      next.styles = updateConfigByAncestors(
-        next.styles,
-        payload.ancestors,
-        payload.value,
-      );
-      break;
-    case ChartConfigReducerActionType.SETTING:
-      next.settings = updateConfigByAncestors(
-        next.settings,
-        payload.ancestors,
-        payload.value,
-      );
-      break;
-    case ChartConfigReducerActionType.INTERACTION:
-      next.interactions = updateConfigByAncestors(
-        next.interactions,
-        payload.ancestors,
-        payload.value,
-      );
-      break;
-    default:
-      break;
+  const configKey = configKeyMap[type];
+  if (!configKey || !chartConfig?.[configKey]) {
+    return chartConfig;
   }
+  const next = { ...chartConfig };
+  next[configKey] = updateCollectionByAction(next[configKey], {
+    ancestors: payload.ancestors || [],
+    value: payload.value,
+  });
   return next;
 }
 
-function updateConfigByAncestors(
-  list: any[] = [],
-  ancestors: number[] = [],
-  value: any,
-): any[] {
-  if (!ancestors?.length) return list;
-  const next = [...list];
-  let cursor = next;
-  for (let i = 0; i < ancestors.length - 1; i++) {
-    cursor = cursor[ancestors[i]].rows || cursor[ancestors[i]].children || [];
-  }
-  const last = ancestors[ancestors.length - 1];
-  cursor[last] = value;
-  return next;
-}
+const configKeyMap: Record<string, string> = {
+  [ChartConfigReducerActionType.DATA]: 'datas',
+  [ChartConfigReducerActionType.STYLE]: 'styles',
+  [ChartConfigReducerActionType.SETTING]: 'settings',
+  [ChartConfigReducerActionType.INTERACTION]: 'interactions',
+};
 
 export default ChartConfigPanel;
 

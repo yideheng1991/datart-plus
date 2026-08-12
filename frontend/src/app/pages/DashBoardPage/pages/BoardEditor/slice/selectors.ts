@@ -174,11 +174,11 @@ export const selectBoardChartEditorProps = createSelector(
   boardInfo => boardInfo.chartEditorProps,
 );
 // 原位配置模式
-export const selectWidgetConfigDrawerOpen = createSelector(
+export const selectWidgetConfigPanelOpen = createSelector(
   [boardInfoState],
-  boardInfo => boardInfo.widgetConfigDrawerOpen,
+  boardInfo => boardInfo.widgetConfigPanelOpen,
 );
-export const selectWidgetConfigDrawerWidgetId = createSelector(
+export const selectWidgetConfigPanelWidgetId = createSelector(
   [boardInfoState],
   boardInfo => boardInfo.selectedWidgetIdForConfig,
 );

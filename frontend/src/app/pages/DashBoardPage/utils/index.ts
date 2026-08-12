@@ -35,7 +35,7 @@ import {
 } from 'app/types/ChartDataRequest';
 import ChartDataView from 'app/types/ChartDataView';
 import { convertToChartConfigDTO } from 'app/utils/ChartDtoHelper';
-import { findPathByNameInMeta, getStyles } from 'app/utils/chartHelper';
+import { findPathByNameInMeta, getStyles, mergeChartAndViewComputedField } from 'app/utils/chartHelper';
 import { getTime, splitRangerDateFilters } from 'app/utils/time';
 import {
   DATE_FORMATTER,
@@ -129,7 +129,10 @@ export const getDataChartRequestParams = (obj: {
   const builder = new ChartDataRequestBuilder(
     {
       ...view,
-      computedFields: dataChart.config.computedFields || [],
+      computedFields: mergeChartAndViewComputedField(
+        view?.computedFields || [],
+        dataChart.config.computedFields || [],
+      ),
     },
     datas,
     settings,
