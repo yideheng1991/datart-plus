@@ -36,7 +36,8 @@ import { fetchDataViewsAction, fetchViewDetailAction } from 'app/pages/ChartWork
 import { boardActions } from 'app/pages/DashBoardPage/pages/Board/slice';
 import { selectOrgId } from 'app/pages/MainPage/slice/selectors';
 import { IChart } from 'app/types/Chart';
-import { ChartConfig, ChartConfigReducerActionType } from 'app/types/ChartConfig';
+import { ChartConfig } from 'app/types/ChartConfig';
+import { ChartConfigReducerActionType } from 'app/pages/ChartWorkbenchPage/slice/constant';
 import ChartDataSetDTO from 'app/types/ChartDataSet';
 import ChartDataView from 'app/types/ChartDataView';
 import { FC, useEffect, useMemo } from 'react';
@@ -103,7 +104,7 @@ const ChartWorkbenchInplace: FC<ChartWorkbenchInplaceProps> = ({
   // 不经过 ChartDataViewPanel 内部的「清空/保留」确认框逻辑，原位配置下直接生效。
   useEffect(() => {
     if (defaultViewId) {
-      dispatch(fetchViewDetailAction(defaultViewId));
+      dispatch(fetchViewDetailAction({ viewId: defaultViewId }));
     }
   }, [defaultViewId, dispatch]);
 

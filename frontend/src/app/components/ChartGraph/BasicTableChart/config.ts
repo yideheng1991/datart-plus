@@ -16,7 +16,10 @@
  * limitations under the License.
  */
 
-import { ChartConfig } from 'app/types/ChartConfig';
+import {
+  ChartConfig,
+  ChartStyleSectionRow,
+} from 'app/types/ChartConfig';
 
 const config: ChartConfig = {
   datas: [
@@ -108,7 +111,7 @@ const config: ChartConfig = {
                     ],
                   },
                 ],
-              },
+              } as ChartStyleSectionRow,
             },
           ],
         },

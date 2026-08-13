@@ -25,7 +25,10 @@ import {
 import { ChartConfig, ChartDataConfig } from 'app/types/ChartConfig';
 import ChartDataSetDTO from 'app/types/ChartDataSet';
 import { BrokerContext, BrokerOption } from 'app/types/ChartLifecycleBroker';
-import ChartMetadata, { ChartCategory } from 'app/types/ChartMetadata';
+import ChartMetadata, {
+  ChartCategory,
+  ChartRequirement,
+} from 'app/types/ChartMetadata';
 import { isInRange } from 'app/utils/internalChartHelper';
 
 class Chart implements IChart, IChartLifecycle {
@@ -53,7 +56,7 @@ class Chart implements IChart, IChartLifecycle {
     id: string,
     name: string,
     icon?: string,
-    requirements?: [],
+    requirements?: ChartRequirement[],
     category?: ChartCategory,
   ) {
     this.meta = {

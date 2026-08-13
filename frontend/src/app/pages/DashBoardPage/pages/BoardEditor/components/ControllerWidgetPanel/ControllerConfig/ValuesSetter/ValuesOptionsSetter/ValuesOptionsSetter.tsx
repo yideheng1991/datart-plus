@@ -25,7 +25,8 @@ import {
   Tree,
   TreeSelect,
 } from 'antd';
-import { CascaderOptionType } from 'antd/lib/cascader';
+import { BaseOptionType } from 'antd/lib/cascader';
+import { DataNode } from 'antd/lib/tree';
 import { ControllerFacadeTypes } from 'app/constants';
 import useI18NPrefix from 'app/hooks/useI18NPrefix';
 import migrationViewConfig from 'app/migration/ViewConfig/migrationViewConfig';
@@ -74,7 +75,7 @@ const ValuesOptionsSetter: FC<{
   const [optionValues, setOptionValues] = useState<RelationFilterValue[]>([]);
   const [targetKeys, setTargetKeys] = useState<string[]>([]);
   const [labelOptions, setLabelOptions] = useState<
-    CascaderOptionType[] | undefined
+    BaseOptionType[] | undefined
   >([]);
   const [labelKey, setLabelKey] = useState<string | undefined>();
   const [viewList, setViewList] = useState<optionProps[]>([]);
@@ -144,7 +145,7 @@ const ValuesOptionsSetter: FC<{
       ) || [];
 
     if (!meta) return { option: [], dataView: undefined };
-    const option: CascaderOptionType[] = meta
+    const option: BaseOptionType[] = meta
       .concat(viewComputedField)
       .map(item => {
         return {
@@ -452,7 +453,7 @@ const ValuesOptionsSetter: FC<{
                                 }
                                 checkable
                                 checkStrictly
-                                titleRender={node => {
+                                titleRender={(node: any) => {
                                   return (
                                     <div
                                       style={{

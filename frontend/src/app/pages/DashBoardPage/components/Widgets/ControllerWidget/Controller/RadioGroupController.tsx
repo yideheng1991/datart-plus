@@ -49,9 +49,10 @@ export const RadioGroupController: React.FC<RadioControllerProps> = memo(
     const _onChange = e => {
       onChange([e.target.value]);
     };
+    const isButton = radioButtonType === 'button';
     const RadioItem = useMemo(() => {
-      return radioButtonType === 'button' ? Radio.Button : Radio;
-    }, [radioButtonType]);
+      return isButton ? Radio.Button : Radio;
+    }, [isButton]);
     const renderOptions = useCallback(() => {
       return (options || []).map(o => (
         <RadioItem
@@ -69,7 +70,7 @@ export const RadioGroupController: React.FC<RadioControllerProps> = memo(
         <Radio.Group
           className="control-radio-group"
           value={value}
-          optionType={'button'}
+          optionType={isButton ? 'button' : 'default'}
           onChange={_onChange}
         >
           {renderOptions()}

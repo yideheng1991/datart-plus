@@ -1710,7 +1710,7 @@ export const getSelectedItemStyles = (
   dcIndex: string | number,
   selectionList: SelectedItem[],
   itemStyle: { [x: string]: any } = {},
-): { itemStyle: { opacity?: number; [x: string]: any } } => {
+): { itemStyle: { [x: string]: any } } => {
   if (selectionList.length) {
     const selectionConfig = selectionList.find(
       v => v.index === comIndex + ',' + dcIndex,

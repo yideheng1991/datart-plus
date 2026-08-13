@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-import { ChartConfig } from 'app/types/ChartConfig';
+import { ChartConfig, ChartStyleSectionRow } from 'app/types/ChartConfig';
 import { FONT_FAMILY } from 'styles/StyleConstants';
 
 const config: ChartConfig = {
@@ -167,7 +167,7 @@ const config: ChartConfig = {
                     ],
                   },
                 ],
-              },
+              } as ChartStyleSectionRow,
             },
           ],
         },

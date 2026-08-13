@@ -56,7 +56,7 @@ const isMatchedTheCondition = (
       break;
     case OperatorTypes.Between:
       const [min, max] = conditionValues as number[];
-      matchTheCondition = value >= min && value <= max;
+      matchTheCondition = Number(value) >= Number(min) && Number(value) <= Number(max);
       break;
     case OperatorTypes.LessThan:
       matchTheCondition = value < conditionValues;

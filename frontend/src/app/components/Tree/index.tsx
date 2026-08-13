@@ -34,10 +34,10 @@ export function Tree({
       ) : (
         treeData &&
         (treeData.length ? (
-          <StyledDirectoryTree
+          <StyledDirectoryTree<any>
             showIcon
             blockNode
-            treeData={treeData}
+            treeData={treeData as any}
             {...treeProps}
           />
         ) : (

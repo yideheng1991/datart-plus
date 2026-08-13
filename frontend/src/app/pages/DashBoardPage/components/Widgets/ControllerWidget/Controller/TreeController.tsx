@@ -83,7 +83,7 @@ export const TreeSelectController: React.FC<TreeControllerFormProps> = memo(
                 onCheck={handleonChange}
                 checkable
                 titleRender={node => {
-                  return node.title || node.key;
+                  return (node as any).title || (node as any).label || node.key;
                 }}
                 treeData={treeData}
               />

@@ -30,7 +30,9 @@ export function Popup({
 
   const injectedContent = useMemo(
     () =>
-      isValidElement(content) ? cloneElement(content, { onClose }) : content,
+      isValidElement(content)
+        ? cloneElement(content as React.ReactElement, { onClose })
+        : content,
     [content, onClose],
   );
 

@@ -17,6 +17,7 @@
  */
 
 import { Form, Input, Table, TableProps } from 'antd';
+import type { InputRef } from 'antd';
 import type { FormInstance } from 'antd';
 import { RelationFilterValue } from 'app/types/ChartConfig';
 import { createContext, useContext, useEffect, useRef, useState } from 'react';
@@ -85,7 +86,7 @@ export const EditableCell: React.FC<EditableCellProps> = ({
   ...restProps
 }) => {
   const [editing, setEditing] = useState(false);
-  const inputRef = useRef<Input>(null);
+  const inputRef = useRef<InputRef>(null);
   const form = useContext(EditableContext)!;
 
   useEffect(() => {

@@ -1,4 +1,30 @@
-﻿import EventEmitter from 'events';
+﻿// Browser-safe EventEmitter (Node's `events` module is not available in the browser)
+class EventEmitter {
+  private maxListeners = 10;
+  private listeners: Record<string, Array<(...args: any[]) => void>> = {};
+
+  setMaxListeners(n: number) {
+    this.maxListeners = n;
+  }
+
+  addListener(event: string, fn: (...args: any[]) => void) {
+    (this.listeners[event] ||= []).push(fn);
+    return this;
+  }
+
+  removeListener(event: string, fn: (...args: any[]) => void) {
+    const arr = this.listeners[event];
+    if (arr) {
+      this.listeners[event] = arr.filter(f => f !== fn);
+    }
+    return this;
+  }
+
+  emit(event: string, ...args: any[]) {
+    (this.listeners[event] || []).forEach(fn => fn(...args));
+    return this;
+  }
+}
 const eventBus = new EventEmitter();
 
 const WIDGET_MOVE = 'widgetMove';

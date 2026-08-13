@@ -113,7 +113,7 @@ export const AddChart = () => {
         config: {
           aggregation: true,
           chartGraphId: chartId,
-          chartConfig: chart.config,
+          chartConfig: chart.config!,
           computedFields: [],
         },
       };

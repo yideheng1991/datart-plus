@@ -110,10 +110,11 @@ export const fetchDataViewsAction = createAsyncThunk(
 
 export const fetchViewDetailAction = createAsyncThunk(
   'workbench/fetchViewDetailAction',
-  async (arg: { viewId }) => {
+  async (arg: string | { viewId: string }) => {
+    const viewId = typeof arg === 'string' ? arg : arg.viewId;
     const response = await request2<View>({
       method: 'GET',
-      url: `views/${arg}`,
+      url: `views/${viewId}`,
     });
     if (response?.data) {
       response.data = migrationViewConfig(response.data);

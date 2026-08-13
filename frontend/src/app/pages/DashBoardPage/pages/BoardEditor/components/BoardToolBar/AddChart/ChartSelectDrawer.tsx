@@ -32,9 +32,9 @@ const ChartSelectDrawer: React.FC<ChartSelectDrawerProps> = ({
   onClose,
 }) => {
   const t = useI18NPrefix(`viz.board.action`);
-  const [layoutDirection, setLayoutDirection] = useState<'horizontal'>(
-    'horizontal',
-  );
+  const [layoutDirection, setLayoutDirection] = useState<
+    'horizontal' | 'vertical'
+  >('horizontal');
 
   const handleChartChange = (chart: { meta: { id: string } }) => {
     onSelectChart(chart.meta.id);

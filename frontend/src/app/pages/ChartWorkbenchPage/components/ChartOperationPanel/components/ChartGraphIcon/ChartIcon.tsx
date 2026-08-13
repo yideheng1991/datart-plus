@@ -24,7 +24,7 @@ interface ChartIconProps {
   iconStr?: string;
   isMatchRequirement?: boolean;
   isActive?: boolean;
-  size?: number;
+  size?: string | number;
 }
 
 const ChartIcon: FC<ChartIconProps> = ({
@@ -38,15 +38,23 @@ const ChartIcon: FC<ChartIconProps> = ({
     isMatchRequirement,
     isActive,
     size,
-  }: Required<Omit<ChartIconProps, 'isActive'>> & { isActive?: boolean }) => {
-    if (/^<svg/.test(iconStr) || /^<\?xml/.test(iconStr)) {
-      return <SVGImageRender {...{ iconStr, isMatchRequirement, size }} />;
+  }: {
+    iconStr?: string;
+    isMatchRequirement?: boolean;
+    isActive?: boolean;
+    size: string | number;
+  }) => {
+    const safeIconStr = iconStr ?? '';
+    if (/^<svg/.test(safeIconStr) || /^<\?xml/.test(safeIconStr)) {
+      return <SVGImageRender {...{ iconStr: safeIconStr, isMatchRequirement, size }} />;
     }
-    if (/svg\+xml;base64/.test(iconStr)) {
-      return <Base64ImageRender {...{ iconStr, isMatchRequirement, size }} />;
+    if (/svg\+xml;base64/.test(safeIconStr)) {
+      return (
+        <Base64ImageRender {...{ iconStr: safeIconStr, isMatchRequirement, size }} />
+      );
     }
     return (
-      <SVGFontIconRender {...{ iconStr, isMatchRequirement, size }} />
+      <SVGFontIconRender {...{ iconStr: safeIconStr, isMatchRequirement, size }} />
     );
   };
 
@@ -62,7 +70,7 @@ const SVGImageRender = ({
 }: {
   iconStr: string;
   isMatchRequirement?: boolean;
-  size: number;
+  size: string | number;
 }) => {
   const encodedStr = window.encodeURIComponent(iconStr);
   return (
@@ -82,7 +90,7 @@ const Base64ImageRender = ({
 }: {
   iconStr: string;
   isMatchRequirement?: boolean;
-  size: number;
+  size: string | number;
 }) => {
   return (
     <StyledBase64Icon
@@ -101,7 +109,7 @@ const SVGFontIconRender = ({
 }: {
   iconStr: string;
   isMatchRequirement?: boolean;
-  size: number;
+  size: string | number;
 }) => {
   return (
     <StyledSVGFontIcon

@@ -27,7 +27,7 @@ import { Folder } from '../VizPage/slice/types';
 import { onExport } from './utils';
 
 export const ExportSelector: FC<{
-  treeData: DataNode[];
+  treeData: TreeDataNode[];
   folders: Folder[];
 }> = memo(({ treeData, folders }) => {
   const t = useI18NPrefix('main.subNavs');

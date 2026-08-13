@@ -311,7 +311,7 @@ class BasicFunnelChart extends Chart {
 
     if (!groupConfigs.length) {
       const dc = dataList?.[0];
-      const datas: SeriesData[] = aggregateConfigs.map((aggConfig, acIndex) => {
+      const datas = aggregateConfigs.map((aggConfig, acIndex) => {
         const dataItemStyle = this.getDataItemStyle(
           aggConfig,
           groupConfigs,
@@ -359,7 +359,7 @@ class BasicFunnelChart extends Chart {
     }
 
     const flattenedDatas = aggregateConfigs.flatMap((aggConfig, acIndex) => {
-      const ormalizeSerieDatas: SeriesData[] = dataList.map((dc, dcIndex) => {
+      const ormalizeSerieDatas = dataList.map((dc, dcIndex) => {
         const dataItemStyle = this.getDataItemStyle(
           aggConfig,
           groupConfigs,

@@ -267,8 +267,14 @@ const InputNumberScope = memo(
       }
     };
 
-    const minChange = (value: number) => inputNumberScopeChange([value, max]);
-    const maxChange = (value: number) => inputNumberScopeChange([min, value]);
+    const minChange = (value: number | null) => {
+      if (value === null) return;
+      inputNumberScopeChange([value, max]);
+    };
+    const maxChange = (value: number | null) => {
+      if (value === null) return;
+      inputNumberScopeChange([min, value]);
+    };
 
     return (
       <Row gutter={24} align="middle" key={index}>

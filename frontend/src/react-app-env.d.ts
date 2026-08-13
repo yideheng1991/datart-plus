@@ -1,4 +1,4 @@
-/// <reference types="react-scripts" />
+/// <reference types="vite/client" />
 /// <reference types="styled-components/cssprop" />
 
 declare module '*.css';

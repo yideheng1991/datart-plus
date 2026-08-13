@@ -31,7 +31,12 @@ export function useDebouncedSearch<T>(
   const filteredData = useMemo(
     () =>
       dataSource && keywords.trim()
-        ? filterListOrTree(dataSource, keywords, filterFunc, filterLeaf)
+        ? (filterListOrTree(
+            dataSource as any,
+            keywords,
+            filterFunc as any,
+            filterLeaf,
+          ) as T[])
         : dataSource,
     [dataSource, keywords, filterFunc, filterLeaf],
   );

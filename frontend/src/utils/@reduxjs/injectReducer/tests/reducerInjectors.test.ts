@@ -30,7 +30,11 @@ function configureStore() {
 
   const enhancers = [injectReducerEnhancer(createReducer)];
 
-  const store = createStore(createReducer(), {}, compose(...enhancers));
+  const store = createStore(
+    createReducer(),
+    {},
+    compose(...enhancers) as any,
+  );
 
   return store;
 }
