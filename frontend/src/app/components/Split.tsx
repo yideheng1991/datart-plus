@@ -21,6 +21,7 @@ interface SplitWrapperProps {
   collapsed?: number;
   children?: ReactElement[];
   className?: string;
+  sliderVisible?: boolean;
 }
 
 class SplitWrapper extends React.Component<SplitWrapperProps> {
@@ -154,6 +155,7 @@ class SplitWrapper extends React.Component<SplitWrapperProps> {
       onDragEnd,
       collapsed,
       children,
+      sliderVisible,
       ...rest
     } = this.props;
 
