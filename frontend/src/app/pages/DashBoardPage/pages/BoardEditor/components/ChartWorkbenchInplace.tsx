@@ -31,8 +31,13 @@ import {
   currentDataViewSelector,
   dateFormatSelector,
   languageSelector,
+  selectAvailableSourceFunctions,
 } from 'app/pages/ChartWorkbenchPage/slice/selectors';
-import { fetchDataViewsAction, fetchViewDetailAction } from 'app/pages/ChartWorkbenchPage/slice/thunks';
+import {
+  fetchAvailableSourceFunctionsForChart,
+  fetchDataViewsAction,
+  fetchViewDetailAction,
+} from 'app/pages/ChartWorkbenchPage/slice/thunks';
 import { boardActions } from 'app/pages/DashBoardPage/pages/Board/slice';
 import { selectOrgId } from 'app/pages/MainPage/slice/selectors';
 import { IChart } from 'app/types/Chart';
@@ -92,6 +97,8 @@ const ChartWorkbenchInplace: FC<ChartWorkbenchInplaceProps> = ({
   const orgId = useSelector(selectOrgId);
   // workbench 当前视图（fetchViewDetailAction 填充，含完整 meta 字段）
   const currentDataView = useSelector(currentDataViewSelector);
+  // 当前数据源支持的聚合/日期层级函数；为空会导致日期字段的子字段（年/季/月/日）无法生成
+  const availableSourceFunctions = useSelector(selectAvailableSourceFunctions);
 
   // 拉取组织全量视图列表到 workbench store，使数据源（视图）下拉框显示完整
   useEffect(() => {
@@ -111,22 +118,40 @@ const ChartWorkbenchInplace: FC<ChartWorkbenchInplaceProps> = ({
   // 将已拉详情的当前视图（含完整字段 meta）同步进 dashboard 的 viewMap，
   // 使画布实时计算 (getEditChartWidgetDataAsync) 与「编辑图表」进入 workbench
   // 时 (viewMap[viewId]) 都能拿到带 meta 的视图，避免数据源/计算为空。
+  // 同时依赖 computedFields：保存/新增计算字段后，需把最新视图计算字段同步进
+  // viewMap，否则 getDataChartRequestParams 请求里不含新计算字段，刷新数据会失败。
   useEffect(() => {
     if (currentDataView?.id && currentDataView?.meta) {
       dispatch(boardActions.updateViewMap([currentDataView]));
     }
-  }, [currentDataView?.id, currentDataView?.meta, dispatch]);
+  }, [
+    currentDataView?.id,
+    currentDataView?.meta,
+    currentDataView?.computedFields,
+    dispatch,
+  ]);
 
   const layout = useMemo(() => ChartWorkbenchInplaceLayout, []);
 
   // 优先用 workbench 已拉详情的 currentDataView（字段完整），否则用 dashboard 传入的视图兜底。
-  // 仅当 currentDataView.id 与当前绑定视图一致时才采用，避免 workbench 残留视图误导。
   // 原位配置场景下，currentDataView 即当前选中视图的详情（含完整字段 meta）。
-  // 不再强依赖 defaultViewId 与 currentDataView.id 严格相等，
-  // 否则当 dataChart.viewId 未回流（为 undefined）时会错误回退到无 meta 的视图。
+  // 这里不比较 currentDataView.id 与 defaultViewId 是否一致：
+  // 当 dataChart.viewId 未回流（为 undefined）时，defaultViewId 也可能为空，
+  // 若严格比较会导致错误回退到无 meta 的 dataView。
+  // （注意：currentDataView 可能残留上次 workbench 的视图，需依赖上层传入的
+  //  defaultViewId 触发 fetchViewDetailAction 来刷新为当前绑定视图。）
   const effectiveDataView = currentDataView?.id
     ? currentDataView
     : dataView;
+
+  // 拉取当前数据源支持的函数（含日期层级 AGG_DATE_*），
+  // 否则 availableSourceFunctions 为空，日期父字段的子字段（年/季/月/日）将无法生成。
+  const sourceId = effectiveDataView?.sourceId;
+  useEffect(() => {
+    if (sourceId) {
+      dispatch(fetchAvailableSourceFunctionsForChart(sourceId));
+    }
+  }, [sourceId, dispatch]);
 
   const { i18n } = useTranslation();
   const tSetting = useI18NPrefix(`viz.board.setting`);
@@ -160,7 +185,7 @@ const ChartWorkbenchInplace: FC<ChartWorkbenchInplaceProps> = ({
         value={{
           drillOption: undefined,
           onDrillOptionChange: undefined,
-          availableSourceFunctions: [],
+          availableSourceFunctions,
           onDateLevelChange: undefined,
         }}
       >
@@ -170,7 +195,7 @@ const ChartWorkbenchInplace: FC<ChartWorkbenchInplaceProps> = ({
           <ChartDataViewContext.Provider
             value={{
               dataView: effectiveDataView,
-              availableSourceFunctions: [],
+              availableSourceFunctions,
               expensiveQuery: false,
             }}
           >
