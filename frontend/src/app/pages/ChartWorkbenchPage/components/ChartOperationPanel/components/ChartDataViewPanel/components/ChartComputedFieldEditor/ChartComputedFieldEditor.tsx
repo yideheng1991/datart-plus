@@ -96,6 +96,11 @@ const ChartComputedFieldEditor: ForwardRefRenderFunction<
   const handleEditorDidMount = (editor, monaco) => {
     const model = editor.getModel();
 
+    // Monaco may initialize when the Modal container has not been laid out yet
+    // (height = 0). Force a layout recalculation so the editor renders with
+    // its actual size once the modal animation finishes.
+    setTimeout(() => editor.layout(), 0);
+
     editor.onDidChangeCursorPosition(listener => {
       const positionWord = model.getWordAtPosition(listener.position);
       handleDescriptionChange(positionWord?.word);

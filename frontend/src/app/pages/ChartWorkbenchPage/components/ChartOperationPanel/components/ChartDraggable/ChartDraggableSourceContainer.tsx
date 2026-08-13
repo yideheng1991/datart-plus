@@ -436,10 +436,15 @@ const CollapseWrapper = styled(Collapse)`
   &.ant-collapse {
     width: 100%;
     .ant-collapse-header {
-      > div {
-        display: flex;
-        align-items: center;
-        width: 100% !important;
+      display: flex;
+      align-items: center;
+      > .ant-collapse-header-text {
+        flex: 1;
+        > div {
+          display: flex;
+          align-items: center;
+          width: 100%;
+        }
       }
     }
   }
