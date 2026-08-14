@@ -4,7 +4,7 @@
 > 原 datart 项目自 2023 年 9 月起更新缓慢，本仓库旨在在其基础上持续维护并增强企业级可视化能力。
 
 # datart-plus
-**datart 增强发行版** —— 专注提升大屏编辑体验、统计图表能力与高级表格表现力，更适合企业落地场景。
+**datart官方版本已停更，大屏组件/NL2SQL/雷达图等要自己造轮子？datart-plus开箱即用！！！**
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 
@@ -33,13 +33,12 @@ datart 由原 davinci 主创团队（跑象科技 / running-elephant）出品。
 | ✨ 新增功能 | 数据分析 | • 聚合方式新增 **中位数（Median）**、**四分位数（Quartile）** |
 | ✨ 新增功能 | 图表插件 | • 新增 **雷达图图表插件**，支持多维数据对比分析，支持跳转与查看数据交互<br>• 新增 **箱线图（Boxplot）**，支持分布统计与异常值分析 |
 | ✨ 新增功能 | NL2SQL 智能查询 | • 新增对接 AI 大模型，实现自然语言 SQL 查询<br>• 新增默认 Prompt 模板配置<br>• Schema 提示词压缩优化，降低 Token 消耗 |
-| 🔧 技术升级 | 前端构建工具 | • 前端构建工具从 **Craco 迁移至 Vite 7**<br>• 开发服务器秒级启动，HMR 热更新<br>• Task 构建使用 esbuild + Babel，性能提升 **30x+** |
-| 🔧 技术升级 | API 文档 | • Swagger 从 Springfox v2 迁移至 **Springdoc OpenAPI 3**<br>• 生产环境自动禁用 Swagger |
+| ✨ 新增功能 | 图表工作区 | • 新增 Dashboard 内图表创建入口，支持仪表板内直接配置图表<br>• 图表面板支持横向/垂直布局切换<br>• 实现多选组件批量样式配置能力<br>• 图表无数据时显示友好的 icon + 文字提示占位 |
 | 🐛 Bug 修复 | 筛选与时间 | • 修复图表筛选条件「自定义时间」默认值错误问题（原默认 +2，已修正为当前正确时间） |
 | 🐛 Bug 修复 | SQL 生成 | • 修复日期粒度字段排序时 `columnKey` 与 `functionColumns` 不一致导致的 SQL 报错问题 |
 | 🐛 Bug 修复 | 数据源兼容 | • 修复 H2 方言翻译 MySQL `IF` 与 `DATEDIFF` 函数时的语法兼容性问题 |
 | 🐛 Bug 修复 | 图表渲染 | • 修复图表事件监听器解绑引发的内存泄漏<br>• 修复替换 View 字段时原字段配置丢失问题 |
-| 🐛 Bug 修复 | 大屏组件 | • 修复 TabWidget 选项卡间距、溢出、宽度约束和标题同步问题 |
+| 🐛 Bug 修复 | 大屏组件 | • 修复 TabWidget 选项卡间距、溢出、宽度约束和标题同步问题<br>• 修复 TreeController 鼠标拖动滚动条时下拉框自动关闭问题<br>• 修复下拉树控制器父子节点选择关联问题  |
 
 ---
 
@@ -60,16 +59,16 @@ datart 由原 davinci 主创团队（跑象科技 / running-elephant）出品。
 
 ### 技术栈
 
-| 层面 | 技术 |
-|------|------|
-| 前端框架 | React 17 + TypeScript 4.5 |
-| 构建工具 | **Vite 7**（已从 Craco 迁移） |
-| UI 组件库 | Ant Design 4.16 |
-| 图表引擎 | ECharts 5.3 + AntV S2 1.19 |
-| 后端框架 | Spring Boot 2.4 + Java 8 |
-| API 文档 | **Springdoc OpenAPI 3**（已从 Springfox 迁移） |
-| 数据库 | MySQL 5.7+ / H2 |
-| 前端开发环境 | Node.js >= 22 |
+| 层面 | 技术 | 说明 |
+|------|------|------|
+| 前端框架 | React 17 + **TypeScript 5.0** | TypeScript 从 4.5 升级至 5.0，修复所有类型检查错误 |
+| 构建工具 | **Vite 7** | 从 Craco 迁移，开发服务器秒级启动，HMR 热更新，Task 构建性能提升 **30x+** |
+| UI 组件库 | **Ant Design 4.24** | 从 4.16 升级至 4.24，修复 Vite 下 Context 实例分裂问题 |
+| 图表引擎 | ECharts 5.3 + AntV S2 1.19 | |
+| 后端框架 | Spring Boot 2.4 + Java 8 | |
+| API 文档 | **Springdoc OpenAPI 3** | 从 Springfox v2 迁移，生产环境自动禁用 |
+| 数据库 | MySQL 5.7+ / H2 | |
+| 前端开发环境 | Node.js >= 22 | |
 
 ---
 
