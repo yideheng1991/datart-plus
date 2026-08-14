@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { ThemeProvider as OriginalThemeProvider } from 'styled-components';
 import { useThemeSlice } from './slice';
 import { selectTheme, selectThemeKey } from './slice/selectors';
-import { changeAntdTheme } from './utils';
+import { themes } from './themes';
 
 export const ThemeProvider = (props: { children: React.ReactChild }) => {
   useThemeSlice();
@@ -12,11 +12,17 @@ export const ThemeProvider = (props: { children: React.ReactChild }) => {
   const themeKey = useSelector(selectThemeKey);
 
   useLayoutEffect(() => {
-    // TODO: Ant Design theme switching via less.modifyVars is not available in Vite.
-    // This is a known limitation. For proper theme switching, consider:
-    // 1. Upgrading to Ant Design 5.x which supports ConfigProvider theme prop
-    // 2. Using CSS variables approach
-    changeAntdTheme(themeKey);
+    // Set CSS custom properties on :root for Ant Design component overrides
+    const root = document.documentElement;
+    const resolvedKey = themeKey === 'system'
+      ? (window?.matchMedia && window.matchMedia('(prefers-color-scheme: dark)')?.matches ? 'dark' : 'light')
+      : themeKey;
+    const currentTheme = themes[resolvedKey];
+    if (currentTheme) {
+      Object.entries(currentTheme).forEach(([key, value]) => {
+        root.style.setProperty(`--datart-${key}`, value);
+      });
+    }
   }, [themeKey]);
 
   return (
