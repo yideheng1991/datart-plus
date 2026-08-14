@@ -1,4 +1,4 @@
-﻿import { createAsyncThunk } from '@reduxjs/toolkit';
+import { createAsyncThunk } from '@reduxjs/toolkit';
 import migrateWidgetChartConfig from 'app/migration/BoardConfig/migrateWidgetChartConfig';
 import migrateWidgetConfig from 'app/migration/BoardConfig/migrateWidgetConfig';
 import { migrateWidgets } from 'app/migration/BoardConfig/migrateWidgets';
@@ -524,7 +524,8 @@ export const syncEditBoardWidgetChartDataAsync = createAsyncThunk<
       .addDrillOption(drillOption)
       .build();
 
-    const { data } = await request2<WidgetData>(
+    let requestError = null;
+    const response = await request2<WidgetData>(
       {
         method: 'POST',
         url: `data-provider/execute`,
@@ -533,6 +534,7 @@ export const syncEditBoardWidgetChartDataAsync = createAsyncThunk<
       undefined,
       {
         onRejected: async error => {
+          requestError = error;
           await dispatch(
             editWidgetInfoActions.setWidgetErrInfo({
               boardId,
@@ -547,9 +549,14 @@ export const syncEditBoardWidgetChartDataAsync = createAsyncThunk<
               data: undefined,
             }),
           );
+          return { data: undefined } as any;
         },
       },
     );
+    if (requestError) {
+      return null;
+    }
+    const { data } = response || { data: undefined };
     await dispatch(
       editWidgetDataActions.setWidgetData({
         wid: widgetId,
@@ -630,7 +637,8 @@ export const getEditChartWidgetDataAsync = createAsyncThunk<
       return null;
     }
     let widgetData;
-    const { data } = await request2<WidgetData>(
+    let requestError = null;
+    const response = await request2<WidgetData>(
       {
         method: 'POST',
         url: `data-provider/execute`,
@@ -639,6 +647,7 @@ export const getEditChartWidgetDataAsync = createAsyncThunk<
       undefined,
       {
         onRejected: async error => {
+          requestError = error;
           await dispatch(
             editWidgetInfoActions.setWidgetErrInfo({
               widgetId,
@@ -652,9 +661,14 @@ export const getEditChartWidgetDataAsync = createAsyncThunk<
               data: undefined,
             }),
           );
+          return { data: undefined } as any;
         },
       },
     );
+    if (requestError) {
+      return null;
+    }
+    const { data } = response || { data: undefined };
     widgetData = data;
     await dispatch(
       editWidgetDataActions.setWidgetData({

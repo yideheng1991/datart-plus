@@ -190,11 +190,16 @@ export const ChartEditor: FC<ChartEditorProps> = ({
           }
         } else {
           // chartType === 'dataChart'
+          // 仪表板内编辑图表时，优先使用前端 dataChartMap 中的 originChart，
+          // 它已包含原位配置（inplace）面板新建/编辑的图表级计算字段；
+          // 若仍从后端（backendChartId）拉取，则看不到仅存在于前端状态、
+          // 尚未随仪表板整体保存的字段。
           dispatch(
-            initWorkbenchAction({
-              orgId,
-              backendChartId: dataChartId,
-            }),
+            initWorkbenchAction(
+              originChart
+                ? { orgId, backendChart: originChart as ChartDTO }
+                : { orgId, backendChartId: dataChartId },
+            ),
           );
         }
       }

@@ -39,8 +39,9 @@ import { boardActions } from 'app/pages/DashBoardPage/pages/Board/slice';
 import { dispatchResize } from 'app/utils/dispatchResize';
 import { mergeToChartConfig } from 'app/utils/ChartDtoHelper';
 import { transferChartConfigs } from 'app/utils/internalChartHelper';
-import { clearRuntimeDateLevelFieldsInChartConfig } from 'app/utils/chartHelper';
+import { clearRuntimeDateLevelFieldsInChartConfig, mergeChartAndViewComputedField } from 'app/utils/chartHelper';
 import { updateCollectionByAction } from 'app/utils/mutation';
+import { ChartDataViewMeta } from 'app/types/ChartDataViewMeta';
 import { Widget } from 'app/pages/DashBoardPage/types/widgetTypes';
 import useI18NPrefix from 'app/hooks/useI18NPrefix';
 import { DataChart } from 'app/pages/DashBoardPage/pages/Board/slice/types';
@@ -143,6 +144,37 @@ export const ChartConfigPanel: FC<{
     [],
   );
 
+  // 原位面板内新建/编辑/删除图表级计算字段后，把最新的「图表级」字段集合
+  // 同步回 dataChart.config.computedFields 并写回 widget content，使其持久化，
+  // 且数据请求参数（computedFields）包含新字段。
+  const onChartComputedFieldsChange = useCallback(
+    (chartLevelFields: ChartDataViewMeta[]) => {
+      if (!dataChart) return;
+      const existing = dataChart.config?.computedFields || [];
+      // 保留已有的视图级字段，用最新图表级字段覆盖，按 name 去重
+      const viewLevel = existing.filter(f => f.isViewComputedFields);
+      const nextComputedFields = mergeChartAndViewComputedField(
+        viewLevel,
+        chartLevelFields,
+      );
+      const nextDataChart: DataChart = {
+        ...dataChart,
+        config: {
+          ...dataChart.config,
+          computedFields: nextComputedFields,
+        },
+      };
+      dispatch(
+        boardActions.setDataChartToMap({
+          dashboardId: boardId,
+          dataCharts: [nextDataChart],
+        }),
+      );
+      syncWidgetContent(nextDataChart);
+    },
+    [dataChart, boardId, dispatch, syncWidgetContent],
+  );
+
   // 把选中的视图 id 同步回 datachart / widget（供画布计算与进 workbench 使用）
   const syncViewToDataChart = useCallback(
     (viewId: string) => {
@@ -212,11 +244,17 @@ export const ChartConfigPanel: FC<{
         }),
       );
       syncWidgetContent(nextDataChart);
-      // 每次字段/样式改动后，把 shadow 刷新为最新配置，
-      // 对应 workbench 的 updateShadowChartConfig(null) 语义：
-      // 保证后续切换图表时，迁移源始终包含用户最新配置的维度/指标，
-      // 避免「柱状图→翻牌器→条形图」这类跨类型切换时维度被永久丢失。
-      shadowChartConfigRef.current = nextChartConfig;
+      // 每次字段/样式改动后，把 shadow 刷新为最新配置（作为后续切换图表时的迁移源）。
+      // 关键：transferChartConfigs(target, source) 会保留【target 的 section 骨架】并用
+      // source 的 rows 填充。翻牌器（Scorecard）等图表没有 group/维度 section，nextChartConfig
+      // 骨架里不含维度字段——若以 nextChartConfig 为 target，shadow 里的维度字段就会因
+      // 找不到对应 section 被静默丢弃，再切回条形图等支持维度的图表时维度即永久丢失。
+      // 因此必须以旧 shadow（含完整 section 集合）为 target、nextChartConfig 为 source：
+      // 既保留 shadow 中当前图表不具备的 section（如维度），又吸收用户最新的字段/样式改动。
+      // shadow 为空（首次）时回退到 nextChartConfig 本身，避免把 null 作为 target 导致崩溃。
+      const shadowBase = shadowChartConfigRef.current ?? nextChartConfig;
+      const mergedShadow = transferChartConfigs(shadowBase, nextChartConfig);
+      shadowChartConfigRef.current = mergedShadow;
       if (payload.needRefresh) {
         dispatch(getEditChartWidgetDataAsync({ widgetId }));
       }
@@ -237,6 +275,14 @@ export const ChartConfigPanel: FC<{
       // 保留 shadow 为含完整 section 的上一次配置，即可保证切回条形图时维度恢复。
       const sourceChartConfig =
         shadowChartConfigRef.current || dataChart.config.chartConfig;
+      // 切换后立即把「切换前的完整配置」存回 shadow：
+      // shadow 必须始终是「最近一次有效、含完整 section 集合的配置」，
+      // 否则当用户从未在翻牌器内拖拽字段（handleChartConfigChange 不被触发、
+      // shadow 始终为初始 null）时，下一次切换会回退到当前的翻牌器 config，
+      // 而翻牌器单个 Mixed 受 limit 限制只保留 1 个指标，其余维度/指标在
+      // transferChartConfigs 中因目标无对应 section 被静默丢弃，导致切回透视表时只剩 1 个字段。
+      // 存下切换前的 source（含全部字段），即可在后续「翻牌器→透视表」时完整迁回。
+      shadowChartConfigRef.current = sourceChartConfig;
       // 将旧的维度/指标等数据配置迁移到新图表模板中
       const targetChartConfig = JSON.parse(JSON.stringify(chart?.config || {}));
       const mergedChartConfig = clearRuntimeDateLevelFieldsInChartConfig(
@@ -315,10 +361,12 @@ export const ChartConfigPanel: FC<{
           <ChartWorkbenchInplace
             chart={chart}
             chartConfig={mergedChartConfig}
+            dataChart={dataChart}
             dataView={currentView}
             dataset={dataset}
             aggregation={dataChart.config.aggregation}
             defaultViewId={currentViewId}
+            onChartComputedFieldsChange={onChartComputedFieldsChange}
             toolbarRight={
               <PanelToolbarRight>
                 <CollapseBtn onClick={onToggleCollapse}>

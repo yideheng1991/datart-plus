@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Datart
  *
  * Copyright 2021
@@ -75,11 +75,12 @@ class BasicGaugeChart extends Chart {
     if (options.containerId === undefined || !context.document) {
       return;
     }
+    const container = context.document.getElementById(options.containerId);
+    if (!container) {
+      return;
+    }
 
-    this.chart = init(
-      context.document.getElementById(options.containerId)!,
-      'default',
-    );
+    this.chart = init(container, 'default');
     this.selectionManager = new ChartSelectionManager(this.mouseEvents);
     this.selectionManager.attachZRenderListeners(this.chart);
     this.selectionManager.attachEChartsListeners(this.chart);

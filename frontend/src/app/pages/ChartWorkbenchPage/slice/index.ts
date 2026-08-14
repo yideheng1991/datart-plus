@@ -177,6 +177,14 @@ const workbenchSlice = createSlice({
         let computedFields: ChartDataViewMeta[] = [];
         if (payload.id === state?.backendChart?.view?.id) {
           computedFields = state?.backendChart?.config?.computedFields || [];
+        } else {
+          // 原位配置（inplace）等 backendChart 未加载的场景下，图表级计算字段只存在于
+          // workbench 内存态（currentDataView.computedFields），不会被后端视图详情返回。
+          // 若不保留，则每次 fetchViewDetail 都会把 currentDataView 整体替换、清空调图表级字段，
+          // 导致原位面板内新建的图表级计算字段（及其在字段列表中的显示）被「删除」掉。
+          computedFields = (state.currentDataView?.computedFields || []).filter(
+            f => !f.isViewComputedFields,
+          );
         }
         computedFields = createDateLevelComputedFieldForConfigComputedFields(
           meta,

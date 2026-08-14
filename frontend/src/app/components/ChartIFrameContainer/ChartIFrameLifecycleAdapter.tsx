@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Datart
  *
  * Copyright 2021
@@ -123,15 +123,39 @@ const ChartIFrameLifecycleAdapter: FC<{
         .loadResource(document, chart?.getDependencies?.())
         .then(_ => {
           chart.init(config);
-          const newBrokerRef = new ChartIFrameEventBroker();
-          newBrokerRef.register(chart);
-          newBrokerRef.publish(
-            ChartLifecycle.Mounted,
-            buildBrokerOption(),
-            buildBrokerContext(),
-          );
-          eventBrokerRef.current = newBrokerRef;
-          setContainerStatus(ContainerStatus.SUCCESS);
+
+          // 等待容器 DOM 真正被挂载到 iframe.document 上。
+          // 由于 iframe document 独立于主 document，React 本轮 commit 完成后
+          // 并不保证 iframe 内 getElementById 立刻能拿到节点，直接调用 echarts.init
+          // 会抛出 "Initialize failed: invalid dom"。
+          const waitForContainer = (
+            resolve: () => void,
+            remainingMs = 1000,
+          ) => {
+            const dom = document?.getElementById(containerId);
+            if (dom) {
+              resolve();
+              return;
+            }
+            if (remainingMs <= 0) {
+              // 兜底：超时后仍然尝试挂载，让 onMount 处理异常
+              resolve();
+              return;
+            }
+            setTimeout(() => waitForContainer(resolve, remainingMs - 16), 16);
+          };
+
+          new Promise<void>(waitForContainer).then(() => {
+            const newBrokerRef = new ChartIFrameEventBroker();
+            newBrokerRef.register(chart);
+            newBrokerRef.publish(
+              ChartLifecycle.Mounted,
+              buildBrokerOption(),
+              buildBrokerContext(),
+            );
+            eventBrokerRef.current = newBrokerRef;
+            setContainerStatus(ContainerStatus.SUCCESS);
+          });
         })
         .catch(_ => {
           setContainerStatus(ContainerStatus.FAILED);

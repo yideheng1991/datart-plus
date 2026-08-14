@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Datart
  *
  * Copyright 2021
@@ -27,12 +27,35 @@ rejectedErrorHandlerMiddleware.startListening({
     listenerApi.cancelActiveListeners();
     await listenerApi.delay(100);
 
+    const actionType = action?.type || 'unknown';
+
+    let errorMessage = '';
     if (action?.payload?.message) {
-      message.error(action?.payload?.message);
-    } else if (action?.error) {
-      message.error((action as any)?.error?.message);
+      errorMessage = action.payload.message;
+    } else if (typeof action?.payload === 'string') {
+      errorMessage = action.payload;
+    } else if (action?.error?.message) {
+      errorMessage = action.error.message;
     }
-    console.error(`Redux Rejection Error | `, action);
+
+    if (errorMessage) {
+      message.error(errorMessage);
+    }
+
+    console.error(
+      `%cRedux Rejection Error | ${actionType}`,
+      'color: #ff4d4f; font-weight: bold; font-size: 13px;',
+    );
+    console.groupCollapsed(`Details for: ${actionType}`);
+    console.log('%cThunk Name/Type:', 'font-weight: bold; color: #1890ff;', actionType);
+    console.log('%cMeta Arg:', 'font-weight: bold; color: #52c41a;', action?.meta?.arg);
+    console.log('%cPayload:', 'font-weight: bold; color: #fa8c16;', action?.payload);
+    console.log('%cError Object:', 'font-weight: bold; color: #f5222d;', action?.error);
+    console.log('%cFull Action:', 'font-weight: bold; color: #722ed1;', action);
+    if (errorMessage) {
+      console.log('%cResolved Message:', 'font-weight: bold; color: #eb2f96;', errorMessage);
+    }
+    console.groupEnd();
   },
 });
 
