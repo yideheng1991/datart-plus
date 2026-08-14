@@ -4,7 +4,7 @@
 > 原 datart 项目自 2023 年 9 月起更新缓慢，本仓库旨在在其基础上持续维护并增强企业级可视化能力。
 
 # datart-plus
-**datart 增强发行版** —— 专注提升大屏编辑体验、统计图表能力与高级表格表现力，更适合企业落地场景。
+**datart官方版本已停更，大屏组件/NL2SQL/雷达图等要自己造轮子？datart-plus开箱即用！！！**
 
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 
