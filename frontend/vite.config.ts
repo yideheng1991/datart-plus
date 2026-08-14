@@ -4,6 +4,21 @@ import svgr from 'vite-plugin-svgr';
 import path from 'path';
 import fs from 'fs';
 
+// Strips invalid sourceMappingURL from quilljs-markdown's CSS to suppress dev warnings
+function fixQuillMarkdownSourcemap(): Plugin {
+  return {
+    name: 'fix-quill-markdown-sourcemap',
+    enforce: 'pre',
+    load(id) {
+      if (id.includes('quilljs-markdown-common-style.css')) {
+        let code = fs.readFileSync(id, 'utf-8');
+        code = code.replace(/\/\*# sourceMappingURL=.*?\*\//, '');
+        return code;
+      }
+    },
+  };
+}
+
 // Custom plugin for dev server middleware (history API fallback + custom charts API)
 function devServerPlugin(): Plugin {
   return {
@@ -76,6 +91,7 @@ export default defineConfig(({ mode }) => {
       }),
       // Custom dev server middleware
       devServerPlugin(),
+      fixQuillMarkdownSourcemap(),
     ],
 
     css: {
