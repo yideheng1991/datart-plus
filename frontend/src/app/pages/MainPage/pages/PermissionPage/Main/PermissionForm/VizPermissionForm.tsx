@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Datart
  *
  * Copyright 2021
@@ -390,7 +390,7 @@ const FormContent = styled(Form)`
     display: none;
 
     &.selected {
-      display: flex;
+      display: block;
     }
   }
 `;
