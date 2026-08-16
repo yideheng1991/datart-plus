@@ -222,8 +222,11 @@ const ChartWorkbenchInplace: FC<ChartWorkbenchInplaceProps> = ({
       if (f.isViewComputedFields) {
         continue;
       }
-      // currentDataView 里已经有这个字段了 → 无论如何都不需要处理
+      // currentDataView 里已经有这个字段了 → 不需要合并，但仍要记入 names，
+      // 否则用户删除该字段时 wasMergedBefore 为 false，Effect1 会把它重新合并回来，
+      // 导致「必须删除两次」。
       if (currentComputedNames.has(f.name)) {
+        mergedChartFieldNamesRef.current.names.add(f.name);
         continue;
       }
       const wasMergedBefore = mergedChartFieldNamesRef.current.names.has(f.name);

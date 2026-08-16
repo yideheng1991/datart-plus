@@ -477,8 +477,9 @@ const ChartDataViewPanel: FC<{
   });
 
   useEffect(() => {
-    buildAllMetaFields(dataView?.type === 'STRUCT', 'byNameSort');
-  }, [dataView?.type, buildAllMetaFields]);
+    buildAllMetaFields(isGroup, sortType);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dataView?.type, dataView?.computedFields, buildAllMetaFields]);
 
   return (
     <StyledChartDataViewPanel>
