@@ -175,7 +175,8 @@ const StyledChartPresentWrapper = styled.div<{
 `;
 
 const StyledGraphPanelContainer = styled.div`
-  flex-shrink: 0;
+  display: flex;
+  min-width: 0;
 `;
 
 const StyledPresentPanelContainer = styled.div<{ $vertical: boolean }>`
