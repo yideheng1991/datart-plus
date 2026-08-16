@@ -286,7 +286,7 @@ export const widgetToolkit: BorderWidgetToolKit = {
     const [type, firstColor, secondColor, title, titleWidth, titleFont] =
       getJsonConfigs(
         props,
-        ['borderWidgeGroup'],
+        ['borderWidgetGroup'],
         [
           'type',
           'firstColor',
