@@ -111,14 +111,19 @@ export const AntdBase = createGlobalStyle`
     .ant-btn-link {
       color: ${p => p.theme.primary};
       background: transparent;
+      border-color: transparent;
+    }
+    .ant-btn-link:hover {
+      border-color: transparent;
     }
     .ant-btn-text {
       color: ${p => p.theme.textColorSnd};
       background: transparent;
+      border-color: transparent;
     }
     .ant-btn-text:hover {
       color: ${p => p.theme.textColor};
-      background: ${p => p.theme.emphasisBackground};
+      border-color: transparent;
     }
     .ant-btn-background-ghost {
       color: ${p => p.theme.textColorLight};
@@ -137,6 +142,26 @@ export const AntdBase = createGlobalStyle`
       color: ${p => p.theme.white};
       background: ${p => p.theme.error};
       border-color: ${p => p.theme.error};
+    }
+
+    /* ============ Typography ============ */
+    .ant-typography {
+      color: ${p => p.theme.textColor};
+    }
+    .ant-typography.ant-typography-secondary {
+      color: ${p => p.theme.textColorSnd};
+    }
+    .ant-typography.ant-typography-success {
+      color: ${p => p.theme.success};
+    }
+    .ant-typography.ant-typography-warning {
+      color: ${p => p.theme.warning};
+    }
+    .ant-typography.ant-typography-danger {
+      color: ${p => p.theme.error};
+    }
+    .ant-typography.ant-typography-disabled {
+      color: ${p => p.theme.textColorDisabled};
     }
 
     /* ============ Modal ============ */

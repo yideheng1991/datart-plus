@@ -18,7 +18,7 @@
 // 直接复用 ChartOperationPanel，仅用 inplace layout 去掉 PRESENT 节点，
 // 并通过 workbench 的 context 注入 dashboard 当前视图 / 数据，使字段拖拽与配置框互通。
 
-import { Button } from 'antd';
+import { Button, Space, Typography } from 'antd';
 import ChartAggregationContext from 'app/pages/ChartWorkbenchPage/contexts/ChartAggregationContext';
 import ChartDataViewContext from 'app/pages/ChartWorkbenchPage/contexts/ChartDataViewContext';
 import ChartDatasetContext from 'app/pages/ChartWorkbenchPage/contexts/ChartDatasetContext';
@@ -393,13 +393,17 @@ const ChartWorkbenchInplace: FC<ChartWorkbenchInplaceProps> = ({
     <StyledChartWorkbench>
       <ChartTypeBar>
         <ChartTypeLeft>
-          <span>{tSetting('chartType')}:</span>
-          <ChartIcon
-            iconStr={chart?.meta?.icon}
-            isMatchRequirement
-            size={18}
-          />
-          <span>{chartName}</span>
+          <Space size={8} align="center">
+            <Typography.Text type="secondary">
+              {tSetting('chartType')}:
+            </Typography.Text>
+            <ChartIcon
+              iconStr={chart?.meta?.icon}
+              isMatchRequirement
+              size={18}
+            />
+            <Typography.Text type="secondary">{chartName}</Typography.Text>
+          </Space>
           <ChangeChartBtn type="link" onClick={onOpenChangeChart}>
             {tSetting('changeChart')}
           </ChangeChartBtn>
