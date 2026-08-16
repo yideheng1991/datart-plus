@@ -160,7 +160,7 @@ export const AntdBase = createGlobalStyle`
       color: ${p => p.theme.textColor};
     }
     .ant-modal-mask {
-      background: ${p => p.theme.black};
+      background: rgba(0, 0, 0, 0.45);
     }
     .ant-modal-confirm-body .ant-modal-confirm-title {
       color: ${p => p.theme.textColor};
