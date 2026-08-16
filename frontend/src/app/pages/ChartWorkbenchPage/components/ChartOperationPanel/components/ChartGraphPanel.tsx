@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Datart
  *
  * Copyright 2021
@@ -200,6 +200,54 @@ export default ChartGraphPanel;
 const StyledTabs = styled(Tabs)<{ $vertical: boolean }>`
   margin-bottom: ${SPACE_MD};
 
+  &.ant-tabs.ant-tabs-left {
+    flex: 1;
+    min-height: 0;
+  }
+
+  &.ant-tabs.ant-tabs-left > .ant-tabs-nav {
+    display: flex;
+    flex-direction: column;
+    padding-left: ${SPACE_SM};
+    margin: 0;
+    overflow-y: auto;
+    background-color: ${p => p.theme.componentBackground};
+    border-radius: ${BORDER_RADIUS};
+
+    .ant-tabs-nav-wrap {
+      flex: 1;
+    }
+
+    .ant-tabs-nav-list {
+      width: 100%;
+    }
+
+    .ant-tabs-ink-bar {
+      width: 3px;
+      border-radius: ${BORDER_RADIUS};
+    }
+  }
+
+  &.ant-tabs.ant-tabs-left > .ant-tabs-content-holder {
+    display: flex;
+    flex: 1;
+    min-width: 0;
+    padding: ${SPACE_XS};
+    color: ${p => p.theme.textColorLight};
+    background-color: ${p => p.theme.componentBackground};
+    border-radius: ${BORDER_RADIUS};
+
+    > .ant-tabs-content {
+      display: flex;
+      flex: 1;
+      overflow-y: auto;
+
+      > .ant-tabs-tabpane {
+        width: 100%;
+      }
+    }
+  }
+
   &.ant-tabs.ant-tabs-top > .ant-tabs-nav {
     padding: ${SPACE_XS} ${SPACE_XS} 0;
     margin: 0;
@@ -215,71 +263,32 @@ const StyledTabs = styled(Tabs)<{ $vertical: boolean }>`
     border-radius: ${BORDER_RADIUS};
   }
 
-  &.ant-tabs.ant-tabs-left {
-    flex: 1;
-    min-height: 0;
+  &.ant-tabs.ant-tabs-left > .ant-tabs-nav .ant-tabs-tab {
+    width: 90px;
+    padding: 4px ${SPACE_SM};
+    margin: 0;
+    font-weight: ${FONT_WEIGHT_REGULAR};
+    color: ${p => p.theme.textColorLight};
 
-    > .ant-tabs-nav {
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-      padding: ${SPACE_XS};
-      margin: 0;
-      overflow-y: auto;
-      background-color: ${p => p.theme.componentBackground};
+    &.ant-tabs-tab-active {
+      font-weight: ${FONT_WEIGHT_MEDIUM};
+      color: ${p => p.theme.textColor};
+      background-color: ${p => p.theme.bodyBackground};
       border-radius: ${BORDER_RADIUS};
-
-      .ant-tabs-nav-wrap {
-        flex: 1;
-      }
-
-      .ant-tabs-nav-list {
-        width: 100%;
-      }
-
-      .ant-tabs-tab {
-        width: 80px;
-        padding: ${SPACE_SM} ${SPACE_MD};
-        margin: 0;
-        font-weight: ${FONT_WEIGHT_REGULAR};
-        color: ${p => p.theme.textColorLight};
-
-        &.ant-tabs-tab-active {
-          font-weight: ${FONT_WEIGHT_MEDIUM};
-          color: ${p => p.theme.textColor};
-          background-color: ${p => p.theme.bodyBackground};
-          border-radius: ${BORDER_RADIUS};
-        }
-      }
-
-      .ant-tabs-ink-bar {
-        width: 3px;
-        border-radius: ${BORDER_RADIUS};
-      }
     }
+  }
 
-    > .ant-tabs-content-holder {
-      display: flex;
-      flex: 1;
-      min-width: 0;
-      height: 100%;
-      padding: ${SPACE_XS};
-      margin-left: ${SPACE_XS};
-      color: ${p => p.theme.textColorLight};
-      background-color: ${p => p.theme.componentBackground};
-      border-radius: ${BORDER_RADIUS};
+  &.ant-tabs.ant-tabs-top > .ant-tabs-nav .ant-tabs-tab {
+    padding: 4px ${SPACE_XS};
+    margin: ${SPACE_XS};
+  }
 
-      > .ant-tabs-content {
-        display: flex;
-        flex: 1;
-        height: 100%;
-        overflow-y: auto;
+  &.ant-tabs.ant-tabs-left > .ant-tabs-nav .ant-tabs-tab + .ant-tabs-tab {
+    margin-top: 4px;
+  }
 
-        > .ant-tabs-tabpane {
-          width: 100%;
-        }
-      }
-    }
+  &.ant-tabs.ant-tabs-top > .ant-tabs-nav .ant-tabs-tab + .ant-tabs-tab {
+    margin-left: 1px;
   }
 `;
 
@@ -288,8 +297,7 @@ const StyledPanel = styled.div<{ $vertical: boolean }>`
     p.$vertical &&
     `display: flex;
      flex-direction: column;
-     width: 288px;
-     height: 100%;
+     width: 310px;
      flex-shrink: 0;`}
 `;
 

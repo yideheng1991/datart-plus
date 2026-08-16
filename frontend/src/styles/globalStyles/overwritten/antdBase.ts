@@ -486,7 +486,7 @@ export const AntdBase = createGlobalStyle`
       color: ${p => p.theme.textColorSnd};
     }
     .ant-drawer-mask {
-      background: ${p => p.theme.black};
+      background: rgba(0, 0, 0, 0.45);
     }
 
     /* ============ Checkbox ============ */
