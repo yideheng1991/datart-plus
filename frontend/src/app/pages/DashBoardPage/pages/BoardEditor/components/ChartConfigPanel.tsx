@@ -244,15 +244,14 @@ export const ChartConfigPanel: FC<{
         }),
       );
       syncWidgetContent(nextDataChart);
-      // 每次字段/样式改动后，把 shadow 刷新为最新配置（作为后续切换图表时的迁移源）。
-      // 关键：transferChartConfigs(target, source) 会保留【target 的 section 骨架】并用
-      // source 的 rows 填充。翻牌器（Scorecard）等图表没有 group/维度 section，nextChartConfig
-      // 骨架里不含维度字段——若以 nextChartConfig 为 target，shadow 里的维度字段就会因
-      // 找不到对应 section 被静默丢弃，再切回条形图等支持维度的图表时维度即永久丢失。
-      // 因此必须以旧 shadow（含完整 section 集合）为 target、nextChartConfig 为 source：
-      // 既保留 shadow 中当前图表不具备的 section（如维度），又吸收用户最新的字段/样式改动。
-      // shadow 为空（首次）时回退到 nextChartConfig 本身，避免把 null 作为 target 导致崩溃。
-      const shadowBase = shadowChartConfigRef.current ?? nextChartConfig;
+      // 刷新 shadow 作为跨图表切换的迁移源。transferChartConfigs 保留 target 的 section 骨架、
+      // 以 source 的 rows 填充：必须以含完整 section 的旧 shadow 为 target（保留维度等当前图表
+      // 不具备的 section），否则切回支持维度的图表时字段会丢失。target 需深拷贝，因为
+      // transferChartConfigs 会原地改 value/disabled/rows，而 nextChartConfig 为 immer 冻结对象，
+      // 直接操作会抛 "object is not extensible"。首次 shadow 为空时回退到 nextChartConfig。
+      const shadowBase = JSON.parse(
+        JSON.stringify(shadowChartConfigRef.current ?? nextChartConfig),
+      );
       const mergedShadow = transferChartConfigs(shadowBase, nextChartConfig);
       shadowChartConfigRef.current = mergedShadow;
       if (payload.needRefresh) {
