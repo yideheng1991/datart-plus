@@ -46,6 +46,7 @@ import { ChartDataConfigSectionReplaceMenu } from './ChartDataConfigSectionRepla
 const ChartDraggableElementField: FC<{
   modalSize;
   config;
+  allSections?;
   columnConfig;
   ancestors;
   aggregation;
@@ -56,6 +57,7 @@ const ChartDraggableElementField: FC<{
   ({
     modalSize,
     config,
+    allSections,
     columnConfig,
     ancestors,
     aggregation,
@@ -118,6 +120,7 @@ const ChartDraggableElementField: FC<{
           category={columnConfig.category}
           ancestors={ancestors}
           config={config}
+          allSections={allSections}
           modalSize={modalSize}
           availableSourceFunctions={availableSourceFunctions}
           metas={dataView?.meta}

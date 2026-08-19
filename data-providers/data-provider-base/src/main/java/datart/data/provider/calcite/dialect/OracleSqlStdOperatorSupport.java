@@ -29,7 +29,8 @@ import java.util.concurrent.ConcurrentSkipListSet;
 import static datart.core.data.provider.StdSqlOperator.*;
 
 public class OracleSqlStdOperatorSupport extends OracleSqlDialect
-        implements SqlStdOperatorSupport, StatisticalAggregateDialectSupport {
+        implements SqlStdOperatorSupport, StatisticalAggregateDialectSupport,
+        DateOffsetDialectSupport {
 
     static ConcurrentSkipListSet<StdSqlOperator> OWN_SUPPORTED = new ConcurrentSkipListSet<>(
             EnumSet.of(STDDEV, ABS, CEILING, FLOOR, POWER, ROUND, SQRT, EXP, LOG10, RAND, DEGREES, RADIANS,
@@ -104,5 +105,71 @@ public class OracleSqlStdOperatorSupport extends OracleSqlDialect
     @Override
     public Syntax statisticalAggregateSyntax() {
         return Syntax.PERCENTILE_CONT;
+    }
+
+    @Override
+    public boolean supportsDateOffset() {
+        return true;
+    }
+
+    @Override
+    public String dateOffset(String timeExpr, int offset, String unit) {
+        switch (unit) {
+            case "YEAR":
+                return "ADD_MONTHS(" + timeExpr + ", -" + (offset * 12) + ")";
+            case "QUARTER":
+                return "ADD_MONTHS(" + timeExpr + ", -" + (offset * 3) + ")";
+            case "WEEK":
+                return timeExpr + " - INTERVAL '" + (offset * 7) + "' DAY";
+            case "DAY":
+                return timeExpr + " - INTERVAL '" + offset + "' DAY";
+            case "MONTH":
+            default:
+                return "ADD_MONTHS(" + timeExpr + ", -" + offset + ")";
+        }
+    }
+
+    @Override
+    public String dateOffsetFormatted(String timeExpr, int offset, String offsetUnit, String fmt) {
+        // 根据偏移单位生成不同的日期偏移：月/季/年用 ADD_MONTHS，周/日用 INTERVAL DAY
+        String dateExpr = "TO_DATE(" + timeExpr + ", '" + fmt + "')";
+        switch (offsetUnit) {
+            case "YEAR":
+                dateExpr = "ADD_MONTHS(" + dateExpr + ", -" + (offset * 12) + ")";
+                break;
+            case "MONTH":
+                dateExpr = "ADD_MONTHS(" + dateExpr + ", -" + offset + ")";
+                break;
+            case "QUARTER":
+                dateExpr = "ADD_MONTHS(" + dateExpr + ", -" + (offset * 3) + ")";
+                break;
+            case "WEEK":
+                dateExpr = "(" + dateExpr + " - INTERVAL '" + (offset * 7) + "' DAY)";
+                break;
+            case "DAY":
+            default:
+                dateExpr = "(" + dateExpr + " - INTERVAL '" + offset + "' DAY)";
+                break;
+        }
+        return "TO_CHAR(" + dateExpr + ", '" + fmt + "')";
+    }
+
+    @Override
+    public String periodFormat(String granularity) {
+        switch (granularity) {
+            case "YEAR":
+                return "YYYY";
+            case "MONTH":
+                return "YYYY-MM";
+            case "WEEK":
+                return "IYYY-IW";
+            case "DAY":
+                return "YYYY-MM-DD";
+            case "QUARTER":
+                // Oracle 的 TO_DATE 支持 YYYY-Q(季度) 格式
+                return "YYYY-Q";
+            default:
+                return null;
+        }
     }
 }

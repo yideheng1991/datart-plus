@@ -263,7 +263,15 @@
           "MIN": "Min",
           "MEDIAN": "Median",
           "QUARTILE_1": "First Quartile",
-          "QUARTILE_3": "Third Quartile"
+          "QUARTILE_3": "Third Quartile",
+          "YOY": "Year over Year",
+          "MOM": "Month over Month"
+        },
+        "comparisonReturnTypes": {
+          "returnType": "Result Type",
+          "VALUE": "Comparison Value",
+          "DIFF": "Difference",
+          "GROWTH": "Growth Rate"
         },
         "controllerFacadeTypes": {
           "dropdownList": "Dropdown List",

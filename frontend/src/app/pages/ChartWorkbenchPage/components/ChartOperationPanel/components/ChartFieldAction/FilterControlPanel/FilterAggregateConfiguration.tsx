@@ -29,13 +29,22 @@ const FilterAggregateConfiguration: FC<{
 }> = memo(({ config, aggregate, onChange }) => {
   const t = useI18NPrefix('viz.common.enum.aggregateTypes');
 
+  // 同环比(YOY/MOM)属于度量对比聚合方式，不应作为过滤器字段的聚合选项，
+  // 因此数值型字段在过滤器聚合下拉中需排除这两种类型
+  const comparisonAggregateTypes = [
+    AggregateFieldActionType.Yoy,
+    AggregateFieldActionType.Mom,
+  ];
+
   const getAggregateByModelType = () => {
     switch (config?.type) {
       case DataViewFieldType.STRING:
       case DataViewFieldType.DATE:
         return [AggregateFieldActionType.None, AggregateFieldActionType.Count];
       case DataViewFieldType.NUMERIC:
-        return Object.values(AggregateFieldActionType);
+        return Object.values(AggregateFieldActionType).filter(
+          agg => !comparisonAggregateTypes.includes(agg),
+        );
       default:
         return [AggregateFieldActionType.None];
     }

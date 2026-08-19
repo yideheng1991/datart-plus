@@ -16,8 +16,29 @@
  * limitations under the License.
  */
 
-import { AggregateFieldActionType, SortActionType } from 'app/constants';
+import {
+  AggregateFieldActionType,
+  ComparisonReturnType,
+  SortActionType,
+} from 'app/constants';
 import { ChartDatasetPageInfo } from 'app/types/ChartDataSet';
+
+/**
+ * 聚合列请求结构，同比/环比(YOY/MOM)额外携带同环比配置。
+ */
+export type ChartDataRequestAggregator = {
+  column: string[];
+  sqlOperator: string;
+  alias?: string;
+  // 同环比基础聚合（默认 SUM）
+  baseAggregator?: AggregateFieldActionType;
+  // 同环比返回类型
+  returnType?: ComparisonReturnType;
+  // 同环比对比用时间维度列
+  compareColumn?: string[];
+  // 时间维度粒度：YEAR/QUARTER/MONTH/WEEK/DAY
+  granularity?: 'YEAR' | 'QUARTER' | 'MONTH' | 'WEEK' | 'DAY';
+};
 
 export type ChartDataRequestFilter = {
   aggOperator?: AggregateFieldActionType | null;
@@ -41,7 +62,7 @@ export type PendingChartDataRequestFilter = {
 
 export type ChartDataRequest = {
   viewId: string;
-  aggregators: Array<{ column: string[]; sqlOperator: string }>;
+  aggregators: Array<ChartDataRequestAggregator>;
   expired?: number;
   filters: ChartDataRequestFilter[];
   flush?: boolean;

@@ -30,7 +30,7 @@ import static datart.core.data.provider.StdSqlOperator.*;
 
 public class MysqlSqlStdOperatorSupport extends MysqlSqlDialect
         implements SqlStdOperatorSupport, FetchAndOffsetSupport,
-        StatisticalAggregateDialectSupport {
+        StatisticalAggregateDialectSupport, DateOffsetDialectSupport {
 
     static ConcurrentSkipListSet<StdSqlOperator> OWN_SUPPORTED = new ConcurrentSkipListSet<>(
             EnumSet.of(STDDEV, ABS, CEILING, FLOOR, POWER, ROUND, SQRT, EXP, LOG10, LN, MOD, RAND, DEGREES, RADIANS, TRUNC, SIGN,
@@ -106,5 +106,55 @@ public class MysqlSqlStdOperatorSupport extends MysqlSqlDialect
     @Override
     public Syntax statisticalAggregateSyntax() {
         return Syntax.LOCAL_H2;
+    }
+
+    @Override
+    public boolean supportsDateOffset() {
+        return true;
+    }
+
+    @Override
+    public String dateOffset(String timeExpr, int offset, String unit) {
+        return "DATE_SUB(" + timeExpr + ", INTERVAL " + offset + " " + unit + ")";
+    }
+
+    @Override
+    public String dateOffsetFormatted(String timeExpr, int offset, String offsetUnit, String fmt) {
+        // fmt 是时间列粒度的周期格式(如 MONTH->'%Y-%m')，offsetUnit 是偏移单位(同比 YEAR、环比时间列粒度)。
+        // 注意：MySQL STR_TO_DATE 对未指定的日期部分默认为 0，
+        // 如 STR_TO_DATE('2026-08','%Y-%m') = '2026-08-00'(零日期)，在 NO_ZERO_DATE 模式下返回 NULL。
+        // 因此先按 fmt 补齐到完整日期(day=01)再偏移，避免零日期导致 JOIN 匹配失败。
+        String parseExpr;
+        String parseFmt = "%Y-%m-%d";
+        if ("%Y-%m-%d".equals(fmt)) {
+            // 日粒度 '2026-08-01' 已是完整日期
+            parseExpr = timeExpr;
+        } else if ("%Y-%m".equals(fmt)) {
+            // 月粒度 '2026-08' → '2026-08-01'
+            parseExpr = "CONCAT(" + timeExpr + ", '-01')";
+        } else if ("%Y".equals(fmt)) {
+            // 年粒度 '2026' → '2026-01-01'
+            parseExpr = "CONCAT(" + timeExpr + ", '-01-01')";
+        } else {
+            // 周/季等其他周期字符串无法用 STR_TO_DATE 可靠还原
+            return null;
+        }
+        return "DATE_FORMAT(DATE_SUB(STR_TO_DATE(" + parseExpr + ", '" + parseFmt + "'), INTERVAL "
+                + offset + " " + offsetUnit + "), '" + fmt + "')";
+    }
+
+    @Override
+    public String periodFormat(String granularity) {
+        switch (granularity) {
+            case "YEAR":
+                return "%Y";
+            case "MONTH":
+                return "%Y-%m";
+            case "DAY":
+                return "%Y-%m-%d";
+            default:
+                // 周/季粒度：MySQL 无法用 STR_TO_DATE 可靠还原，不支持
+                return null;
+        }
     }
 }

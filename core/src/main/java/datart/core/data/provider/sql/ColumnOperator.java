@@ -26,6 +26,10 @@ public abstract class ColumnOperator implements Operator {
 
     protected String[] column;
 
+    public String[] getColumn() {
+        return column;
+    }
+
     public String getColumnKey() {
         if (column == null) {
             return null;

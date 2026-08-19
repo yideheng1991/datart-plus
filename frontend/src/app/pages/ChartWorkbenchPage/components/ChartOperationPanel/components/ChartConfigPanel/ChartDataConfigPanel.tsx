@@ -43,6 +43,8 @@ const ChartDataConfigPanel: FC<{
         key: config?.key || index,
         ancestors: [index],
         config,
+        // 把整个图表的 sections 传下去，便于跨 section 自动识别时间维度
+        allSections: dataConfigs,
         translate,
         aggregation,
         expensiveQuery,

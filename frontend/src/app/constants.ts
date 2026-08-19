@@ -120,6 +120,20 @@ export enum AggregateFieldActionType {
   Median = 'MEDIAN',
   Quartile1 = 'QUARTILE_1',
   Quartile3 = 'QUARTILE_3',
+  Yoy = 'YOY',
+  Mom = 'MOM',
+}
+
+/**
+ * 同比/环比计算结果返回类型
+ */
+export enum ComparisonReturnType {
+  // 对比值：上一期/去年同期值
+  Value = 'VALUE',
+  // 差值：当前值 - 对比值
+  Diff = 'DIFF',
+  // 增长率：(当前值 - 对比值) / 对比值
+  Growth = 'GROWTH',
 }
 
 export enum ChartDataSectionType {
@@ -190,6 +204,8 @@ export const AggregateFieldSubAggregateType = {
     AggregateFieldActionType.Median,
     AggregateFieldActionType.Quartile1,
     AggregateFieldActionType.Quartile3,
+    AggregateFieldActionType.Yoy,
+    AggregateFieldActionType.Mom,
   ],
   [ChartDataSectionFieldActionType.AggregateLimit]: [
     AggregateFieldActionType.Count,

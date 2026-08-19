@@ -158,11 +158,29 @@ export class ChartDataRequestBuilder {
     );
 
     return UniqWith(
-      aggColumns.map(aggCol => ({
-        alias: this.buildAliasName(aggCol),
-        column: this.buildColumnName(aggCol),
-        sqlOperator: aggCol.aggregate!,
-      })),
+      aggColumns.map(aggCol => {
+        const isComparison =
+          aggCol.aggregate === AggregateFieldActionType.Yoy ||
+          aggCol.aggregate === AggregateFieldActionType.Mom;
+        const comparison = aggCol.comparison;
+        return {
+          alias: this.buildAliasName(aggCol),
+          column: this.buildColumnName(aggCol),
+          sqlOperator: aggCol.aggregate!,
+          ...(isComparison
+            ? {
+                baseAggregator:
+                  comparison?.baseAggregator || AggregateFieldActionType.Sum,
+                returnType: comparison?.returnType,
+                // compareColumn 转成 path 数组，与 group 的 column 保持一致，便于后端匹配
+                compareColumn: comparison?.compareColumn
+                  ? this.buildColumnName({ colName: comparison.compareColumn })
+                  : undefined,
+                granularity: comparison?.granularity,
+              }
+            : {}),
+        };
+      }),
       (a, b) =>
         isEqualObject(a.column, b.column) && a.sqlOperator === b.sqlOperator,
     );

@@ -21,7 +21,8 @@ package datart.data.provider.calcite.dialect;
 import org.apache.calcite.sql.dialect.ClickHouseSqlDialect;
 
 public class ClickHouseSqlDialectSupport extends ClickHouseSqlDialect
-        implements FetchAndOffsetSupport, StatisticalAggregateDialectSupport {
+        implements FetchAndOffsetSupport, StatisticalAggregateDialectSupport,
+        DateOffsetDialectSupport {
 
     private ClickHouseSqlDialectSupport(Context context) {
         super(context);
@@ -34,5 +35,47 @@ public class ClickHouseSqlDialectSupport extends ClickHouseSqlDialect
     @Override
     public Syntax statisticalAggregateSyntax() {
         return Syntax.CLICKHOUSE_EXACT_INCLUSIVE;
+    }
+
+    @Override
+    public boolean supportsDateOffset() {
+        return true;
+    }
+
+    @Override
+    public String dateOffset(String timeExpr, int offset, String unit) {
+        switch (unit) {
+            case "YEAR":
+                return "subtractYears(" + timeExpr + ", " + offset + ")";
+            case "QUARTER":
+                return "subtractQuarters(" + timeExpr + ", " + offset + ")";
+            case "WEEK":
+                return "subtractWeeks(" + timeExpr + ", " + offset + ")";
+            case "DAY":
+                return "subtractDays(" + timeExpr + ", " + offset + ")";
+            case "MONTH":
+            default:
+                return "subtractMonths(" + timeExpr + ", " + offset + ")";
+        }
+    }
+
+    @Override
+    public String dateOffsetFormatted(String timeExpr, int offset, String unit, String fmt) {
+        return "formatDateTime(" + dateOffset("parseDateTimeBestEffort(" + timeExpr + ")", offset, unit)
+                + ", '" + fmt + "')";
+    }
+
+    @Override
+    public String periodFormat(String granularity) {
+        switch (granularity) {
+            case "YEAR":
+                return "%Y";
+            case "MONTH":
+                return "%Y-%m";
+            case "DAY":
+                return "%Y-%m-%d";
+            default:
+                return null;
+        }
     }
 }

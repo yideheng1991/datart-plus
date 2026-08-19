@@ -48,6 +48,7 @@ const ChartDataConfigSectionActionMenu: FC<
   onCloseMenu,
   ancestors,
   config,
+  allSections,
   availableSourceFunctions,
   category,
   metas,
@@ -144,9 +145,14 @@ const ChartDataConfigSectionActionMenu: FC<
       );
     }
     if (actionName === ChartDataSectionFieldActionType.Aggregate) {
+      // 合并整个图表所有 sections 的字段，便于跨 section 自动识别时间维度
+      const allFields = (allSections || []).flatMap(
+        (section: { rows?: ChartDataSectionField[] }) => section.rows || [],
+      );
       return (
         <AggregationAction
           config={fieldConfig}
+          allFields={allFields}
           onConfigChange={(config, needRefresh) => {
             handleFieldConfigChanged(uid, config, needRefresh);
           }}

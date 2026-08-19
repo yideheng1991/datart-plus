@@ -62,6 +62,7 @@ export const ChartDraggableTargetContainer: FC<ChartDataConfigSectionProps> =
     ancestors,
     modalSize,
     config,
+    allSections,
     translate: t = (...args) => args?.[0],
     onConfigChanged,
   }) {
@@ -300,21 +301,22 @@ export const ChartDraggableTargetContainer: FC<ChartDataConfigSectionProps> =
 
       return currentConfig.rows?.map((columnConfig, index) => {
         return (
-          <ChartDraggableElement
-            key={columnConfig.uid}
-            index={index}
-            config={columnConfig}
-            content={() => {
-              const contentProps = {
-                modalSize: modalSize,
-                config: currentConfig,
-                columnConfig,
-                ancestors: ancestors,
-                aggregation: aggregation,
-                availableSourceFunctions,
-                onConfigChanged: onConfigChanged,
-                handleOpenActionModal: handleOpenActionModal,
-              };
+                <ChartDraggableElement
+                  key={columnConfig.uid}
+                  index={index}
+                  config={columnConfig}
+                  content={() => {
+                    const contentProps = {
+                      modalSize: modalSize,
+                      config: currentConfig,
+                      allSections: allSections,
+                      columnConfig,
+                      ancestors: ancestors,
+                      aggregation: aggregation,
+                      availableSourceFunctions,
+                      onConfigChanged: onConfigChanged,
+                      handleOpenActionModal: handleOpenActionModal,
+                    };
               return columnConfig.category ===
                 ChartDataViewFieldCategory.Hierarchy ? (
                 <ChartDraggableElementHierarchy {...contentProps} />

@@ -263,7 +263,15 @@
           "MIN": "最小值",
           "MEDIAN": "中位数",
           "QUARTILE_1": "第一四分位数",
-          "QUARTILE_3": "第三四分位数"
+          "QUARTILE_3": "第三四分位数",
+          "YOY": "同比",
+          "MOM": "环比"
+        },
+        "comparisonReturnTypes": {
+          "returnType": "返回结果",
+          "VALUE": "对比值",
+          "DIFF": "差值",
+          "GROWTH": "增长率"
         },
         "controllerFacadeTypes": {
           "dropdownList": "下拉列表",

@@ -24,6 +24,8 @@ import { ReactNode } from 'react';
 export interface ChartDataConfigSectionProps {
   ancestors: number[];
   config: ChartDataConfig;
+  // 整个图表所有 sections，用于跨 section 自动识别时间维度等
+  allSections?: ChartDataConfig[];
   modalSize?: StateModalSize;
   category?: Lowercase<keyof typeof ChartDataViewFieldCategory>;
   aggregation?: boolean;

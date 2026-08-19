@@ -34,7 +34,7 @@ import static datart.core.data.provider.StdSqlOperator.AGG_DATE_DAY;
 
 public class ImpalaSqlDialectSupport extends CustomSqlDialect
         implements SqlStdOperatorSupport, FetchAndOffsetSupport,
-        StatisticalAggregateDialectSupport {
+        StatisticalAggregateDialectSupport, DateOffsetDialectSupport {
 
     static ConcurrentSkipListSet<StdSqlOperator> OWN_SUPPORTED = new ConcurrentSkipListSet<>(
             EnumSet.of(AGG_DATE_YEAR, AGG_DATE_QUARTER, AGG_DATE_MONTH, AGG_DATE_WEEK, AGG_DATE_DAY));
@@ -106,5 +106,69 @@ public class ImpalaSqlDialectSupport extends CustomSqlDialect
     @Override
     public Syntax statisticalAggregateSyntax() {
         return Syntax.LOCAL_H2;
+    }
+
+    @Override
+    public boolean supportsDateOffset() {
+        return true;
+    }
+
+    @Override
+    public String dateOffset(String timeExpr, int offset, String unit) {
+        switch (unit) {
+            case "YEAR":
+                return "add_months(" + timeExpr + ", -" + (offset * 12) + ")";
+            case "QUARTER":
+                return "add_months(" + timeExpr + ", -" + (offset * 3) + ")";
+            case "WEEK":
+                return "days_sub(" + timeExpr + ", " + (offset * 7) + ")";
+            case "DAY":
+                return "days_sub(" + timeExpr + ", " + offset + ")";
+            case "MONTH":
+            default:
+                return "add_months(" + timeExpr + ", -" + offset + ")";
+        }
+    }
+
+    @Override
+    public String dateOffsetFormatted(String timeExpr, int offset, String offsetUnit, String fmt) {
+        // Impala 用 unix_timestamp/from_unixtime 把周期字符串转日期，再按单位偏移后格式化还原
+        String dateExpr = "from_unixtime(unix_timestamp(" + timeExpr + ", '" + fmt + "'), 'yyyy-MM-dd')";
+        switch (offsetUnit) {
+            case "YEAR":
+                dateExpr = "add_months(" + dateExpr + ", -" + (offset * 12) + ")";
+                break;
+            case "MONTH":
+                dateExpr = "add_months(" + dateExpr + ", -" + offset + ")";
+                break;
+            case "QUARTER":
+                dateExpr = "add_months(" + dateExpr + ", -" + (offset * 3) + ")";
+                break;
+            case "WEEK":
+                dateExpr = "days_sub(" + dateExpr + ", " + (offset * 7) + ")";
+                break;
+            case "DAY":
+            default:
+                dateExpr = "days_sub(" + dateExpr + ", " + offset + ")";
+                break;
+        }
+        return "from_unixtime(unix_timestamp(" + dateExpr + ", 'yyyy-MM-dd'), '" + fmt + "')";
+    }
+
+    @Override
+    public String periodFormat(String granularity) {
+        switch (granularity) {
+            case "YEAR":
+                return "yyyy";
+            case "MONTH":
+                return "yyyy-MM";
+            case "WEEK":
+                return "yyyy-ww";
+            case "DAY":
+                return "yyyy-MM-dd";
+            default:
+                // 季粒度：Impala 周期字符串 'YYYY-Q' 无法用 unix_timestamp 可靠解析
+                return null;
+        }
     }
 }

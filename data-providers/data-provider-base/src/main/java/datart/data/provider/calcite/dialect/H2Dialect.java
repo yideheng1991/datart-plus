@@ -32,7 +32,7 @@ import java.util.concurrent.ConcurrentSkipListSet;
 import static datart.core.data.provider.StdSqlOperator.*;
 
 public class H2Dialect extends H2SqlDialect implements SqlStdOperatorSupport,
-        FetchAndOffsetSupport, StatisticalAggregateDialectSupport {
+        FetchAndOffsetSupport, StatisticalAggregateDialectSupport, DateOffsetDialectSupport {
 
     static ConcurrentSkipListSet<StdSqlOperator> OWN_SUPPORTED = new ConcurrentSkipListSet<>(
             EnumSet.of(IF, DATEDIFF, AGG_DATE_YEAR, AGG_DATE_QUARTER,
@@ -128,5 +128,37 @@ public class H2Dialect extends H2SqlDialect implements SqlStdOperatorSupport,
     @Override
     public Syntax statisticalAggregateSyntax() {
         return Syntax.PERCENTILE_CONT;
+    }
+
+    @Override
+    public boolean supportsDateOffset() {
+        return true;
+    }
+
+    @Override
+    public String dateOffset(String timeExpr, int offset, String unit) {
+        return "DATEADD('" + unit + "', -" + offset + ", " + timeExpr + ")";
+    }
+
+    @Override
+    public String dateOffsetFormatted(String timeExpr, int offset, String unit, String fmt) {
+        return "FORMATDATETIME(DATEADD('" + unit + "', -" + offset
+                + ", PARSEDATETIME(" + timeExpr + ", '" + fmt + "')), '" + fmt + "')";
+    }
+
+    @Override
+    public String periodFormat(String granularity) {
+        switch (granularity) {
+            case "YEAR":
+                return "yyyy";
+            case "MONTH":
+                return "yyyy-MM";
+            case "WEEK":
+                return "yyyy-ww";
+            case "DAY":
+                return "yyyy-MM-dd";
+            default:
+                return null;
+        }
     }
 }

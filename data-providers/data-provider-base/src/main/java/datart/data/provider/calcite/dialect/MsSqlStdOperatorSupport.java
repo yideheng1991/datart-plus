@@ -30,7 +30,8 @@ import static datart.core.data.provider.StdSqlOperator.*;
 import static datart.core.data.provider.StdSqlOperator.COALESCE;
 
 public class MsSqlStdOperatorSupport extends MssqlSqlDialect
-        implements SqlStdOperatorSupport, StatisticalAggregateDialectSupport {
+        implements SqlStdOperatorSupport, StatisticalAggregateDialectSupport,
+        DateOffsetDialectSupport {
 
     static ConcurrentSkipListSet<StdSqlOperator> OWN_SUPPORTED = new ConcurrentSkipListSet<>(
             EnumSet.of(STDDEV, ABS, CEILING, FLOOR, POWER, ROUND, SQRT,
@@ -99,5 +100,25 @@ public class MsSqlStdOperatorSupport extends MssqlSqlDialect
     @Override
     public Syntax statisticalAggregateSyntax() {
         return Syntax.LOCAL_H2;
+    }
+
+    @Override
+    public boolean supportsDateOffset() {
+        return true;
+    }
+
+    @Override
+    public String dateOffset(String timeExpr, int offset, String unit) {
+        // SQL Server DATEADD 单位：year/month/day/week/quarter
+        return "DATEADD(" + unit.toLowerCase() + ", -" + offset + ", " + timeExpr + ")";
+    }
+
+    @Override
+    public String periodFormat(String granularity) {
+        // SQL Server 的粒度字符串(如 CONCAT(YEAR,'-',MONTH) 非零填充)无法用 CONVERT 可靠还原，
+        // 因此【周期字符串列(AGG_DATE_*)】路径不支持。
+        // 注意：原生日期列路径走 dateOffset()(DATEADD)，supportsDateOffset()=true，
+        //       故原生日期列按 年/季/月/周/日 粒度做同环比【仍然支持】。
+        return null;
     }
 }

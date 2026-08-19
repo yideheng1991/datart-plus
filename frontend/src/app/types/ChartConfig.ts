@@ -22,6 +22,7 @@ import {
   ChartDataSectionType,
   ChartDataViewFieldCategory,
   ChartStyleSectionComponentType,
+  ComparisonReturnType,
   ControllerFacadeTypes,
   ControllerVisibilityTypes,
   DataViewFieldType,
@@ -116,11 +117,23 @@ export type ChartDataSectionField = {
   alias?: AliasFieldAction;
   format?: FormatFieldAction;
   aggregate?: AggregateFieldActionType;
+  comparison?: ComparisonFieldAction;
   filter?: FilterFieldAction;
   color?: ColorFieldAction;
   size?: number;
   path?: string[];
   dateFormat?: DateFormat;
+};
+
+export type ComparisonFieldAction = {
+  // 返回类型：对比值 / 差值 / 增长率 / 全量
+  returnType?: ComparisonReturnType;
+  // 用于对比的时间维度字段
+  compareColumn?: string;
+  // 时间维度粒度：YEAR/QUARTER/MONTH/WEEK/DAY，用于推导同比偏移
+  granularity?: 'YEAR' | 'QUARTER' | 'MONTH' | 'WEEK' | 'DAY';
+  // 基础聚合（默认 SUM）
+  baseAggregator?: AggregateFieldActionType;
 };
 
 export type SortFieldAction = {

@@ -62,7 +62,7 @@ logging:
     datart:
       core:
         mappers: info
-      data.provider.jdbc: info
+      data.provider.jdbc: debug
   config: config/logback.xml
 
 shiro:

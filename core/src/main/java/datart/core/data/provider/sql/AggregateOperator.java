@@ -30,6 +30,26 @@ public class AggregateOperator extends ColumnOperator implements Alias {
 
     private String alias;
 
+    /**
+     * Comparison (同比/环比) base aggregate applied to the current period.
+     * When sqlOperator is YOY or MOM, this specifies how the current value is
+     * aggregated before being compared with the previous period.
+     */
+    private SqlOperator baseAggregator;
+
+    /**
+     * Comparison (同比/环比) configuration, meaningful only when sqlOperator
+     * is YOY or MOM.
+     */
+    private ComparisonGranularity granularity;
+
+    private ComparisonReturnType returnType;
+
+    /**
+     * The time dimension column used to order periods.
+     */
+    private String[] compareColumn;
+
     public enum SqlOperator {
 
         MIN,
@@ -48,11 +68,63 @@ public class AggregateOperator extends ColumnOperator implements Alias {
 
         QUARTILE_1,
 
-        QUARTILE_3;
+        QUARTILE_3,
+
+        YOY,
+
+        MOM;
 
         // Statistical aggregates require dialect checks or local H2 fallback.
         public boolean isStatistical() {
             return this == MEDIAN || this == QUARTILE_1 || this == QUARTILE_3;
+        }
+
+        // Comparison aggregates (同比/环比) require two-stage SQL generation.
+        public boolean isComparison() {
+            return this == YOY || this == MOM;
+        }
+    }
+
+    /**
+     * The granularity of the time dimension which determines how far the
+     * previous period is shifted.
+     */
+    public enum ComparisonGranularity {
+
+        YEAR,
+
+        QUARTER,
+
+        MONTH,
+
+        WEEK,
+
+        DAY;
+
+        /**
+         * Offset for 环比(MOM): previous period is one granularity behind.
+         */
+        public int momOffset() {
+            return 1;
+        }
+    }
+
+    /**
+     * What the comparison aggregation returns.
+     */
+    public enum ComparisonReturnType {
+
+        // 对比值：返回上一期/去年同期值
+        VALUE,
+
+        // 差值：当前值 - 对比值
+        DIFF,
+
+        // 增长率：(当前值 - 对比值) / 对比值
+        GROWTH;
+
+        public boolean isDiffLike() {
+            return this == DIFF || this == GROWTH;
         }
     }
 
