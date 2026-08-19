@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Datart
  *
  * Copyright 2021
@@ -29,6 +29,7 @@ export { default as BasicRadarChart } from './BasicRadarChart';
 export { default as BasicRichText } from './BasicRichText';
 export { default as BasicScatterChart } from './BasicScatterChart';
 export { default as BasicTableChart } from './BasicTableChart';
+export { default as BoxPlotChart } from './BoxPlotChart';
 export { default as ClusterBarChart } from './ClusterBarChart';
 export { default as ClusterColumnChart } from './ClusterColumnChart';
 export { default as DoughnutChart } from './DoughnutChart';

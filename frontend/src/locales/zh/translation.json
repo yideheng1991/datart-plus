@@ -844,7 +844,8 @@
           "stackBarChart": "堆叠条形图",
           "stackColumnChart": "堆叠柱状图",
           "waterfallChart": "瀑布图",
-          "wordCloudChart": "词云"
+          "wordCloudChart": "词云",
+          "boxPlot": "箱线图"
         },
         "category": {
           "all": "全部",

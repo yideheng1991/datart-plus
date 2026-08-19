@@ -846,7 +846,8 @@
           "stackBarChart": "Stack Bar Chart",
           "stackColumnChart": "Stack Column Chart",
           "waterfallChart": "Waterfall Chart",
-          "wordCloudChart": "Word Cloud"
+          "wordCloudChart": "Word Cloud",
+          "boxPlot": "Boxplot"
         },
         "category": {
           "all": "All",

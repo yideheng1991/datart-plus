@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Datart
  *
  * Copyright 2021
@@ -24,6 +24,7 @@ import {
   BasicRadarChart,
   BasicRichText,
   BasicScatterChart,
+  BoxPlotChart,
   ClusterBarChart,
   ClusterColumnChart,
   DoughnutChart,
@@ -209,6 +210,7 @@ class ChartManager {
       new AreaChart(),
       new StackAreaChart(),
       new BasicScatterChart(),
+      new BoxPlotChart(),
       new PieChart(),
       new DoughnutChart(),
       new RoseChart(),
