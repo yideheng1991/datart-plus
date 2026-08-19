@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Datart
  *
  * Copyright 2021
@@ -59,6 +59,9 @@ export const getDefaultAggregate = (
       item.category === ChartDataViewFieldCategory.AggregateComputedField
     ) {
       return;
+    }
+    if (config?.defaultAggregate) {
+      return config.defaultAggregate;
     }
     if (item.aggregate) {
       return item.aggregate;

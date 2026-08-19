@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Datart
  *
  * Copyright 2021
@@ -195,6 +195,8 @@ export type ChartDataConfig = ChartConfigBase & {
   limit?: null | number | string | number[] | string[];
   disableAggregate?: boolean;
   disableAggregateComputedField?: boolean;
+  // NOTE: default aggregate applied when a field is dragged into this section
+  defaultAggregate?: ValueOf<typeof AggregateFieldActionType>;
   drillable?: boolean;
   drillContextMenuVisible?: boolean;
   options?: {
