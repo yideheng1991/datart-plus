@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Datart
  *
  * Copyright 2021
@@ -17,15 +17,19 @@
  */
 
 import {
+  BackgroundCondition,
+  Conditions,
+  CornerCell,
   Data,
-  DataCell,
-  DefaultCellTheme,
+  IntervalCondition,
   Meta,
   S2CellType,
+  S2Style,
+  S2Theme,
   SortParam,
   SpreadSheet,
-  Style,
   TargetCellInfo,
+  TextCondition,
   ViewMeta,
 } from '@antv/s2';
 import {
@@ -53,17 +57,30 @@ import {
   transformToDataSet,
 } from 'app/utils/chartHelper';
 import { isUndefined } from 'utils/object';
-import { PIVOT_THEME_LIST } from '../../FormGenerator/Customize/PivotSheetTheme/theme';
 import AntVS2Wrapper from './AntVS2Wrapper';
 import Config from './config';
 import { AndvS2Config } from './types';
 
-enum BolderFontWeight {
-  lighter = 'normal',
-  normal = 'bold',
-  bold = 'bolder',
-  bolder = 'bolder',
-}
+const valueOrDefault = (value: any, defaultValue: any) =>
+  value === undefined || value === null ? defaultValue : value;
+
+const toPositiveNumber = (value: any, defaultValue: number) => {
+  const number = Number(value);
+  return Number.isFinite(number) && number > 0 ? number : defaultValue;
+};
+
+const toNonNegativeInteger = (value: any) => {
+  const number = Number(value);
+  return Number.isFinite(number) && number > 0 ? Math.floor(number) : 0;
+};
+
+const toFiniteNumber = (value: any) => {
+  if (value === undefined || value === null || value === '') {
+    return null;
+  }
+  const number = Number(value);
+  return Number.isFinite(number) ? number : null;
+};
 
 class PivotSheetChart extends ReactChart {
   static icon = `<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' aria-hidden='true' role='img' width='1em' height='1em' preserveAspectRatio='xMidYMid meet' viewBox='0 0 24 24'><path d='M10 8h11V5c0-1.1-.9-2-2-2h-9v5zM3 8h5V3H5c-1.1 0-2 .9-2 2v3zm2 13h3V10H3v9c0 1.1.9 2 2 2zm8 1l-4-4l4-4zm1-9l4-4l4 4zm.58 6H13v-2h1.58c1.33 0 2.42-1.08 2.42-2.42V13h2v1.58c0 2.44-1.98 4.42-4.42 4.42z' fill='gray'/></svg>`;
@@ -78,6 +95,12 @@ class PivotSheetChart extends ReactChart {
   private drillLevel: number = 0;
   private collapsedRows: Record<string, boolean> = {};
   private selectedItems: SelectedItem[] = [];
+  // 拖拽调整后的宽高（会话内保持，用于重渲染时回填，避免被默认值重置）
+  private resizedStyle: Record<string, number> = {};
+  // 配置中每列列宽映射（S2 field key -> width）
+  private columnWidthsMap: Map<string, { width?: number }> = new Map();
+  // 配置中不参与汇总的列字段（S2 field key 集合）
+  private noTotalsFieldKeys: Set<string> = new Set();
 
   constructor() {
     super(AntVS2Wrapper, {
@@ -169,19 +192,109 @@ class PivotSheetChart extends ReactChart {
       .flatMap(config => config.rows || []);
 
     const [
-      enableExpandRow,
-      enableHoverHighlight,
-      enableSelectedHighlight,
-      metricNameShowIn,
+      hierarchyType,
+      metricPlacement,
+      widthType,
+      cornerText,
+      showSeriesNumber,
+      emptyPlaceholder,
     ] = getStyles(
       styleConfigs,
-      ['style'],
+      ['layout'],
       [
-        'enableExpandRow',
-        'enableHoverHighlight',
-        'enableSelectedHighlight',
-        'metricNameShowIn',
+        'hierarchyType',
+        'metricPlacement',
+        'widthType',
+        'cornerText',
+        'showSeriesNumber',
+        'emptyPlaceholder',
       ],
+    );
+    const [
+      dataWidth,
+      dataHeight,
+      rowWidth,
+      treeWidth,
+      columnHeight,
+      wordWrap,
+      maxLines,
+    ] = getStyles(
+      styleConfigs,
+      ['cell'],
+      [
+        'dataWidth',
+        'dataHeight',
+        'rowWidth',
+        'treeWidth',
+        'columnHeight',
+        'wordWrap',
+        'maxLines',
+      ],
+    );
+    const [
+      freezeRowHeader,
+      frozenRows,
+      frozenColumns,
+      enableResize,
+      enableCopy,
+      copyWithHeader,
+      hoverHighlight,
+      selectedHighlight,
+      brushSelection,
+    ] = getStyles(
+      styleConfigs,
+      ['interaction'],
+      [
+        'freezeRowHeader',
+        'frozenRows',
+        'frozenColumns',
+        'enableResize',
+        'enableCopy',
+        'copyWithHeader',
+        'hoverHighlight',
+        'selectedHighlight',
+        'brushSelection',
+      ],
+    );
+    const [
+      aggregation,
+      rowGrandTotal,
+      rowSubTotal,
+      rowTotalAtTop,
+      columnGrandTotal,
+      columnSubTotal,
+      columnTotalAtLeft,
+      rowTotalsSettings,
+    ] = getStyles(
+      styleConfigs,
+      ['totals'],
+      [
+        'aggregation',
+        'rowGrandTotal',
+        'rowSubTotal',
+        'rowTotalAtTop',
+        'columnGrandTotal',
+        'columnSubTotal',
+        'columnTotalAtLeft',
+        'rowTotalsSettings',
+      ],
+    );
+
+    // ---- legacy config fallbacks (old style/summary settings) ----
+    const [enableExpandRow] = getStyles(
+      styleConfigs,
+      ['style'],
+      ['enableExpandRow'],
+    );
+    const [metricNameShowIn] = getStyles(
+      styleConfigs,
+      ['style'],
+      ['metricNameShowIn'],
+    );
+    const [enableHoverHighlight, enableSelectedHighlight] = getStyles(
+      styleConfigs,
+      ['style'],
+      ['enableHoverHighlight', 'enableSelectedHighlight'],
     );
     const [summaryAggregation] = getStyles(
       settingConfigs,
@@ -214,7 +327,61 @@ class PivotSheetChart extends ReactChart {
       ['enableTotal', 'totalPosition', 'enableSubTotal', 'subTotalPosition'],
     );
 
-    if (!!enableExpandRow) {
+    const resolvedHierarchyType = valueOrDefault(
+      hierarchyType,
+      enableExpandRow ? 'tree' : 'grid',
+    );
+    const resolvedMetricPlacement = valueOrDefault(
+      metricPlacement,
+      metricNameShowIn === false ? 'rows' : 'columns',
+    );
+    const resolvedHoverHighlight = valueOrDefault(
+      hoverHighlight,
+      valueOrDefault(enableHoverHighlight, true),
+    );
+    const resolvedSelectedHighlight = valueOrDefault(
+      selectedHighlight,
+      valueOrDefault(enableSelectedHighlight, true),
+    );
+    const resolvedAggregation = valueOrDefault(
+      aggregation,
+      valueOrDefault(summaryAggregation, 'SUM'),
+    );
+    const resolvedWidthType = valueOrDefault(widthType, 'compact');
+
+    const valueInCols = resolvedMetricPlacement !== 'rows';
+    const rowKeys = rowSectionConfigRows.map(config =>
+      chartDataSet.getFieldKey(config),
+    );
+    const columnKeys = columnSectionConfigRows.map(config =>
+      chartDataSet.getFieldKey(config),
+    );
+    const metricKeys = metricsSectionConfigRows.map(config =>
+      chartDataSet.getFieldKey(config),
+    );
+    // dataWidth 兼容两种结构：number（旧配置）或 { width, columnWidths }（新配置）
+    const columnWidths =
+      dataWidth && typeof dataWidth === 'object'
+        ? (dataWidth as any).columnWidths || []
+        : [];
+    // per-column width settings keyed by S2 field key (case-insensitive)
+    this.columnWidthsMap = new Map<string, { width?: number }>();
+    (Array.isArray(columnWidths) ? columnWidths : []).forEach((item: any) => {
+      if (item && item.key) {
+        this.columnWidthsMap.set(String(item.key).toLowerCase(), item);
+      }
+    });
+    // per-column totals settings keyed by S2 field key (case-insensitive)
+    this.noTotalsFieldKeys = new Set(
+      (Array.isArray(rowTotalsSettings) ? rowTotalsSettings : [])
+        .filter((item: any) => item && item.key && item.totals === false)
+        .map((item: any) => String(item.key).toLowerCase()),
+    );
+    const isTree =
+      resolvedHierarchyType === 'tree' ||
+      resolvedHierarchyType === 'grid-tree';
+
+    if (isTree) {
       if (
         this.lastRowsConfig.map(lrc => lrc.uid).join('-') !==
         rowSectionConfigRows.map(lrc => lrc.uid).join('-')
@@ -234,84 +401,170 @@ class PivotSheetChart extends ReactChart {
         this.collapsedRows = {};
       }
     }
+
     return {
       options: {
-        hierarchyType: enableExpandRow ? 'tree' : 'grid',
-        hierarchyCollapse: this.hierarchyCollapse,
         width: context?.width,
         height: context?.height,
-        tooltip: {
-          showTooltip: true,
+        hierarchyType: resolvedHierarchyType,
+        cornerText: cornerText ? String(cornerText) : '',
+        cornerExtraFieldText: valueInCols
+          ? context.translator('summary.number')
+          : '',
+        seriesNumber: {
+          enable: valueOrDefault(showSeriesNumber, false),
         },
-        cornerExtraFieldText: context.translator('summary.number'),
-        interaction: {
-          hoverHighlight: Boolean(enableHoverHighlight),
-          selectedCellsSpotlight: Boolean(enableSelectedHighlight),
-          autoResetSheetStyle: false,
-          enableCopy: true,
+        placeholder: {
+          cell: valueOrDefault(emptyPlaceholder, '-'),
+        },
+        frozen: {
+          rowHeader: valueOrDefault(freezeRowHeader, true),
+          rowCount: toNonNegativeInteger(frozenRows),
+          colCount: toNonNegativeInteger(frozenColumns),
         },
         totals: {
           row: {
-            showGrandTotals: Boolean(enableRowTotal),
-            reverseLayout: Boolean(rowTotalPosition),
-            showSubTotals: Boolean(enableRowSubTotal),
-            reverseSubLayout: Boolean(rowSubTotalPosition),
-            subTotalsDimensions: [
-              rowSectionConfigRows.map(
-                chartDataSet.getFieldKey,
-                chartDataSet,
-              )?.[0],
-            ],
-            label: context.translator('summary.total'),
-            subLabel: context.translator('summary.subTotal'),
-            calcTotals: {
-              aggregation: summaryAggregation,
+            showGrandTotals: valueOrDefault(
+              rowGrandTotal,
+              valueOrDefault(enableRowTotal, false),
+            ),
+            showSubTotals:
+              rowKeys.length > 1 &&
+              valueOrDefault(
+                rowSubTotal,
+                valueOrDefault(enableRowSubTotal, false),
+              ),
+            subTotalsDimensions: rowKeys.slice(0, -1),
+            reverseGrandTotalsLayout: valueOrDefault(
+              rowTotalAtTop,
+              valueOrDefault(rowTotalPosition, true),
+            ),
+            reverseSubTotalsLayout: valueOrDefault(
+              rowTotalAtTop,
+              valueOrDefault(rowSubTotalPosition, true),
+            ),
+            calcGrandTotals: {
+              aggregation: resolvedAggregation,
             },
             calcSubTotals: {
-              aggregation: calcSubAggregation,
+              aggregation: valueOrDefault(calcSubAggregation, resolvedAggregation),
             },
+            grandTotalsLabel: context.translator('summary.total'),
+            subTotalsLabel: context.translator('summary.subTotal'),
           },
           col: {
-            showGrandTotals: Boolean(enableColTotal),
-            reverseLayout: Boolean(colTotalPosition),
-            showSubTotals: Boolean(enableColSubTotal),
-            reverseSubLayout: Boolean(colSubTotalPosition),
-            subTotalsDimensions: [
-              columnSectionConfigRows.map(
-                chartDataSet.getFieldKey,
-                chartDataSet,
-              )?.[0],
-            ],
-            label: context.translator('summary.total'),
-            subLabel: context.translator('summary.subTotal'),
-            calcTotals: {
-              aggregation: summaryAggregation,
+            showGrandTotals: valueOrDefault(
+              columnGrandTotal,
+              valueOrDefault(enableColTotal, false),
+            ),
+            showSubTotals:
+              columnKeys.length > 1 &&
+              valueOrDefault(
+                columnSubTotal,
+                valueOrDefault(enableColSubTotal, false),
+              ),
+            subTotalsDimensions: columnKeys.slice(0, -1),
+            reverseGrandTotalsLayout: valueOrDefault(
+              columnTotalAtLeft,
+              valueOrDefault(colTotalPosition, true),
+            ),
+            reverseSubTotalsLayout: valueOrDefault(
+              columnTotalAtLeft,
+              valueOrDefault(colSubTotalPosition, true),
+            ),
+            calcGrandTotals: {
+              aggregation: resolvedAggregation,
             },
             calcSubTotals: {
-              aggregation: calcSubAggregation,
+              aggregation: valueOrDefault(calcSubAggregation, resolvedAggregation),
             },
+            grandTotalsLabel: context.translator('summary.total'),
+            subTotalsLabel: context.translator('summary.subTotal'),
           },
         },
-        supportCSSTransform: true,
-        style: this.getRowAndColStyle(
+        conditions: this.getConditions(
           styleConfigs,
           metricsSectionConfigRows,
-          columnSectionConfigRows,
           chartDataSet,
         ),
+        style: this.getCellStyle(
+          styleConfigs,
+          resolvedWidthType,
+          isTree,
+          this.collapsedRows,
+          this.columnWidthsMap,
+        ),
+        interaction: {
+          autoResetSheetStyle: false,
+          hoverHighlight: resolvedHoverHighlight
+            ? {
+                rowHeader: true,
+                colHeader: true,
+                currentRow: true,
+                currentCol: true,
+              }
+            : false,
+          selectedCellHighlight: resolvedSelectedHighlight
+            ? {
+                rowHeader: true,
+                colHeader: true,
+                currentRow: true,
+                currentCol: true,
+              }
+            : false,
+          selectedCellsSpotlight: false,
+          resize: valueOrDefault(enableResize, true)
+            ? {
+                rowCellVertical: true,
+                cornerCellHorizontal: true,
+                colCellHorizontal: true,
+                colCellVertical: true,
+                minCellWidth: 40,
+                minCellHeight: 20,
+              }
+            : false,
+          copy: {
+            enable: valueOrDefault(enableCopy, true),
+            withFormat: true,
+            withHeader: valueOrDefault(copyWithHeader, true),
+          },
+          brushSelection: valueOrDefault(brushSelection, true),
+          multiSelection: true,
+          rangeSelection: true,
+          selectedCellMove: true,
+          overscrollBehavior: 'contain',
+        },
+        tooltip: {
+          enable: true,
+        },
+        // 未参与汇总的列，其汇总单元格显示为 '-'（普通 facet 不触发 data-cell:render，故在此改 meta）
+        layoutCellMeta: cellMeta => {
+          if (
+            cellMeta?.isTotals &&
+            this.noTotalsFieldKeys.has(
+              String(cellMeta.valueField).toLowerCase(),
+            )
+          ) {
+            return { ...cellMeta, fieldValue: '-' };
+          }
+          return cellMeta;
+        },
+        showDefaultHeaderActionIcon: false,
+        hd: true,
+        csp: {
+          iconStrategy: 'path',
+        },
+        transformCanvasConfig: () => ({
+          supportsCSSTransform: true,
+        }),
+        cornerCell: this.getCornerCell(cornerText),
       },
       dataCfg: {
         fields: {
-          rows: rowSectionConfigRows.map(config =>
-            chartDataSet.getFieldKey(config),
-          ),
-          columns: columnSectionConfigRows.map(config =>
-            chartDataSet.getFieldKey(config),
-          ),
-          values: metricsSectionConfigRows.map(config =>
-            chartDataSet.getFieldKey(config),
-          ),
-          valueInCols: !!enableExpandRow || !!metricNameShowIn,
+          rows: rowKeys,
+          columns: columnKeys,
+          values: metricKeys,
+          valueInCols,
         },
         meta: rowSectionConfigRows
           .concat(columnSectionConfigRows)
@@ -333,43 +586,22 @@ class PivotSheetChart extends ReactChart {
           chartDataSet,
         ),
       },
-      theme: {
-        /*
-          DATA_CELL = "dataCell",
-          HEADER_CELL = "headerCell",
-          ROW_CELL = "rowCell",
-          COL_CELL = "colCell",
-          CORNER_CELL = "cornerCell",
-          MERGED_CELL = "mergedCell"
-        */
-        cornerCell: this.getHeaderStyle(styleConfigs),
-        colCell: this.getHeaderStyle(styleConfigs),
-        rowCell: this.getHeaderStyle(styleConfigs),
-        dataCell: this.getBodyStyle(styleConfigs),
-        background: {
-          opacity: 0,
-        },
+      themeCfg: {
+        theme: this.getTheme(styleConfigs),
       },
-      palette: {
-        basicColors: this.getThemeColorList(styleConfigs),
-        semanticColors: {},
-        brandColor: '#3471F9',
-        basicColorRelations: [],
-      },
-      onRowCellCollapseTreeRows: ({ isCollapsed, node }) => {
+      onRowCellCollapsed: ({ isCollapsed, node }) => {
         this.collapsedRows[node.id] = isCollapsed;
         this.changeDrillConfig(rowSectionConfigRows, drillOption);
       },
-      onCollapseRowsAll: hierarchyCollapse => {
-        this.hierarchyCollapse = !hierarchyCollapse;
+      onRowCellAllCollapsed: isCollapsed => {
+        this.hierarchyCollapse = !isCollapsed;
         Object.keys(this.collapsedRows).forEach(k => {
           this.collapsedRows[k] = this.hierarchyCollapse;
         });
         this.changeDrillConfig(rowSectionConfigRows, drillOption, true);
       },
-      onSelected: (cells: DataCell[]) => {
-        const state = this.chart?.interaction.getState();
-        this.changeSelectedItems(state?.interactedCells || [], chartDataSet);
+      onSelected: (cells: S2CellType<ViewMeta>[]) => {
+        this.changeSelectedItems(cells, chartDataSet);
       },
       onDataCellClick: (cell: TargetCellInfo) => {
         const state = this.chart?.interaction.getState();
@@ -378,8 +610,40 @@ class PivotSheetChart extends ReactChart {
       getSpreadSheet: getSpreadSheet => {
         this.chart = getSpreadSheet;
       },
+      onLayoutResizeRowWidth: ({ info }) => {
+        if (info?.resizedWidth) {
+          this.resizedStyle.rowWidth = info.resizedWidth;
+        }
+      },
+      onLayoutResizeTreeWidth: ({ info }) => {
+        if (info?.resizedWidth) {
+          this.resizedStyle.treeWidth = info.resizedWidth;
+        }
+      },
+      onLayoutResizeColWidth: ({ info }) => {
+        if (info?.resizedWidth) {
+          this.resizedStyle.dataWidth = info.resizedWidth;
+        }
+      },
+      onLayoutResizeRowHeight: ({ info }) => {
+        if (info?.resizedHeight) {
+          this.resizedStyle.dataHeight = info.resizedHeight;
+        }
+      },
+      onLayoutResizeColHeight: ({ info }) => {
+        if (info?.resizedHeight) {
+          this.resizedStyle.columnHeight = info.resizedHeight;
+        }
+      },
+      onLayoutResizeSeriesWidth: ({ seriesNumberWidth }) => {
+        if (seriesNumberWidth) {
+          this.resizedStyle.seriesWidth = seriesNumberWidth;
+        }
+      },
     };
   }
+
+  // 未参与汇总的列，其汇总单元格显示为 '-'（已通过 options.layoutCellMeta 实现）
 
   changeSelectedItems(
     cells: S2CellType<ViewMeta>[],
@@ -527,60 +791,105 @@ class PivotSheetChart extends ReactChart {
     }
   }
 
-  private getThemeColorList(style: ChartStyleConfig[]): Array<string> {
-    const [basicColors] = getStyles(style, ['theme'], ['themeType']);
-    return basicColors?.colors || PIVOT_THEME_LIST[basicColors?.themeType || 0];
-  }
-
-  private getRowAndColStyle(
+  private getCellStyle(
     style: ChartStyleConfig[],
-    metricsSectionConfigRows: ChartDataSectionField[],
-    columnSectionConfigRows: ChartDataSectionField[],
-    chartDataSet: IChartDataSet<string>,
-  ): Partial<Style> {
-    const [bodyHeight, bodyWidth] = getStyles(
-      style,
-      ['tableBodyStyle'],
-      ['height', 'width'],
-    );
-
-    const [headerHeight, headerWidth] = getStyles(
-      style,
-      ['tableHeaderStyle'],
-      ['height', 'width'],
-    );
-    const [enableExpandRow, metricNameShowIn] = getStyles(
-      style,
-      ['style'],
-      ['enableExpandRow', 'metricNameShowIn'],
-    );
+    widthType: string,
+    isTree: boolean,
+    collapsedRows: Record<string, boolean>,
+    columnWidthsMap: Map<string, { width?: number }>,
+  ): S2Style {
+    const [dataWidth, dataHeight, rowWidth, treeWidth, columnHeight, wordWrap, maxLines] =
+      getStyles(
+        style,
+        ['cell'],
+        [
+          'dataWidth',
+          'dataHeight',
+          'rowWidth',
+          'treeWidth',
+          'columnHeight',
+          'wordWrap',
+          'maxLines',
+        ],
+      );
+    const isCompact = widthType === 'compact';
+    // dataWidth 兼容两种结构：number（旧配置）或 { width, columnWidths }（新配置）
+    const resolvedDataWidth =
+      dataWidth && typeof dataWidth === 'object'
+        ? (dataWidth as any).width
+        : dataWidth;
     return {
-      colCfg: {
-        height: headerHeight || 30,
-        widthByFieldValue:
-          !!enableExpandRow || !!metricNameShowIn
-            ? metricsSectionConfigRows.reduce((allConfig, config) => {
-                return {
-                  ...allConfig,
-                  [chartDataSet.getFieldKey(config)]: bodyWidth,
-                };
-              }, {})
-            : chartDataSet.reduce((dataSetAllConfig, dataSetConfig) => {
-                return {
-                  ...dataSetAllConfig,
-                  [dataSetConfig?.getCell(
-                    columnSectionConfigRows[columnSectionConfigRows.length - 1],
-                  )]: bodyWidth,
-                };
-              }, {}),
+      layoutWidthType: widthType as S2Style['layoutWidthType'],
+      compactMinWidth: 40,
+      dataCell: {
+        width: isCompact
+          ? toPositiveNumber(
+              valueOrDefault(this.resizedStyle.dataWidth, resolvedDataWidth),
+              120,
+            )
+          : undefined,
+        height: toPositiveNumber(
+          valueOrDefault(this.resizedStyle.dataHeight, dataHeight),
+          32,
+        ),
+        wordWrap: valueOrDefault(wordWrap, false),
+        maxLines: toPositiveNumber(maxLines, 2),
+        textOverflow: 'ellipsis',
       },
-      rowCfg: {
-        width: headerWidth,
+      rowCell: {
+        width: isCompact
+          ? toPositiveNumber(
+              valueOrDefault(this.resizedStyle.rowWidth, rowWidth),
+              120,
+            )
+          : null,
+        treeWidth: isCompact
+          ? toPositiveNumber(
+              valueOrDefault(this.resizedStyle.treeWidth, treeWidth),
+              220,
+            )
+          : undefined,
+        wordWrap: valueOrDefault(wordWrap, false),
+        maxLines: toPositiveNumber(maxLines, 2),
+        textOverflow: 'ellipsis',
+        collapseFields: isTree ? collapsedRows : null,
       },
-      cellCfg: {
-        height: bodyHeight || 30,
+      colCell: {
+        width: isCompact
+          ? (colNode: any) => {
+              // 优先级: 拖拽宽度 > 配置列宽 > 默认列宽
+              // 指标挂列时列节点 field 为 $$extra$$，真实指标字段在 query[$$extra$$]
+              const field =
+                colNode?.field === '$$extra$$'
+                  ? colNode?.query?.['$$extra$$']
+                  : colNode?.field;
+              const setting = field
+                ? columnWidthsMap.get(String(field).toLowerCase())
+                : undefined;
+              return setting?.width
+                ? setting.width
+                : toPositiveNumber(
+                    valueOrDefault(
+                      this.resizedStyle.dataWidth,
+                      resolvedDataWidth,
+                    ),
+                    120,
+                  );
+            }
+          : null,
+        height: toPositiveNumber(
+          valueOrDefault(this.resizedStyle.columnHeight, columnHeight),
+          32,
+        ),
+        wordWrap: valueOrDefault(wordWrap, false),
+        maxLines: toPositiveNumber(maxLines, 2),
+        textOverflow: 'ellipsis',
       },
-      collapsedRows: enableExpandRow ? this.collapsedRows : {},
+      cornerCell: {
+        wordWrap: valueOrDefault(wordWrap, false),
+        maxLines: toPositiveNumber(maxLines, 2),
+        textOverflow: 'ellipsis',
+      },
     };
   }
 
@@ -593,9 +902,16 @@ class PivotSheetChart extends ReactChart {
         if (!config?.sort?.type || config?.sort?.type === SortActionType.None) {
           return null;
         }
+        const sortFieldId = chartDataSet.getFieldKey(config);
+        if (config.sort.type === SortActionType.Customize) {
+          return {
+            sortFieldId,
+            sortBy: config.sort.value as string[],
+          };
+        }
         const isASC = config.sort.type === SortActionType.ASC;
         return {
-          sortFieldId: chartDataSet.getFieldKey(config),
+          sortFieldId,
           sortFunc: params => {
             const { data } = params;
             return data?.sort((a, b) =>
@@ -607,55 +923,357 @@ class PivotSheetChart extends ReactChart {
       .filter(Boolean) as Array<SortParam>;
   }
 
-  private getBodyStyle(styleConfigs: ChartStyleConfig[]): DefaultCellTheme {
-    const [bodyFont, bodyTextAlign] = getStyles(
+  private getConditions(
+    styleConfigs: ChartStyleConfig[],
+    metricFields: ChartDataSectionField[],
+    chartDataSet: IChartDataSet<string>,
+  ): Conditions {
+    const [
+      enableTextColor,
+      negativeColor,
+      positiveColor,
+      enableBackground,
+      threshold,
+      belowColor,
+      aboveColor,
+      enableDataBar,
+      dataBarColor,
+    ] = getStyles(
       styleConfigs,
-      ['tableBodyStyle'],
-      ['font', 'tableAlign'],
+      ['condition'],
+      [
+        'enableTextColor',
+        'negativeColor',
+        'positiveColor',
+        'enableBackground',
+        'threshold',
+        'belowColor',
+        'aboveColor',
+        'enableDataBar',
+        'dataBarColor',
+      ],
     );
+    const text: TextCondition[] = [];
+    const background: BackgroundCondition[] = [];
+    const interval: IntervalCondition[] = [];
 
-    const _getBolderFontWeight = (
-      weightName: string,
-    ): number | BolderFontWeight => {
-      return BolderFontWeight[weightName]
-        ? BolderFontWeight[weightName]
-        : parseInt(weightName) + 100;
-    };
+    metricFields.forEach(field => {
+      const fieldKey = chartDataSet.getFieldKey(field);
+      if (valueOrDefault(enableTextColor, true)) {
+        text.push({
+          field: fieldKey,
+          mapping: fieldValue => {
+            const number = toFiniteNumber(fieldValue);
+            if (number === null || number === 0) {
+              return null;
+            }
+            return {
+              fill:
+                number < 0
+                  ? valueOrDefault(negativeColor, '#cf1322')
+                  : valueOrDefault(positiveColor, '#237804'),
+            };
+          },
+        });
+      }
+      if (valueOrDefault(enableBackground, false)) {
+        background.push({
+          field: fieldKey,
+          mapping: fieldValue => {
+            const number = toFiniteNumber(fieldValue);
+            if (number === null) {
+              return null;
+            }
+            return {
+              fill:
+                number < valueOrDefault(threshold, 0)
+                  ? valueOrDefault(belowColor, '#fff1f0')
+                  : valueOrDefault(aboveColor, '#f6ffed'),
+              intelligentReverseTextColor: true,
+            };
+          },
+        });
+      }
+      if (valueOrDefault(enableDataBar, false)) {
+        const values = chartDataSet
+          .map(row => toFiniteNumber(row.getCell(field)))
+          .filter(value => value !== null) as number[];
+        if (values.length) {
+          const minValue = Math.min(...values);
+          const maxValue = Math.max(...values);
+          interval.push({
+            field: fieldKey,
+            mapping: () => ({
+              fill: valueOrDefault(dataBarColor, '#5b8ff9'),
+              minValue,
+              maxValue,
+            }),
+          });
+        }
+      }
+    });
 
-    return {
-      text: {
-        fontFamily: bodyFont?.fontFamily,
-        fontSize: bodyFont?.fontSize,
-        fontWeight: bodyFont?.fontWeight,
-        textAlign: bodyTextAlign,
-      },
-      bolderText: {
-        fontFamily: bodyFont?.fontFamily,
-        fontSize: bodyFont?.fontSize,
-        fontWeight: _getBolderFontWeight(bodyFont?.fontWeight),
-        textAlign: bodyTextAlign,
-      },
-    };
+    return { text, background, interval };
   }
 
-  private getHeaderStyle(styleConfigs: ChartStyleConfig[]): DefaultCellTheme {
-    const [headerFont, headerTextAlign] = getStyles(
+  private getCornerCell(cornerText: string) {
+    if (!cornerText) {
+      return undefined;
+    }
+    const cell = (viewMeta: any, spreadsheet: SpreadSheet, headerConfig: any) => {
+      class DatartCornerCell extends CornerCell {
+        getFormattedFieldValue() {
+          const { cornerType, field } = this.meta as any;
+          const [firstRowField] = (this.spreadsheet.dataSet.fields
+            .rows || []) as string[];
+          if (
+            cornerType === 'row' &&
+            (!field || field === firstRowField)
+          ) {
+            return {
+              value: cornerText,
+              formattedValue: cornerText,
+            };
+          }
+          return super.getFormattedFieldValue();
+        }
+      }
+      return new DatartCornerCell(viewMeta, spreadsheet, headerConfig);
+    };
+    return cell;
+  }
+
+  private getTheme(styleConfigs: ChartStyleConfig[]): S2Theme {
+    const [headerAlign, dataAlign] = getStyles(
+      styleConfigs,
+      ['cell'],
+      ['headerAlign', 'dataAlign'],
+    );
+    const [
+      headerBackground,
+      headerTextColor,
+      bodyBackground,
+      alternateBackground,
+      bodyTextColor,
+      borderColor,
+      selectedColor,
+      headerFont,
+      bodyFont,
+    ] = getStyles(
+      styleConfigs,
+      ['theme'],
+      [
+        'headerBackground',
+        'headerTextColor',
+        'bodyBackground',
+        'alternateBackground',
+        'bodyTextColor',
+        'borderColor',
+        'selectedColor',
+        'headerFont',
+        'bodyFont',
+      ],
+    );
+    // legacy font/align fallback
+    const [tableHeaderFont, tableHeaderAlign] = getStyles(
       styleConfigs,
       ['tableHeaderStyle'],
       ['font', 'align'],
     );
-    return {
-      text: {
-        fontFamily: headerFont?.fontFamily,
-        fontSize: headerFont?.fontSize,
-        fontWeight: headerFont?.fontWeight,
-        textAlign: headerTextAlign,
+    const [tableBodyFont, tableBodyAlign] = getStyles(
+      styleConfigs,
+      ['tableBodyStyle'],
+      ['font', 'tableAlign'],
+    );
+    // legacy pivotSheetTheme fallback (themeType + colors array)
+    const [legacyThemeConfig] = getStyles(
+      styleConfigs,
+      ['theme'],
+      ['themeType'],
+    );
+    const legacyColors = (legacyThemeConfig as any)?.colors as
+      | string[]
+      | undefined;
+
+    const resolvedHeaderFont = valueOrDefault(headerFont, tableHeaderFont);
+    const resolvedBodyFont = valueOrDefault(bodyFont, tableBodyFont);
+    const resolvedHeaderAlign = valueOrDefault(
+      headerAlign,
+      valueOrDefault(tableHeaderAlign, 'center'),
+    );
+    const resolvedDataAlign = valueOrDefault(
+      dataAlign,
+      valueOrDefault(tableBodyAlign, 'right'),
+    );
+    const resolvedHeaderBackground = valueOrDefault(
+      headerBackground,
+      valueOrDefault(legacyColors?.[3], '#d9eaf7'),
+    );
+    const resolvedHeaderTextColor = valueOrDefault(
+      headerTextColor,
+      valueOrDefault(legacyColors?.[0], '#1f4e78'),
+    );
+    const resolvedBodyBackground = valueOrDefault(
+      bodyBackground,
+      valueOrDefault(legacyColors?.[1], '#ffffff'),
+    );
+    const resolvedAlternateBackground = valueOrDefault(
+      alternateBackground,
+      valueOrDefault(legacyColors?.[8], '#f7fbff'),
+    );
+    const resolvedBodyTextColor = valueOrDefault(
+      bodyTextColor,
+      valueOrDefault(legacyColors?.[13], '#262626'),
+    );
+    const resolvedBorderColor = valueOrDefault(
+      borderColor,
+      valueOrDefault(legacyColors?.[9], '#b8c8d8'),
+    );
+    const resolvedSelectedColor = valueOrDefault(
+      selectedColor,
+      valueOrDefault(legacyColors?.[2], '#bae7ff'),
+    );
+
+    const toTextTheme = (font, fill, textAlign, forceBold = false) => ({
+      fontFamily:
+        font?.fontFamily || 'Microsoft YaHei, PingFang SC, Arial, sans-serif',
+      fontSize: toPositiveNumber(font?.fontSize, 12),
+      fontWeight: forceBold
+        ? font?.fontWeight === 'normal'
+          ? 'bold'
+          : valueOrDefault(font?.fontWeight, 'bold')
+        : valueOrDefault(font?.fontWeight, 'normal'),
+      fontStyle: valueOrDefault(font?.fontStyle, 'normal'),
+      fill,
+      textAlign,
+      textBaseline: 'middle' as any,
+    });
+    const getCellTheme = ({
+      backgroundColor,
+      crossBackgroundColor,
+      borderColor: cellBorderColor,
+      selectedColor: cellSelectedColor,
+    }) => ({
+      backgroundColor,
+      crossBackgroundColor,
+      backgroundColorOpacity: 1,
+      horizontalBorderColor: cellBorderColor,
+      horizontalBorderColorOpacity: 1,
+      verticalBorderColor: cellBorderColor,
+      verticalBorderColorOpacity: 1,
+      horizontalBorderWidth: 1,
+      verticalBorderWidth: 1,
+      padding: {
+        top: 8,
+        right: 8,
+        bottom: 8,
+        left: 8,
       },
-      bolderText: {
-        fontFamily: headerFont?.fontFamily,
-        fontSize: headerFont?.fontSize,
-        fontWeight: headerFont?.fontWeight,
-        textAlign: headerTextAlign,
+      interactionState: {
+        hover: {
+          backgroundColor: cellSelectedColor,
+          backgroundOpacity: 0.45,
+        },
+        selected: {
+          backgroundColor: cellSelectedColor,
+          backgroundOpacity: 0.75,
+          borderColor: cellSelectedColor,
+          borderWidth: 1,
+        },
+        prepareSelect: {
+          borderColor: cellSelectedColor,
+          borderWidth: 1,
+          borderOpacity: 1,
+        },
+      },
+    });
+
+    const headerText = toTextTheme(
+      resolvedHeaderFont,
+      resolvedHeaderTextColor,
+      resolvedHeaderAlign,
+      true,
+    );
+    const bodyText = toTextTheme(
+      resolvedBodyFont,
+      resolvedBodyTextColor,
+      resolvedDataAlign,
+    );
+    const headerCell = getCellTheme({
+      backgroundColor: resolvedHeaderBackground,
+      crossBackgroundColor: resolvedHeaderBackground,
+      borderColor: resolvedBorderColor,
+      selectedColor: resolvedSelectedColor,
+    });
+    const bodyCell = getCellTheme({
+      backgroundColor: resolvedBodyBackground,
+      crossBackgroundColor: resolvedAlternateBackground,
+      borderColor: resolvedBorderColor,
+      selectedColor: resolvedSelectedColor,
+    });
+
+    return {
+      cornerCell: {
+        text: headerText,
+        bolderText: headerText,
+        measureText: headerText,
+        cell: headerCell,
+      },
+      colCell: {
+        text: headerText,
+        bolderText: headerText,
+        measureText: headerText,
+        cell: headerCell,
+      },
+      rowCell: {
+        text: headerText,
+        bolderText: headerText,
+        measureText: headerText,
+        seriesText: headerText,
+        cell: headerCell,
+        seriesNumberWidth: this.resizedStyle.seriesWidth,
+      },
+      dataCell: {
+        text: bodyText,
+        bolderText: {
+          ...bodyText,
+          fontWeight: 'bold',
+        },
+        cell: bodyCell,
+        miniChart: {
+          interval: {
+            height: 12,
+            fill: '#5b8ff9',
+          },
+        },
+      },
+      seriesNumberCell: {
+        text: headerText,
+        bolderText: headerText,
+        cell: headerCell,
+      },
+      resizeArea: {
+        size: 6,
+        background: resolvedSelectedColor,
+        guideLineColor: resolvedSelectedColor,
+      },
+      splitLine: {
+        horizontalBorderColor: resolvedBorderColor,
+        horizontalBorderWidth: 1,
+        verticalBorderColor: resolvedBorderColor,
+        verticalBorderWidth: 1,
+        showShadow: false,
+      },
+      scrollBar: {
+        trackColor: '#f0f0f0',
+        thumbColor: '#bfbfbf',
+        thumbHoverColor: '#8c8c8c',
+        size: 8,
+        hoverSize: 10,
+      },
+      background: {
+        color: resolvedBodyBackground,
+        opacity: 1,
       },
     };
   }

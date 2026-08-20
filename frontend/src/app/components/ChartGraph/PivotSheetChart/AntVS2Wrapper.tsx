@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Datart
  *
  * Copyright 2021
@@ -17,8 +17,9 @@
  */
 
 import { setLang } from '@antv/s2';
+import '@antv/s2/dist/s2.min.css';
 import { SheetComponent } from '@antv/s2-react';
-import '@antv/s2-react/dist/style.min.css';
+import '@antv/s2-react/dist/s2-react.min.css';
 import { getLang } from 'locales/i18n';
 import { FC, memo } from 'react';
 import styled from 'styled-components';
@@ -27,53 +28,56 @@ import { AndvS2Config } from './types';
 
 setLang(['zh_CN', 'en_US'].find(lang => lang.includes(getLang()!)) as any);
 
-const AntVS2Wrapper: FC<AndvS2Config> = memo(
-  ({
+const AntVS2Wrapper: FC<AndvS2Config> = memo(config => {
+  const {
     dataCfg,
     options,
-    theme,
-    palette,
-    onCollapseRowsAll,
-    onRowCellCollapseTreeRows,
+    themeCfg,
+    onRowCellCollapsed,
+    onRowCellAllCollapsed,
     onSelected,
     getSpreadSheet,
     onDataCellClick,
-  }) => {
-    if (!dataCfg) {
-      return <div></div>;
-    }
+    ...resizeHandlers
+  } = config;
+  if (!dataCfg) {
+    return <div></div>;
+  }
 
-    const onDataCellHover = ({ event, viewMeta }) => {
-      viewMeta.spreadsheet.tooltip.show({
-        position: {
-          x: event.clientX,
-          y: event.clientY,
-        },
-        content: (
-          <TableDataCellTooltip
-            datas={viewMeta.data}
-            meta={viewMeta.spreadsheet.dataCfg.meta}
-          />
-        ),
-      });
-    };
+  const onDataCellHover = ({ event, viewMeta }) => {
+    viewMeta.spreadsheet.showTooltip({
+      position: {
+        x: event.clientX,
+        y: event.clientY,
+      },
+      content: (
+        <TableDataCellTooltip
+          datas={viewMeta.data}
+          meta={viewMeta.spreadsheet.dataCfg.meta}
+        />
+      ),
+    });
+  };
 
-    return (
-      <StyledAntVS2Wrapper
-        sheetType="pivot"
-        dataCfg={dataCfg}
-        options={options}
-        themeCfg={{ theme, palette }}
-        onCollapseRowsAll={onCollapseRowsAll}
-        onRowCellCollapseTreeRows={onRowCellCollapseTreeRows}
-        onDataCellHover={onDataCellHover}
-        onSelected={onSelected}
-        getSpreadSheet={getSpreadSheet}
-        onDataCellClick={onDataCellClick}
-      />
-    );
-  },
-);
+  return (
+    <StyledAntVS2Wrapper
+      sheetType="pivot"
+      dataCfg={dataCfg}
+      options={options as any}
+      themeCfg={themeCfg}
+      adaptive={false}
+      onRowCellCollapsed={onRowCellCollapsed}
+      onRowCellAllCollapsed={onRowCellAllCollapsed}
+      onDataCellHover={onDataCellHover}
+      onDataCellSelected={onSelected}
+      onDataCellClick={onDataCellClick}
+      onMounted={spreadsheet => {
+        getSpreadSheet?.(spreadsheet);
+      }}
+      {...(resizeHandlers as any)}
+    />
+  );
+});
 
 const TableDataCellTooltip: FC<{
   datas?: object;

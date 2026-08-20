@@ -62,8 +62,8 @@
   "dependencies": {
     "@ant-design/icons": "^4.8.3",
     "@ant-design/pro-table": "2.60.1",
-    "@antv/s2": "1.19.0",
-    "@antv/s2-react": "1.18.0",
+    "@antv/s2": "2.7.2",
+    "@antv/s2-react": "2.3.1",
     "@dinero.js/currencies": "^2.0.0-alpha.8",
     "@jiaminghi/data-view-react": "^1.2.5",
     "@reduxjs/toolkit": "^1.8.0",

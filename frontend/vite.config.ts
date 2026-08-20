@@ -111,8 +111,12 @@ export default defineConfig(({ mode }) => {
         // Handle antd's ~-prefixed less imports
         '~antd': path.resolve(__dirname, 'node_modules/antd'),
         '~@ant-design': path.resolve(__dirname, 'node_modules/@ant-design'),
-        // Module aliases
-        '@app': path.resolve(__dirname, 'src/app'),
+        // @antv/s2-react lazily imports 'react-dom/client' (React 18 entry).
+        // React 17 has no such entry; s2-react falls back to legacy render at
+        // runtime, so alias it to react-dom to satisfy build-time resolution.
+        'react-dom/client': path.resolve(__dirname, 'node_modules/react-dom'),
+      // Module aliases
+      '@app': path.resolve(__dirname, 'src/app'),
         '@styles': path.resolve(__dirname, 'src/styles'),
         '@utils': path.resolve(__dirname, 'src/utils'),
         '@locales': path.resolve(__dirname, 'src/locales'),

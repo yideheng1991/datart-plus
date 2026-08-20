@@ -66,6 +66,10 @@ module.exports = {
     '^types$': '<rootDir>/src/types.ts',
     '^entryPointFactory$': '<rootDir>/src/entryPointFactory',
     '^globalConstants$': '<rootDir>/src/globalConstants',
+    // @antv/s2 v2 exports the './extends' subpath via the "exports" field,
+    // which Jest 27 does not resolve by default. Map it explicitly to the
+    // CJS build (matches how @antv/s2-react/lib requires it).
+    '^@antv/s2/extends$': '<rootDir>/node_modules/@antv/s2/lib/extends/index.js',
     // Handle antd's ~-prefixed less imports
     '^~antd/(.*)$': '<rootDir>/node_modules/antd/$1',
     '^~@ant-design/(.*)$': '<rootDir>/node_modules/@ant-design/$1',

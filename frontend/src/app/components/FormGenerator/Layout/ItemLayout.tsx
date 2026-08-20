@@ -63,6 +63,8 @@ import {
   LegendType,
   ListTemplatePanel,
   NameLocation,
+  PivotColumnSettings,
+  PivotColumnWidth,
   PivotSheetTheme,
   RadarIndicatorPanel,
   ScorecardConditionalStylePanel,
@@ -203,6 +205,10 @@ const ItemLayout: FC<FormGeneratorLayoutProps<ChartStyleConfig>> = memo(
           return <ScorecardConditionalStylePanel {...props} />;
         case ChartStyleSectionComponentType.PIVOT_SHEET_THEME:
           return <PivotSheetTheme {...props} />;
+        case ChartStyleSectionComponentType.PIVOT_COLUMN_SETTINGS:
+          return <PivotColumnSettings {...props} />;
+        case ChartStyleSectionComponentType.PIVOT_COLUMN_WIDTH:
+          return <PivotColumnWidth {...props} />;
         case ChartStyleSectionComponentType.BACKGROUND:
           return <Background {...props} />;
         case ChartStyleSectionComponentType.WIDGET_BORDER:

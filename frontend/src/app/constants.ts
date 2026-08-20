@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Datart
  *
  * Copyright 2021
@@ -247,6 +247,8 @@ export const ChartStyleSectionComponentType = {
   SCORECARD_LIST_TEMPLATE: 'scorecardListTemplate',
   SCORECARD_CONDITIONAL_STYLE: 'scorecardConditionalStyle',
   PIVOT_SHEET_THEME: 'pivotSheetTheme',
+  PIVOT_COLUMN_SETTINGS: 'pivotColumnSettings',
+  PIVOT_COLUMN_WIDTH: 'pivotColumnWidth',
   BACKGROUND: 'background',
   WIDGET_BORDER: 'widgetBorder',
   TIMER_FORMAT: 'timerFormat',
