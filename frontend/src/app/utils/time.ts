@@ -52,7 +52,16 @@ export function getTime(
 }
 
 export function formatTime(time: string | Moment, format?): string {
-  return moment(time).format(format || TIME_FORMATTER);
+  // moment(undefined) 等价于 moment()，会返回当前时间且 isValid() 为 true，
+  // 必须单独拦截；null/'' 产生的 invalid moment 由下方 isValid 兜底
+  if (time === undefined) {
+    return '';
+  }
+  const m = moment(time);
+  if (!m.isValid()) {
+    return '';
+  }
+  return m.format(format || TIME_FORMATTER);
 }
 
 export function recommendTimeRangeConverter(relativeTimeRange, dateFormat?) {

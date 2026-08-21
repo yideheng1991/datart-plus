@@ -910,12 +910,6 @@ describe('ChartDataRequestBuild Test', () => {
       },
       {
         aggOperator: undefined,
-        column: ['birthday'],
-        sqlOperator: 'IN',
-        values: [{ value: 'Invalid date', valueType: 'DATE' }],
-      },
-      {
-        aggOperator: undefined,
         column: ['born'],
         sqlOperator: 'IN',
         values: [
@@ -1215,12 +1209,6 @@ describe('ChartDataRequestBuild Test', () => {
           { value: `${today} 00:00:00`, valueType: 'DATE' },
           { value: `${today} 23:59:59`, valueType: 'DATE' },
         ],
-      },
-      {
-        aggOperator: undefined,
-        column: ['dad', 'birthday'],
-        sqlOperator: 'IN',
-        values: [{ value: 'Invalid date', valueType: 'DATE' }],
       },
       {
         aggOperator: undefined,

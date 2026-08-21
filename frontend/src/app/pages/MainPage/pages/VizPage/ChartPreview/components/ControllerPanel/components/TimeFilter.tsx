@@ -35,7 +35,12 @@ const TimeFilter: FC<PresentControllerFilterProps> = memo(
       onConditionChange(newCondition);
       setStringTime(newCondition.value as string);
     }
-    return <DatePicker value={moment(stringTime)} onChange={onChange} />;
+    return (
+      <DatePicker
+        value={stringTime ? moment(stringTime) : null}
+        onChange={onChange}
+      />
+    );
   },
 );
 

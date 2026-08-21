@@ -32,7 +32,7 @@ const { RangePicker } = DatePicker;
 
 const toMoment = (t, isStart?) => {
   if (!t) {
-    return moment();
+    return null;
   }
   if (Boolean(t) && typeof t === 'object' && 'unit' in t) {
     const offset = t.direction === '+0' ? 0 : +(t.direction + t.amount);
@@ -61,7 +61,7 @@ const RangeTimePickerFilter: FC<PresentControllerFilterProps> = memo(
       if (condition?.type === FilterConditionType.RecommendTime) {
         return recommendTimeRangeConverter(condition?.value)?.map(toMoment);
       }
-      return [moment(), moment()];
+      return [null, null];
     }, [condition?.type, condition?.value]);
 
     return (

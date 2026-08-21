@@ -40,7 +40,7 @@ const ExactTimeSelector: FC<
   return (
     <DatePicker
       showTime
-      value={moment(time as string)}
+      value={time ? moment(time as string) : null}
       onChange={handleMomentTimeChange}
       placeholder={t('select')}
     />

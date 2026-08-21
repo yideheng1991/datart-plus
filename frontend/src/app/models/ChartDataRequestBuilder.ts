@@ -342,13 +342,18 @@ export class ChartDataRequestBuilder {
                 valueType: field.type,
               };
             } else {
+              const converted = _timeConverter(
+                field.filter?.condition?.visualType,
+                v,
+                dateFormat,
+                index === 0,
+              );
+              // 过滤掉无效/为空的值，避免下游 SQL 报错或发出 'Invalid date'
+              if (converted === undefined || converted === null || converted === '') {
+                return undefined;
+              }
               return {
-                value: _timeConverter(
-                  field.filter?.condition?.visualType,
-                  v,
-                  dateFormat,
-                  index === 0,
-                ),
+                value: converted,
                 valueType: field.type,
               };
             }
@@ -367,26 +372,44 @@ export class ChartDataRequestBuilder {
           valueType: field.type,
         }));
       }
+      const converted = _timeConverter(
+        field.filter?.condition?.visualType,
+        conditionValue,
+        dateFormat,
+      );
+      if (converted === undefined || converted === null || converted === '') {
+        return [];
+      }
       return [
         {
-          value: _timeConverter(
-            field.filter?.condition?.visualType,
-            conditionValue,
-            dateFormat,
-          ),
+          value: converted,
           valueType: field.type,
         },
       ];
     };
     const filters = fields
       .map(field => {
+        const values = _transformFieldValues(field);
+        const operator = field.filter?.condition?.operator;
         if (
-          field.filter?.condition?.operator === FilterSqlOperator.In ||
-          field.filter?.condition?.operator === FilterSqlOperator.NotIn
+          operator === FilterSqlOperator.Null ||
+          operator === FilterSqlOperator.NotNull
         ) {
-          if (isEmptyArray(_transformFieldValues(field))) {
-            return null;
-          }
+          // IS NULL / NOT NULL 过滤不需要具体值，保留以便后端生成对应 SQL
+          return {
+            aggOperator:
+              field.aggregate === AggregateFieldActionType.None
+                ? null
+                : field.aggregate,
+            column: this.buildColumnName(field),
+            sqlOperator: operator,
+            values: [],
+          };
+        }
+        // 值为空数组（包括 DATE 过滤被清空）的过滤条件直接丢弃，
+        // 避免发出 WHERE ... = 'Invalid date' 之类的 SQL
+        if (isEmptyArray(values)) {
+          return null;
         }
         return {
           aggOperator:
@@ -394,8 +417,8 @@ export class ChartDataRequestBuilder {
               ? null
               : field.aggregate,
           column: this.buildColumnName(field),
-          sqlOperator: field.filter?.condition?.operator!,
-          values: _transformFieldValues(field) || [],
+          sqlOperator: operator!,
+          values: values,
         };
       })
       .filter(Boolean) as ChartDataRequestFilter[];
