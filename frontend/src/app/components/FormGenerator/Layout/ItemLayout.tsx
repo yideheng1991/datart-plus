@@ -55,6 +55,7 @@ import {
   ConditionalStylePanel,
   CrossFilteringPanel,
   DataReferencePanel,
+  ColumnAlign,
   DataZoomPanel,
   DrillThroughPanel,
   FontAlignment,
@@ -209,6 +210,8 @@ const ItemLayout: FC<FormGeneratorLayoutProps<ChartStyleConfig>> = memo(
           return <PivotColumnSettings {...props} />;
         case ChartStyleSectionComponentType.PIVOT_COLUMN_WIDTH:
           return <PivotColumnWidth {...props} />;
+        case ChartStyleSectionComponentType.COLUMN_ALIGN:
+          return <ColumnAlign {...props} />;
         case ChartStyleSectionComponentType.BACKGROUND:
           return <Background {...props} />;
         case ChartStyleSectionComponentType.WIDGET_BORDER:

@@ -1101,6 +1101,7 @@ class PivotSheetChart extends ReactChart {
       headerAlign,
       valueOrDefault(tableHeaderAlign, 'center'),
     );
+    // S2 的 textAlign 为全局属性，无法按列单独设置。
     const resolvedDataAlign = valueOrDefault(
       dataAlign,
       valueOrDefault(tableBodyAlign, 'right'),

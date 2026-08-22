@@ -249,6 +249,7 @@ export const ChartStyleSectionComponentType = {
   PIVOT_SHEET_THEME: 'pivotSheetTheme',
   PIVOT_COLUMN_SETTINGS: 'pivotColumnSettings',
   PIVOT_COLUMN_WIDTH: 'pivotColumnWidth',
+  COLUMN_ALIGN: 'columnAlign',
   BACKGROUND: 'background',
   WIDGET_BORDER: 'widgetBorder',
   TIMER_FORMAT: 'timerFormat',
