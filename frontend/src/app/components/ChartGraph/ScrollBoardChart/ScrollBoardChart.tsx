@@ -49,7 +49,7 @@ class ScrollBoardChart extends ReactChart {
   constructor(props?) {
     super(ScrollBoardWrapper, {
       id: props?.id || 'scroll-board',
-      name: props?.name || 'ScrollBoard',
+      name: props?.name || 'viz.palette.graph.names.scrollBoardChart',
       icon: props?.icon || SCROLL_BOARD_ICON,
       category: props?.category || ChartCategory.Table,
     });
