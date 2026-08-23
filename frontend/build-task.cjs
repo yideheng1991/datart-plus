@@ -25,8 +25,166 @@ if (!fs.existsSync(outDir)) {
  * 另外 String.prototype.replaceAll 是 ES2021，Nashorn 不支持
  */
 const polyfills = `
-"use strict";
 /* --- Minimal Polyfills for Java Nashorn (Java 8) --- */
+/* NOTE: 不能以 "use strict" 开头，因为下面 Symbol 需要以顶层 var 方式创建全局变量，
+   "use strict" 会禁止对未声明全局变量赋值，导致 "ReferenceError: Symbol is not defined"。 */
+
+/* --- Symbol (ES2015) 顶层全局声明 ---
+   源码中直接用 Symbol('...') 作为对象属性的唯一 key (如 RUNTIME_FILTER_KEY / RUNTIME_DATE_LEVEL_KEY)。
+   Java 8 Nashorn 没有 Symbol 全局对象，这里用一个自增 id 的唯一字符串来模拟，
+   保证作为对象 key 时唯一且不与业务 key 冲突。
+   同时提供 Symbol.iterator / Symbol.for 等属性，避免 Babel helper 在运行时访问未定义的 Symbol 报错。
+   必须用顶层 var 声明，后续（严格模式）bundle 代码才能访问到。 */
+var __datart_symbol_counter__ = 0;
+function __datart_symbol__(desc) {
+  __datart_symbol_counter__ += 1;
+  return '__datart_symbol_' + (desc == null ? '' : String(desc)) + '_' + __datart_symbol_counter__ + '__';
+}
+__datart_symbol__.iterator = '__datart_symbol_iterator__';
+__datart_symbol__.for = function (key) { return '__datart_symbol_for_' + String(key) + '__'; };
+__datart_symbol__.keyFor = function (sym) { return null; };
+if (typeof Symbol === 'undefined' || typeof Symbol !== 'function') {
+  Symbol = __datart_symbol__;
+}
+/* --- Array 迭代器 (ES2015) - 让 for...of / Array.from 可用 --- */
+if (!Array.prototype[Symbol.iterator]) {
+  Array.prototype[Symbol.iterator] = function () {
+    var index = 0;
+    var arr = this;
+    var iter = {
+      next: function () {
+        return index < arr.length ? { value: arr[index++], done: false } : { value: undefined, done: true };
+      },
+    };
+    iter[Symbol.iterator] = function () { return this; };
+    return iter;
+  };
+}
+/* --- Array.from (ES2015) 顶层全局声明 - Babel 的 _iterableToArray helper 依赖 --- */
+if (!Array.from) {
+  Array.from = function (arrayLike, mapFn, thisArg) {
+    var result = [];
+    // 优先使用迭代器（Map.keys()/Set 等）
+    var it = arrayLike != null && arrayLike[Symbol.iterator];
+    if (it) {
+      var iter = it.call(arrayLike);
+      var step;
+      var i = 0;
+      while (!(step = iter.next()).done) {
+        result.push(mapFn ? mapFn.call(thisArg, step.value, i++) : step.value);
+      }
+      return result;
+    }
+    // 类数组回退
+    var list = arrayLike == null ? [] : (arrayLike.length != null ? arrayLike : Object.keys(arrayLike));
+    for (var k = 0; k < list.length; k++) {
+      result.push(mapFn ? mapFn.call(thisArg, list[k], k) : list[k]);
+    }
+    return result;
+  };
+}
+/* --- Map (ES2015) 顶层全局声明 - Java 8 Nashorn 没有 Map --- */
+if (typeof Map === 'undefined') {
+  function __datartMap() {
+    this.__entries = [];
+    this.__size = 0;
+    if (arguments.length && arguments[0] != null) {
+      Array.from(arguments[0]).forEach(function (entry) { this.set(entry[0], entry[1]); }, this);
+    }
+  }
+  __datartMap.prototype.set = function (key, value) {
+    for (var i = 0; i < this.__entries.length; i += 2) {
+      if (this.__entries[i] === key) { this.__entries[i + 1] = value; return this; }
+    }
+    this.__entries.push(key, value);
+    this.__size += 1;
+    return this;
+  };
+  __datartMap.prototype.get = function (key) {
+    for (var i = 0; i < this.__entries.length; i += 2) {
+      if (this.__entries[i] === key) return this.__entries[i + 1];
+    }
+    return undefined;
+  };
+  __datartMap.prototype.has = function (key) {
+    for (var i = 0; i < this.__entries.length; i += 2) {
+      if (this.__entries[i] === key) return true;
+    }
+    return false;
+  };
+  __datartMap.prototype.delete = function (key) {
+    for (var i = 0; i < this.__entries.length; i += 2) {
+      if (this.__entries[i] === key) {
+        this.__entries.splice(i, 2);
+        this.__size -= 1;
+        return true;
+      }
+    }
+    return false;
+  };
+  __datartMap.prototype.clear = function () { this.__entries = []; this.__size = 0; };
+  __datartMap.prototype.forEach = function (cb, thisArg) {
+    for (var i = 0; i < this.__entries.length; i += 2) {
+      cb.call(thisArg, this.__entries[i + 1], this.__entries[i], this);
+    }
+  };
+  __datartMap.prototype.keys = function () {
+    var keys = [];
+    for (var i = 0; i < this.__entries.length; i += 2) keys.push(this.__entries[i]);
+    return keys[Symbol.iterator] ? keys : keys;
+  };
+  __datartMap.prototype.values = function () {
+    var vals = [];
+    for (var i = 0; i < this.__entries.length; i += 2) vals.push(this.__entries[i + 1]);
+    return vals;
+  };
+  __datartMap.prototype.entries = function () {
+    var es = [];
+    for (var i = 0; i < this.__entries.length; i += 2) es.push([this.__entries[i], this.__entries[i + 1]]);
+    return es;
+  };
+  Object.defineProperty(__datartMap.prototype, 'size', {
+    get: function () { return this.__size; },
+  });
+  Map = __datartMap;
+}
+/* --- Set (ES2015) 顶层全局声明 - Java 8 Nashorn 没有 Set --- */
+if (typeof Set === 'undefined') {
+  function __datartSet() {
+    this.__items = [];
+    if (arguments.length && arguments[0] != null) {
+      Array.from(arguments[0]).forEach(function (v) { this.add(v); }, this);
+    }
+  }
+  __datartSet.prototype.add = function (value) {
+    if (!this.has(value)) { this.__items.push(value); }
+    return this;
+  };
+  __datartSet.prototype.has = function (value) {
+    return this.__items.indexOf(value) !== -1;
+  };
+  __datartSet.prototype.delete = function (value) {
+    var idx = this.__items.indexOf(value);
+    if (idx !== -1) { this.__items.splice(idx, 1); return true; }
+    return false;
+  };
+  __datartSet.prototype.clear = function () { this.__items = []; };
+  __datartSet.prototype.forEach = function (cb, thisArg) {
+    for (var i = 0; i < this.__items.length; i++) cb.call(thisArg, this.__items[i], this.__items[i], this);
+  };
+  __datartSet.prototype.keys = function () { return this.__items; };
+  __datartSet.prototype.values = function () { return this.__items; };
+  __datartSet.prototype.entries = function () {
+    return this.__items.map(function (v) { return [v, v]; });
+  };
+  Object.defineProperty(__datartSet.prototype, 'size', {
+    get: function () { return this.__items.length; },
+  });
+  Set = __datartSet;
+}
+
+"use strict";
+/* --- 其余 polyfill 对已存在对象的属性赋值，可在严格模式 IIFE 内安全执行 --- */
 (function(){
   // Object.values (ES2017)
   if (!Object.values) {
@@ -72,10 +230,84 @@ const polyfills = `
       return this.replace(search, replace);
     };
   }
+  // Array.prototype.includes (ES2016)
+  if (!Array.prototype.includes) {
+    Array.prototype.includes = function (searchElement, fromIndex) {
+      if (this == null) throw new TypeError('Array.prototype.includes called on null or undefined');
+      var list = Object(this);
+      var length = list.length >>> 0;
+      var n = fromIndex || 0;
+      var k;
+      if (n >= 0) { k = n; }
+      else { k = length + n; if (k < 0) k = 0; }
+      for (; k < length; k++) {
+        var current = list[k];
+        if (current === searchElement || (current !== current && searchElement !== searchElement)) {
+          return true;
+        }
+      }
+      return false;
+    };
+  }
+  // Array.prototype.flat (ES2019)
+  if (!Array.prototype.flat) {
+    Array.prototype.flat = function (depth) {
+      depth = depth === undefined ? 1 : depth;
+      var result = [];
+      var flatten = function (arr, d) {
+        for (var i = 0; i < arr.length; i++) {
+          if (Array.isArray(arr[i]) && d > 0) { flatten(arr[i], d - 1); }
+          else { result.push(arr[i]); }
+        }
+      };
+      flatten(this, depth);
+      return result;
+    };
+  }
+  // Array.prototype.flatMap (ES2019)
+  if (!Array.prototype.flatMap) {
+    Array.prototype.flatMap = function (callback, thisArg) {
+      var self = this;
+      return self.map(function (item, index, arr) {
+        return callback.call(thisArg, item, index, arr);
+      }).flat(1);
+    };
+  }
+  // String.prototype.includes (ES2015)
+  if (!String.prototype.includes) {
+    String.prototype.includes = function (search, start) {
+      if (typeof start !== 'number') start = 0;
+      if (start + search.length > this.length) return false;
+      return this.indexOf(search, start) !== -1;
+    };
+  }
+  // String.prototype.startsWith / endsWith (ES2015)
+  if (!String.prototype.startsWith) {
+    String.prototype.startsWith = function (search, pos) {
+      return this.lastIndexOf(search, pos) === pos;
+    };
+  }
+  if (!String.prototype.endsWith) {
+    String.prototype.endsWith = function (search, pos) {
+      var end = pos === undefined ? this.length : Math.min(pos, this.length);
+      return this.substring(end - search.length, end) === search;
+    };
+  }
   // Object.entries (ES2017) - lodash 可能依赖
   if (!Object.entries) {
     Object.entries = function (obj) {
       return Object.keys(obj).map(function (key) { return [key, obj[key]]; });
+    };
+  }
+  // Object.getOwnPropertyDescriptors (ES2017) - 某些库(如 lodash)在加载阶段依赖
+  if (!Object.getOwnPropertyDescriptors) {
+    Object.getOwnPropertyDescriptors = function (obj) {
+      var result = {};
+      var keys = Object.getOwnPropertyNames(obj);
+      for (var i = 0; i < keys.length; i++) {
+        result[keys[i]] = Object.getOwnPropertyDescriptor(obj, keys[i]);
+      }
+      return result;
     };
   }
   // Object.assign (ES2015) - 确保可用
