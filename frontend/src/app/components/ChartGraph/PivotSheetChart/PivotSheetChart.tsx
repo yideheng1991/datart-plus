@@ -496,6 +496,8 @@ class PivotSheetChart extends ReactChart {
         ),
         interaction: {
           autoResetSheetStyle: false,
+          // 内置 hoverFocus 弹层延时从默认 800ms 缩短到 300ms，消除 tooltip 迟滞感
+          hoverFocus: { duration: 300 },
           hoverHighlight: resolvedHoverHighlight
             ? {
                 rowHeader: true,
@@ -642,8 +644,6 @@ class PivotSheetChart extends ReactChart {
       },
     };
   }
-
-  // 未参与汇总的列，其汇总单元格显示为 '-'（已通过 options.layoutCellMeta 实现）
 
   changeSelectedItems(
     cells: S2CellType<ViewMeta>[],
