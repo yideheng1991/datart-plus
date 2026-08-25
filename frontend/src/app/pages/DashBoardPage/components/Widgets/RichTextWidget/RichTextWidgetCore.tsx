@@ -74,7 +74,9 @@ export const RichTextWidgetCore: React.FC<RichTextWidgetProps> = ({
   const [quillValue, setQuillValue] = useState<DeltaStatic | undefined>(
     initContent,
   );
-  const [containerId, setContainerId] = useState<string>();
+  const [containerId] = useState<string>(
+    () => `rich-text-${widgetInfo.id + new Date().getTime()}`,
+  );
   const [quillModules, setQuillModules] = useState<any>(null);
 
   const [customColorVisible, setCustomColorVisible] = useState<boolean>(false);
@@ -129,11 +131,9 @@ export const RichTextWidgetCore: React.FC<RichTextWidgetProps> = ({
   ]);
 
   useEffect(() => {
-    const newId = `rich-text-${widgetInfo.id + new Date().getTime()}`;
-    setContainerId(newId);
     const modules = {
       toolbar: {
-        container: `#${newId}`,
+        container: `#${containerId}`,
         handlers: {
           color: function (value) {
             if (value === QuillPalette.RICH_TEXT_CUSTOM_COLOR) {
@@ -154,7 +154,7 @@ export const RichTextWidgetCore: React.FC<RichTextWidgetProps> = ({
       imageDrop: true,
     };
     setQuillModules(modules);
-  }, [widgetInfo.id]);
+  }, [containerId]);
 
   const quillRef = useRef<ReactQuill>(null);
 
@@ -231,6 +231,11 @@ export const RichTextWidgetCore: React.FC<RichTextWidgetProps> = ({
     [containerId, t],
   );
 
+  // 确保 toolbar 容器 DOM 先于 ReactQuill 挂载，否则 Quill 初始化时
+  // querySelector('#rich-text-xxx') 找不到容器会抛 classList 白屏
+  // 使用 callback ref 在容器挂载时同步置位，不依赖 effect 依赖比较
+  const [toolbarReady, setToolbarReady] = useState(false);
+
   const customColorChange = color => {
     if (color) {
       quillRef.current!.getEditor().format(customColorType, color);
@@ -273,17 +278,25 @@ export const RichTextWidgetCore: React.FC<RichTextWidgetProps> = ({
       >
         {quillModules && (
           <ModalBody>
-            {toolbar}
-            <ReactQuill
-              ref={quillRef}
-              className="react-quill"
-              placeholder={t('viz.board.setting.enterHere')}
-              value={quillValue}
-              onChange={quillChange}
-              modules={quillModules}
-              formats={Formats}
-              readOnly={false}
-            />
+            <div
+              ref={node => {
+                if (node) setToolbarReady(true);
+              }}
+            >
+              {toolbar}
+            </div>
+            {toolbarReady && (
+              <ReactQuill
+                ref={quillRef}
+                className="react-quill"
+                placeholder={t('viz.board.setting.enterHere')}
+                value={quillValue}
+                onChange={quillChange}
+                modules={quillModules}
+                formats={Formats}
+                readOnly={false}
+              />
+            )}
           </ModalBody>
         )}
       </Modal>
