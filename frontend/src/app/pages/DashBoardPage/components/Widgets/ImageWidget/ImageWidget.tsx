@@ -59,7 +59,7 @@ export const ImageWidget: React.FC<{ hideTitle: boolean }> = memo(
 
     useEffect(() => {
       if (widgetInfo.editing) {
-        uploaderRef.current?.onClick();
+        uploaderRef.current?.openFileDialog();
       }
     }, [widgetInfo.editing]);
 

@@ -38,7 +38,14 @@ export const HiddenUploader = forwardRef(
     const uploadRef = useRef<any>();
     const { boardId } = useContext(BoardContext);
 
-    useImperativeHandle(ref, () => uploadRef.current?.upload.uploader);
+    useImperativeHandle(ref, () => ({
+      // rc-upload's AjaxUploader#onClick requires an event object with
+      // `target`; calling it without one throws a TypeError.
+      openFileDialog: () => {
+        const uploader = uploadRef.current?.upload?.uploader;
+        uploader?.onClick({ target: null });
+      },
+    }));
 
     const beforeUpload = useCallback(
       async info => {
