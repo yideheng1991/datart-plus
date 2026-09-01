@@ -67,6 +67,7 @@ export const TreeSelectController: React.FC<TreeControllerFormProps> = memo(
         onChange={onChange}
         multiple
         bordered={false}
+        fieldNames={{ label: 'label', value: 'key', children: 'children' }}
         treeData={treeData}
         dropdownRender={() => {
           return (
