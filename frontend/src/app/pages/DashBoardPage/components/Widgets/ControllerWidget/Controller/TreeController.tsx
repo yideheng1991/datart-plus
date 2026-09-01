@@ -51,7 +51,12 @@ export const TreeSelectController: React.FC<TreeControllerFormProps> = memo(
     const t = useI18NPrefix(`viz.common.enum.controllerPlaceHolders`);
     const handleonChange = useCallback(
       checkedKeys => {
-        onChange(Array.isArray(checkedKeys) ? checkedKeys : checkedKeys?.checked);
+        // inner Tree cascades: onCheck returns ALL keys (parent + descendants).
+        // Store the full cascading set so backend filtering hits every descendant.
+        const keys = Array.isArray(checkedKeys)
+          ? checkedKeys
+          : checkedKeys?.checked ?? [];
+        onChange(keys);
       },
       [onChange],
     );
@@ -64,9 +69,10 @@ export const TreeSelectController: React.FC<TreeControllerFormProps> = memo(
         placeholder={t('treeSelectController')}
         maxTagTextLength={4}
         maxTagCount={3}
-        onChange={onChange}
+        onChange={handleonChange}
         multiple
         bordered={false}
+        showCheckedStrategy={TreeSelect.SHOW_PARENT}
         fieldNames={{ label: 'label', value: 'key', children: 'children' }}
         treeData={treeData}
         dropdownRender={() => {
