@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Datart
  *
  * Copyright 2021
@@ -814,6 +814,7 @@ export const convertListToTree = (
         id: o['id'],
         parentId: o['parentId'],
         key: o['id'],
+        label: o['label'] || o['id'],
         title: o['label'] || o['id'],
       });
     } else {
