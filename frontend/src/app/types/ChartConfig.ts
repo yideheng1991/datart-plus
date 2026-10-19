@@ -348,10 +348,10 @@ export type LabelStyle = {
 };
 
 export interface LegendStyle {
-  bottom?: number;
-  right?: number;
-  top?: number;
-  left?: number;
+  bottom?: number | string;
+  right?: number | string;
+  top?: number | string;
+  left?: number | string;
   width?: number;
   height?: number | null;
   type: string;
@@ -441,10 +441,10 @@ export interface BorderStyle {
 }
 
 export interface GridStyle {
-  left?: string;
-  right?: string;
-  bottom?: string;
-  top?: string;
+  left?: string | number;
+  right?: string | number;
+  bottom?: string | number;
+  top?: string | number;
   containLabel?: boolean;
 }
 

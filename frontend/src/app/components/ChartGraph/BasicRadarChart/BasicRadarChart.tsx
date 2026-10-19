@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Datart
  *
  * Copyright 2021
@@ -30,6 +30,7 @@ import {
   getColumnRenderName,
   getDataColumnMaxAndMin2,
   getExtraSeriesRowData,
+  getLegendOrientAndPositions,
   getSeriesTooltips4Polar2,
   getStyles,
   getValueByColumnKey,
@@ -339,27 +340,9 @@ class BasicRadarChart extends Chart {
       ['legend'],
       ['showLegend', 'type', 'font', 'position', 'selectAll', 'height'],
     );
-    let positions = {};
-    let orient = '';
-
-    switch (legendPosition) {
-      case 'top':
-        orient = 'horizontal';
-        positions = { top: 8, left: 8, right: 8, height: 32 };
-        break;
-      case 'bottom':
-        orient = 'horizontal';
-        positions = { bottom: 8, left: 8, right: 8, height: 32 };
-        break;
-      case 'left':
-        orient = 'vertical';
-        positions = { left: 8, top: 16, bottom: 24, width: 96 };
-        break;
-      default:
-        orient = 'vertical';
-        positions = { right: 8, top: 16, bottom: 24, width: 96 };
-        break;
-    }
+    const { orient, positions } = getLegendOrientAndPositions(
+      legendPosition,
+    );
     const selected = seriesNames.reduce(
       (result, name) => ({
         ...result,

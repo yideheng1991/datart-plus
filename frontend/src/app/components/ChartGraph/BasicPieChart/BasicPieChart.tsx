@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Datart
  *
  * Copyright 2021
@@ -40,6 +40,7 @@ import {
   getExtraSeriesDataFormat,
   getExtraSeriesRowData,
   getGridStyle,
+  getLegendOrientAndPositions,
   getSelectedItemStyles,
   getStyles,
   toFormattedValue,
@@ -266,9 +267,6 @@ class BasicPieChart extends Chart {
       ['legend'],
       ['showLegend', 'type', 'font', 'position', 'selectAll', 'height'],
     );
-    let positions = {};
-    let orient = '';
-
     const selected = (
       !!groupConfigs.length ? series[0].data : (series as PieSeriesStyle)?.data
     )
@@ -281,24 +279,7 @@ class BasicPieChart extends Chart {
         {},
       );
 
-    switch (legendPos) {
-      case 'top':
-        orient = 'horizontal';
-        positions = { top: 8, left: 8, right: 8, height: 32 };
-        break;
-      case 'bottom':
-        orient = 'horizontal';
-        positions = { bottom: 8, left: 8, right: 8, height: 32 };
-        break;
-      case 'left':
-        orient = 'vertical';
-        positions = { left: 8, top: 16, bottom: 24, width: 96 };
-        break;
-      default:
-        orient = 'vertical';
-        positions = { right: 8, top: 16, bottom: 24 };
-        break;
-    }
+    const { orient, positions } = getLegendOrientAndPositions(legendPos);
 
     return {
       ...positions,

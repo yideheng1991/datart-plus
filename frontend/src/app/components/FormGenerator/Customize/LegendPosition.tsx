@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Datart
  *
  * Copyright 2021
@@ -34,6 +34,16 @@ const template = {
       { label: 'viz.palette.style.position.bottom', value: 'bottom' },
       { label: 'viz.palette.style.position.left', value: 'left' },
       { label: 'viz.palette.style.position.right', value: 'right' },
+      { label: 'viz.palette.style.position.leftTop', value: 'topLeft' },
+      { label: 'viz.palette.style.position.rightTop', value: 'topRight' },
+      {
+        label: 'viz.palette.style.position.leftBottom',
+        value: 'bottomLeft',
+      },
+      {
+        label: 'viz.palette.style.position.rightBottom',
+        value: 'bottomRight',
+      },
     ],
   },
 };

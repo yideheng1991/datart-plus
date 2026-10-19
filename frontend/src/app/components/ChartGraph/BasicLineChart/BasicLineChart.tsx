@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Datart
  *
  * Copyright 2021
@@ -42,7 +42,8 @@ import {
   getDrillableRows,
   getExtraSeriesDataFormat,
   getExtraSeriesRowData,
-  getGridStyle,
+  getGridStyleWithLegend,
+  getLegendOrientAndPositions,
   getNameTextStyle,
   getReference2,
   getSeriesTooltips4Rectangular2,
@@ -201,10 +202,18 @@ class BasicLineChart extends Chart {
     );
     const yAxisNames: string[] = aggregateConfigs.map(getColumnRenderName);
 
+    const legend = this.getLegendStyle(
+      styleConfigs,
+      series?.map(s => s.name),
+    );
+
     // @TM 溢出自动根据bar长度设置标尺
     const option = setOptionsByAxisLabelOverflow({
       chart: this.chart,
-      grid: getGridStyle(styleConfigs),
+      grid: getGridStyleWithLegend(styleConfigs, legend, {
+        width: this.chart.getWidth(),
+        height: this.chart.getHeight(),
+      }),
       xAxis: this.getXAxis(styleConfigs, xAxisColumns),
       yAxis: this.getYAxis(styleConfigs, yAxisNames),
       series,
@@ -223,10 +232,7 @@ class BasicLineChart extends Chart {
           infoConfigs,
         ),
       },
-      legend: this.getLegendStyle(
-        styleConfigs,
-        series?.map(s => s.name),
-      ),
+      legend,
       dataZoom: this.getDataZoom(styleConfigs),
       ...option,
     };
@@ -551,27 +557,7 @@ class BasicLineChart extends Chart {
       ['legend'],
       ['showLegend', 'type', 'font', 'position', 'selectAll', 'height'],
     );
-    let positions = {};
-    let orient = '';
-
-    switch (legendPos) {
-      case 'top':
-        orient = 'horizontal';
-        positions = { top: 8, left: 8, right: 8, height: 32 };
-        break;
-      case 'bottom':
-        orient = 'horizontal';
-        positions = { bottom: 8, left: 8, right: 8, height: 32 };
-        break;
-      case 'left':
-        orient = 'vertical';
-        positions = { left: 8, top: 16, bottom: 24, width: 96 };
-        break;
-      default:
-        orient = 'vertical';
-        positions = { right: 8, top: 16, bottom: 24, width: 96 };
-        break;
-    }
+    const { orient, positions } = getLegendOrientAndPositions(legendPos);
     const selected = seriesNames.reduce(
       (obj, name) => ({
         ...obj,

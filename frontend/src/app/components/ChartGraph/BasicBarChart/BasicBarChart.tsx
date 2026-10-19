@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Datart
  *
  * Copyright 2021
@@ -40,7 +40,8 @@ import {
   getDrillableRows,
   getExtraSeriesDataFormat,
   getExtraSeriesRowData,
-  getGridStyle,
+  getGridStyleWithLegend,
+  getLegendOrientAndPositions,
   getReference2,
   getSelectedItemStyles,
   getSeriesTooltips4Rectangular2,
@@ -234,12 +235,17 @@ class BasicBarChart extends Chart implements IChartLifecycle {
       this.makeTransposeAxis(axisInfo);
     }
 
+    const legend = this.getLegendStyle(styleConfigs, series);
+
     // @TM 溢出自动根据bar长度设置标尺
     const option = setOptionsByAxisLabelOverflow({
       chart: this.chart,
       xAxis: axisInfo.xAxis,
       yAxis: axisInfo.yAxis,
-      grid: getGridStyle(styleConfigs),
+      grid: getGridStyleWithLegend(styleConfigs, legend, {
+        width: this.chart.getWidth(),
+        height: this.chart.getHeight(),
+      }),
       yAxisNames,
       series,
       horizon: this.isHorizonDisplay,
@@ -257,7 +263,7 @@ class BasicBarChart extends Chart implements IChartLifecycle {
           infoConfigs,
         ),
       },
-      legend: this.getLegendStyle(styleConfigs, series),
+      legend,
       dataZoom: this.getDataZoom(styleConfigs),
       ...option,
     };
@@ -696,34 +702,7 @@ class BasicBarChart extends Chart implements IChartLifecycle {
       ['legend'],
       ['showLegend', 'type', 'font', 'position', 'selectAll', 'height'],
     );
-    let positions: {
-      width?: number;
-      height?: number;
-      top?: number;
-      left?: number;
-      right?: number;
-      bottom?: number;
-    } = {};
-    let orient = '';
-
-    switch (legendPos) {
-      case 'top':
-        orient = 'horizontal';
-        positions = { top: 8, left: 8, right: 8, height: 32 };
-        break;
-      case 'bottom':
-        orient = 'horizontal';
-        positions = { bottom: 8, left: 8, right: 8, height: 32 };
-        break;
-      case 'left':
-        orient = 'vertical';
-        positions = { left: 8, top: 16, bottom: 24, width: 96 };
-        break;
-      default:
-        orient = 'vertical';
-        positions = { right: 8, top: 16, bottom: 24, width: 96 };
-        break;
-    }
+    const { orient, positions } = getLegendOrientAndPositions(legendPos);
     const selected: { [x: string]: boolean } = seriesNames.reduce(
       (obj, name) => ({
         ...obj,

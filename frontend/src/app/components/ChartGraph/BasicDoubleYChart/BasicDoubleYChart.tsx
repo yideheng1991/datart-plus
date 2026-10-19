@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Datart
  *
  * Copyright 2021
@@ -36,7 +36,8 @@ import {
   getColumnRenderName,
   getExtraSeriesDataFormat,
   getExtraSeriesRowData,
-  getGridStyle,
+  getGridStyleWithLegend,
+  getLegendOrientAndPositions,
   getReference2,
   getSelectedItemStyles,
   getSeriesTooltips4Polar2,
@@ -153,6 +154,8 @@ class BasicDoubleYChart extends Chart {
       .concat(rightMetricsConfigs)
       .map(getColumnRenderName);
 
+    const legend = this.getLegend(styleConfigs, yAxisNames);
+
     // @TM 溢出自动根据bar长度设置标尺
     const option = setOptionsByAxisLabelOverflow({
       chart: this.chart,
@@ -163,7 +166,10 @@ class BasicDoubleYChart extends Chart {
         rightMetricsConfigs,
         chartDataSet,
       ),
-      grid: getGridStyle(styleConfigs),
+      grid: getGridStyleWithLegend(styleConfigs, legend, {
+        width: this.chart.getWidth(),
+        height: this.chart.getHeight(),
+      }),
       series: this.getSeries(
         styleConfigs,
         settingConfigs,
@@ -191,7 +197,7 @@ class BasicDoubleYChart extends Chart {
           chartDataSet,
         ),
       },
-      legend: this.getLegend(styleConfigs, yAxisNames),
+      legend,
       ...option,
     };
   }
@@ -418,32 +424,12 @@ class BasicDoubleYChart extends Chart {
   }
 
   private getLegend(styles, seriesNames): LegendStyle {
-    const [show, type, font, legendPos, selectAll] = getStyles(
+    const [show, type, font, legendPos, selectAll, height] = getStyles(
       styles,
       ['legend'],
-      ['showLegend', 'type', 'font', 'position', 'selectAll'],
+      ['showLegend', 'type', 'font', 'position', 'selectAll', 'height'],
     );
-    let positions = {};
-    let orient = '';
-
-    switch (legendPos) {
-      case 'top':
-        orient = 'horizontal';
-        positions = { top: 8, left: 8, right: 8, height: 32 };
-        break;
-      case 'bottom':
-        orient = 'horizontal';
-        positions = { bottom: 8, left: 8, right: 8, height: 32 };
-        break;
-      case 'left':
-        orient = 'vertical';
-        positions = { left: 8, top: 16, bottom: 24, width: 96 };
-        break;
-      default:
-        orient = 'vertical';
-        positions = { right: 8, top: 16, bottom: 24, width: 96 };
-        break;
-    }
+    const { orient, positions } = getLegendOrientAndPositions(legendPos);
     const selected: { [x: string]: boolean } = seriesNames.reduce(
       (obj, name) => ({
         ...obj,
@@ -456,6 +442,7 @@ class BasicDoubleYChart extends Chart {
       ...positions,
       show,
       type,
+      height: height || null,
       orient,
       selected,
       data: seriesNames,

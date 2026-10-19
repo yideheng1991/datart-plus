@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Datart
  *
  * Copyright 2021
@@ -41,6 +41,7 @@ import {
   getExtraSeriesDataFormat,
   getExtraSeriesRowData,
   getGridStyle,
+  getLegendOrientAndPositions,
   getSelectedItemStyles,
   getSeriesTooltips4Scatter,
   getStyles,
@@ -252,9 +253,6 @@ class BasicFunnelChart extends Chart {
       ['legend'],
       ['showLegend', 'type', 'font', 'position', 'height'],
     );
-    let positions = {};
-    let orient = '';
-
     const top = getAutoFunnelTopPosition({
       chart: this.chart,
       sort,
@@ -262,24 +260,9 @@ class BasicFunnelChart extends Chart {
       height,
     });
 
-    switch (legendPos) {
-      case 'top':
-        orient = 'horizontal';
-        positions = { top, left: 8, right: 8, height: 32 };
-        break;
-      case 'bottom':
-        orient = 'horizontal';
-        positions = { bottom: 8, left: 8, right: 8, height: 32 };
-        break;
-      case 'left':
-        orient = 'vertical';
-        positions = { left: 8, top, bottom: 24, width: 96 };
-        break;
-      default:
-        orient = 'vertical';
-        positions = { right: 8, top, bottom: 24, width: 96 };
-        break;
-    }
+    const { orient, positions } = getLegendOrientAndPositions(legendPos, {
+      top,
+    });
 
     return {
       ...positions,

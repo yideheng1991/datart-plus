@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Datart
  *
  * Copyright 2021
@@ -40,6 +40,7 @@ import {
   FontStyle,
   FormatFieldAction,
   GridStyle,
+  LegendStyle,
   LineStyle,
   MarkArea,
   MarkDataConfig,
@@ -69,6 +70,7 @@ import {
 } from 'globalConstants';
 import moment from 'moment';
 import { Debugger } from 'utils/debugger';
+import { getTextWidth } from 'utils/utils';
 import {
   CloneValueDeep,
   isEmpty,
@@ -421,6 +423,78 @@ export function getStyles(
     return Array(childTargetKeys.length).fill(undefined);
   }
   return childTargetKeys.map(k => getValue(rows, [k]));
+}
+
+/**
+ * [中文] 将图例位置配置转换为 ECharts 图例的排列方向与定位样式
+ * </br>
+ * [EN] Convert legend position option to ECharts legend orient and positions
+ *
+ * @param {string} legendPos required
+ *        one of 'top' | 'bottom' | 'left' | 'right' |
+ *        'topLeft' | 'topRight' | 'bottomLeft' | 'bottomRight'
+ * @param {Object} [options] optional
+ * @param {number} [options.top] optional
+ *        pin the legend to a fixed top offset instead of center anchoring
+ *        (used by charts that compute the offset dynamically, e.g. funnel)
+ * @return {{ orient: string; positions: object }}
+ */
+export function getLegendOrientAndPositions(
+  legendPos: string,
+  options?: { top?: number },
+) {
+  const top = options?.top;
+  let positions: {
+    width?: number;
+    height?: number;
+    top?: number | string;
+    left?: number | string;
+    right?: number;
+    bottom?: number;
+  } = {};
+  let orient = '';
+
+  switch (legendPos) {
+    case 'top':
+      orient = 'horizontal';
+      positions = { left: 'center', top: top ?? 8, height: 32 };
+      break;
+    case 'bottom':
+      orient = 'horizontal';
+      positions = { left: 'center', bottom: 8, height: 32 };
+      break;
+    case 'left':
+      orient = 'vertical';
+      positions =
+        top != null
+          ? { left: 8, top, bottom: 24, width: 96 }
+          : { left: 8, top: 'middle' };
+      break;
+    case 'topLeft':
+      orient = 'horizontal';
+      positions = { top: top ?? 8, left: 8 };
+      break;
+    case 'topRight':
+      orient = 'horizontal';
+      positions = { top: top ?? 8, right: 8 };
+      break;
+    case 'bottomLeft':
+      orient = 'horizontal';
+      positions = { bottom: 8, left: 8 };
+      break;
+    case 'bottomRight':
+      orient = 'horizontal';
+      positions = { bottom: 8, right: 8 };
+      break;
+    default:
+      orient = 'vertical';
+      positions =
+        top != null
+          ? { right: 8, top, bottom: 24, width: 96 }
+          : { right: 8, top: 'middle' };
+      break;
+  }
+  return { orient, positions };
 }
 
 /**
@@ -1327,6 +1401,152 @@ export function getGridStyle(styles: ChartStyleConfig[]): GridStyle {
     ['containLabel', 'marginLeft', 'marginRight', 'marginBottom', 'marginTop'],
   );
   return { left, right, bottom, top, containLabel };
+}
+
+function convertMarginToPx(value: string | number | undefined, base?: number) {
+  if (typeof value === 'number') return value;
+  if (typeof value === 'string' && value?.endsWith('%') && base) {
+    return (Number(value.replace('%', '')) / 100) * base;
+  }
+  return 0;
+}
+
+/**
+ * [中文] 估算图例实际渲染高度（像素）
+ * </br>
+ * [EN] Estimate the rendered height (px) of the legend
+ */
+function getLegendEstimatedHeight(legend: LegendStyle, chartWidth?: number) {
+  if (legend.orient !== 'horizontal') {
+    return 0;
+  }
+  const names = (legend.data as string[]) || [];
+  // scroll legend never wraps into multiple rows, it pages horizontally
+  if (legend.type === 'scroll' || !names.length) {
+    return legend.height || 32;
+  }
+  const font = legend.textStyle;
+  const textWidth = (name: string) =>
+    getTextWidth(
+      String(name),
+      font?.fontWeight || undefined,
+      font?.fontSize != null ? String(font.fontSize) : undefined,
+      font?.fontFamily || undefined,
+    );
+  // 25 = default itemWidth, 5 = icon-text spacing, 10 = itemGap / padding
+  const totalWidth =
+    names.reduce((width, name) => width + 25 + 5 + textWidth(name), 0) +
+    Math.max(names.length - 1, 0) * 10 +
+    10;
+  const usableWidth = Math.max((chartWidth ?? 600) - 16, 100);
+  const rows = Math.max(1, Math.ceil(totalWidth / usableWidth));
+  // the configured height may be smaller than the wrapped content, ECharts
+  // still renders extra rows beyond the fixed height, take the larger one
+  return Math.max(legend.height ?? 0, rows * 24 + 8);
+}
+
+/**
+ * [中文] 估算图例单项的最大渲染宽度（像素），系列名未设置别名时会带上
+ * 聚合函数前缀（如 SUM(xxx)），按渲染的完整名称测量
+ * </br>
+ * [EN] Estimate the max rendered width (px) of a legend item. The full
+ * rendered series name is measured, including the aggregate prefix
+ * (e.g. SUM(xxx)) when the field has no alias
+ */
+function getLegendEstimatedWidth(legend: LegendStyle, chartWidth?: number) {
+  const names = (legend.data as string[]) || [];
+  if (!names.length) {
+    return 96;
+  }
+  const font = legend.textStyle;
+  const textWidth = (name: string) =>
+    getTextWidth(
+      String(name),
+      font?.fontWeight || undefined,
+      font?.fontSize != null ? String(font.fontSize) : undefined,
+      font?.fontFamily || undefined,
+    );
+  // 25 = default itemWidth, 5 = icon-text spacing, 10 = padding
+  const maxItemWidth = Math.max(...names.map(name => 25 + 5 + textWidth(name)));
+  return Math.min(
+    maxItemWidth + 10,
+    Math.max((chartWidth ?? 600) * 0.5, 96),
+  );
+}
+
+/**
+ * [中文] 获取绘图区网格样式，并根据图例位置与尺寸自动预留空间，避免图例与图表主区重叠
+ * </br>
+ * [EN] Get grid style and reserve space for the legend automatically
+ * to avoid overlapping between legend and chart main area
+ *
+ * @param {Array<ChartStyleConfig>} styles required
+ * @param {LegendStyle} legend required the final legend style of the chart
+ * @param {Object} [chartSize] optional { width, height } from echarts instance,
+ *        used to resolve percentage margins for comparison
+ * @return {GridStyle}
+ */
+export function getGridStyleWithLegend(
+  styles: ChartStyleConfig[],
+  legend: LegendStyle,
+  chartSize?: { width: number; height: number },
+): GridStyle {
+  const grid = getGridStyle(styles);
+  if (!legend?.show) {
+    return grid;
+  }
+  const RESERVE_GAP = 8;
+  // axis name (e.g. rotated y-axis name) is rendered outside the grid and
+  // not covered by containLabel, reserve extra space for its zone
+  // (default nameGap 15 + name text height ~14)
+  const AXIS_NAME_ALLOWANCE = 30;
+  // when the canvas size is unknown (e.g. plugin charts calling dHelper
+  // without chartSize), percentage margins cannot be resolved to px,
+  // keep them untouched instead of overriding with the reserve value
+  const reserveMoreThan = (
+    margin: string | number | undefined,
+    base: number | undefined,
+    reserve: number,
+  ) => {
+    if (typeof margin === 'string' && margin.endsWith('%') && !base) {
+      return margin;
+    }
+    return Math.max(convertMarginToPx(margin, base), reserve);
+  };
+  const legendHeight = getLegendEstimatedHeight(legend, chartSize?.width);
+
+  if (legend.orient === 'horizontal') {
+    if (typeof legend.top === 'number') {
+      grid.top = reserveMoreThan(
+        grid.top,
+        chartSize?.height,
+        legend.top + legendHeight + RESERVE_GAP,
+      );
+    } else if (typeof legend.bottom === 'number') {
+      grid.bottom = reserveMoreThan(
+        grid.bottom,
+        chartSize?.height,
+        legend.bottom + legendHeight + RESERVE_GAP + AXIS_NAME_ALLOWANCE,
+      );
+    }
+  } else if (legend.orient === 'vertical') {
+    const legendWidth =
+      legend.width || getLegendEstimatedWidth(legend, chartSize?.width);
+    if (typeof legend.left === 'number') {
+      grid.left = reserveMoreThan(
+        grid.left,
+        chartSize?.width,
+        legend.left + legendWidth + RESERVE_GAP + AXIS_NAME_ALLOWANCE,
+      );
+    } else if (typeof legend.right === 'number') {
+      grid.right = reserveMoreThan(
+        grid.right,
+        chartSize?.width,
+        legend.right + legendWidth + RESERVE_GAP + AXIS_NAME_ALLOWANCE,
+      );
+    }
+  }
+  return grid;
 }
 
 // TODO(Stephen): to be used chart DataSetRow model for all charts
