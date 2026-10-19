@@ -35,6 +35,7 @@
     "prepare": "cd .. && husky install frontend/.husky",
     "doc:types": "tsc --project tsconfig.dHelper.json",
     "doc:html": "jsdoc -c jsdoc.config.json",
+    "doc:sync": "node scripts/doc-sync.cjs",
     "build:task:legacy": "rollup -c"
   },
   "browserslist": {
