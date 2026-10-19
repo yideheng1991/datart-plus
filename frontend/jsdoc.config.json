@@ -4,7 +4,7 @@
     "dictionaries": ["jsdoc", "closure"]
   },
   "source": {
-    "include": ["types/chartHelper.js"],
+    "include": ["types/app/utils/chartHelper.js"],
     "excludePattern": "(^|\\/|\\\\)_"
   },
   "plugins": [],

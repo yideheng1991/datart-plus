@@ -1,22 +1,18 @@
 {
-  // Change this to match your project
-  "files": ["src/app/utils/chartHelper.ts"],
+  // Inherits the CRA compiler options so path aliases and modern lib
+  // features resolve, then emits a CommonJS mirror of chartHelper.ts
+  // (types/chartHelper.js) that feeds jsdoc for the dHelper API docs.
+  "extends": "./tsconfig.json",
   "compilerOptions": {
-    // Generate d.ts files
+    "noEmit": false,
     "declaration": true,
-    // This compiler run should
-    // only output d.ts files
     "emitDeclarationOnly": false,
-    // Types should go into this directory.
-    // Removing this would place the .d.ts files
-    // next to the .js files
-    "outDir": "types",
-    // go to js file when using IDE functions like
-    // "Go to Definition" in VSCode
     "declarationMap": true,
-
-    "skipLibCheck": true,
-    "types": []
+    "outDir": "types",
+    "rootDir": "src",
+    // keep emitted JS parseable by jsdoc's espree (no post-ES2020 syntax)
+    "target": "es2020",
+    "module": "commonjs"
   },
-  // "exclude": ["node_modules", "./node_modules", "./node_modules/*"]
+  "include": ["src/app/utils/chartHelper.ts"]
 }
